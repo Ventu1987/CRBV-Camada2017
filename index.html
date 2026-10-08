@@ -4,12 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0f172a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Regatas M9">
 <title>Regatas M9 · Camada 2017</title>
 <link rel="icon" href="escudo.png">
+<link rel="apple-touch-icon" href="escudo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<style>
-:root{
+<style>:root{
   --bg:#0b1222; --bg2:#111b30; --card:rgba(255,255,255,.045); --card2:rgba(255,255,255,.08);
   --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.18);
   --tx:#f1f5f9; --tx2:#cbd5e1; --tx3:#94a3b8; --tx4:#64748b;
@@ -222,20 +224,83 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .ptab th{background:#0e7490;color:#fff;padding:5px 6px;text-align:left;font-size:10.5px;position:static}
 .ptab td{padding:4px 6px;border-bottom:1px solid #cbd5e1;color:#0f172a}
 .ptab tr:nth-child(even) td{background:#f1f5f9}
+
+/* ===== v2 ===== */
+th.nos{cursor:default}
+th .ar{color:var(--cy);font-size:.8em}
+.login{position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 50% 20%,rgba(6,182,212,.18),transparent 55%),linear-gradient(160deg,#0b1222,#132039)}
+.login .box{width:100%;max-width:360px;text-align:center}
+.login img{width:130px;height:130px;object-fit:contain;filter:drop-shadow(0 10px 30px rgba(6,182,212,.3))}
+.login h1{font-size:1.8rem;font-weight:900;margin-top:12px;letter-spacing:-.02em}
+.login .sub{color:var(--cy);font-weight:800;margin-bottom:26px}
+.login input{text-align:center;font-size:1.6rem;letter-spacing:.5em;padding:.8rem;font-weight:800}
+.login .btn{width:100%;margin-top:12px;padding:.9rem;font-size:1.05rem}
+.login .err{color:var(--rd2);font-size:.88rem;margin-top:10px;min-height:1.2em}
+.role{font-size:.66rem;font-weight:800;padding:.12rem .45rem;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}
+.role.admin{background:rgba(245,158,11,.18);color:var(--am2)}.role.staff{background:rgba(6,182,212,.15);color:#67e8f9}
+.banner{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.35);color:var(--rd2);border-radius:12px;padding:.55rem .75rem;margin:12px 0 0;font-size:.85rem;display:flex;gap:.6rem;align-items:center}
+.tog{min-width:118px;height:40px;border-radius:10px;border:none;font-weight:800;font-size:.88rem;flex-shrink:0}
+.tog.P{background:var(--gr);color:#04150a}.tog.A{background:var(--rd);color:#fff}
+.motivos{display:flex;gap:5px;flex-wrap:wrap;margin-top:.45rem}
+.motivos button{border:1px solid var(--line2);background:transparent;border-radius:999px;padding:.25rem .65rem;font-size:.76rem;font-weight:700;color:var(--tx2)}
+.motivos button.on{background:rgba(239,68,68,.22);border-color:var(--rd);color:#fff}
+.files{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.fthumb{position:relative;width:96px;height:96px;border-radius:10px;overflow:hidden;border:1px solid var(--line2);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-direction:column;gap:2px;font-size:.66rem;color:var(--tx3);text-align:center;padding:4px}
+.fthumb img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.fthumb .del{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;border:none;background:rgba(0,0,0,.7);color:#fff;font-size:.8rem;z-index:2}
+.fthumb .ic{font-size:1.8rem}
+.upl{width:96px;height:96px;border-radius:10px;border:1.5px dashed var(--cy);background:rgba(6,182,212,.06);color:#67e8f9;font-weight:800;font-size:.75rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer}
+.upl span{font-size:1.5rem}
+.bday{display:flex;align-items:center;gap:.6rem;padding:.45rem 0;border-bottom:1px solid var(--line)}
+.bday:last-child{border-bottom:none}
+.bday .d{width:42px;height:42px;border-radius:10px;background:rgba(139,92,246,.18);display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:900;line-height:1;color:#ddd6fe}
+.bday .d small{font-size:.55rem;font-weight:700;color:var(--tx3)}
+.bday.hoy .d{background:linear-gradient(135deg,var(--am),#f97316);color:#1c1003}
+.plan-prev{background:rgba(255,255,255,.04);border-radius:10px;padding:.6rem .7rem;font-size:.88rem;white-space:pre-wrap;color:var(--tx2);max-height:140px;overflow:hidden}
+.sub-h{font-size:.95rem;font-weight:800;margin:14px 0 8px;display:flex;align-items:center;gap:.45rem;flex-wrap:wrap}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.25);border-top-color:var(--cy);border-radius:50%;animation:rot .8s linear infinite;vertical-align:-2px}
+@keyframes rot{to{transform:rotate(360deg)}}
+/* ficha del entrenamiento (clara, exportable) */
+.ficha{background:#fff;color:#0f172a;border-radius:12px;padding:18px;font-family:Figtree,system-ui,sans-serif}
+.ficha .fh{display:flex;align-items:center;gap:12px;border-bottom:3px solid #0e7490;padding-bottom:10px;margin-bottom:12px}
+.ficha .fh img{width:58px;height:58px;object-fit:contain}
+.ficha .fh .a{font-size:20px;font-weight:900}.ficha .fh .b{font-size:12.5px;font-weight:800;color:#0e7490}
+.ficha .fh .c{margin-left:auto;text-align:right;font-size:12.5px;font-weight:800;color:#334155}
+.ficha .kp{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.ficha .kp div{flex:1;min-width:90px;background:#f1f5f9;border-radius:8px;padding:6px 10px;font-size:11px;color:#475569;font-weight:700}
+.ficha .kp b{display:block;font-size:20px;color:#0f172a}
+.ficha h4{font-size:13px;font-weight:900;color:#0e7490;text-transform:uppercase;letter-spacing:.04em;margin:12px 0 6px}
+.ficha .plan{white-space:pre-wrap;font-size:12.5px;background:#f8fafc;border-left:4px solid #0e7490;padding:8px 10px;border-radius:6px}
+.ficha .pimgs{display:flex;flex-wrap:wrap;gap:8px}
+.ficha .pimgs img{max-width:100%;max-height:520px;border-radius:6px;border:1px solid #cbd5e1}
+.ficha .pg{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.ficha .pt ol{font-size:12px}
+.ficha .aus{font-size:12px;color:#334155}
+.ficha .ft{margin-top:12px;font-size:10px;color:#94a3b8;text-align:center}
+@media(max-width:520px){.ficha .pg{grid-template-columns:1fr}}
+@media print{.ficha{border-radius:0;padding:0}.ficha .pg{grid-template-columns:repeat(2,1fr)!important}}
 </style>
-<script>
-var ESCUDO_FALLBACK = 'data:image/svg+xml;utf8,' + encodeURIComponent(
- '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 116"><path d="M50 3 L94 16 V56 C94 84 74 103 50 113 C26 103 6 84 6 56 V16 Z" fill="#0e7490" stroke="#a5f3fc" stroke-width="4"/><text x="50" y="66" text-anchor="middle" font-family="Arial" font-weight="900" font-size="28" fill="#fff">RBV</text></svg>');
-</script>
+<script>var ESCUDO_FALLBACK = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 116"><path d="M50 3 L94 16 V56 C94 84 74 103 50 113 C26 103 6 84 6 56 V16 Z" fill="#0e7490" stroke="#a5f3fc" stroke-width="4"/><text x="50" y="66" text-anchor="middle" font-family="Arial" font-weight="900" font-size="28" fill="#fff">RBV</text></svg>');</script>
 </head>
 <body>
 
-<div class="loading" id="loading"><img src="escudo.png" onerror="this.src=ESCUDO_FALLBACK"><div class="muted" id="loadingMsg">Cargando base…</div></div>
+<div class="loading" id="loading"><img src="escudo.png" onerror="this.src=ESCUDO_FALLBACK" alt=""><div class="muted">Cargando…</div></div>
+
+<div class="login hidden" id="login">
+  <div class="box">
+    <img src="escudo.png" onerror="this.src=ESCUDO_FALLBACK" alt="Escudo Regatas Bella Vista">
+    <h1>Regatas Bella Vista</h1>
+    <div class="sub">Camada 2017 · M9</div>
+    <input id="pinIn" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN" aria-label="PIN">
+    <button class="btn pri" id="loginBtn" onclick="entrar()">Entrar</button>
+    <div class="err" id="loginErr"></div>
+  </div>
+</div>
 
 <header class="top">
   <div class="wrap">
-    <img class="escudo" src="escudo.png" alt="Escudo Regatas" onerror="this.src=ESCUDO_FALLBACK">
-    <div><div class="t1">Regatas Bella Vista</div><div class="t2">M9 · Camada 2017</div></div>
+    <img class="escudo" src="escudo.png" alt="Escudo" onerror="this.src=ESCUDO_FALLBACK">
+    <div><div class="t1">Regatas Bella Vista</div><div class="t2">M9 · Camada 2017 <span class="role" id="roleTag"></span></div></div>
     <nav class="tabs-top" id="tabsTop"></nav>
     <div class="sync" id="sync" style="margin-left:auto"><i></i><span id="syncTxt">—</span></div>
     <button class="btn sm" onclick="abrirAjustes()" title="Ajustes">⚙️</button>
@@ -243,39 +308,31 @@ var ESCUDO_FALLBACK = 'data:image/svg+xml;utf8,' + encodeURIComponent(
 </header>
 
 <main class="wrap">
-  <!-- INICIO -->
+  <div class="banner hidden" id="banner"></div>
   <section id="v-inicio"></section>
-  <!-- ASISTENCIA -->
   <section id="v-asistencia" class="hidden"></section>
-  <!-- EQUIPOS -->
   <section id="v-equipos" class="hidden"></section>
-  <!-- PLANTEL -->
   <section id="v-plantel" class="hidden"></section>
-  <!-- GIRA -->
   <section id="v-gira" class="hidden"></section>
-  <!-- ESTADISTICAS -->
   <section id="v-stats" class="hidden"></section>
 </main>
 
 <nav class="nav" id="navBottom"></nav>
-
 <div class="modal" id="modal"><div class="mbox" id="mbox"></div></div>
 <div class="toast" id="toast"></div>
 <div id="printArea"></div>
 
 <script>
 /* =====================================================================
-   CONFIGURACIÓN — pegá acá la URL de tu Apps Script (termina en /exec)
+   Regatas Bella Vista · M9 Camada 2017 — App v2
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbw3STeF0y6gLe6DfeLqwrk57_quHXv33JFRWevNE9wp4Vy0VzF5lkT0pE6w7vnGLs7w/exec';
 
-
-const TIPOS = { MIE: 'Miércoles', SAB: 'Sábado', PAR: 'Partido', OTR: 'Otro' };
-const TABS = [
-  ['inicio', '🏠', 'Inicio'], ['asistencia', '✅', 'Asistencia'], ['equipos', '🧩', 'Equipos'],
-  ['plantel', '👥', 'Plantel'], ['gira', '🚌', 'Gira'], ['stats', '📊', 'Stats']
-];
-const LS = { url: 'm9_api_url', pin: 'm9_pin', demo: 'm9_demo_db', mode: 'm9_mode', tab: 'm9_tab', draft: 'm9_equipos_draft' };
+const TIPOS = { MIE: 'Miércoles', SAB: 'Sábado', PAR: 'Partido / Encuentro', OTR: 'Otro' };
+const TIPOS_C = { MIE: 'Miércoles', SAB: 'Sábado', PAR: 'Partido', OTR: 'Otro' };
+const MOTIVOS = ['Sin aviso', 'Avisó', 'Lesionado', 'Enfermo'];
+const TABS = [['inicio', '🏠', 'Inicio'], ['asistencia', '✅', 'Asistencia'], ['equipos', '🧩', 'Equipos'], ['plantel', '👥', 'Plantel'], ['gira', '🚌', 'Gira'], ['stats', '📊', 'Estadísticas']];
+const LS = { pin: 'm9_pin', cache: 'm9_cache_v2', pend: 'm9_pend_v2', tab: 'm9_tab', draft: 'm9_equipos_draft' };
 
 /* ---------- utilidades ---------- */
 const $ = id => document.getElementById(id);
@@ -283,70 +340,77 @@ const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&a
 const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
 const lsDel = k => { try { localStorage.removeItem(k); } catch (e) {} };
+const sleep = ms => new Promise(r => setTimeout(r, ms));
 const pad = n => String(n).padStart(2, '0');
 const isoDate = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 const hoyISO = () => isoDate(new Date());
 const parseISO = s => { const [y, m, d] = String(s).slice(0, 10).split('-').map(Number); return new Date(y, (m || 1) - 1, d || 1); };
 const fmtF = s => { if (!s) return ''; const p = String(s).slice(0, 10).split('-'); return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : String(s); };
-const fmtFC = s => { if (!s) return ''; const d = parseISO(s); return ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'][d.getDay()] + ' ' + pad(d.getDate()) + '/' + pad(d.getMonth() + 1); };
+const DIAS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+const fmtFC = s => { if (!s) return ''; const d = parseISO(s); return DIAS[d.getDay()] + ' ' + pad(d.getDate()) + '/' + pad(d.getMonth() + 1); };
 const MESES = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+const MESES_L = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 const pct = (a, b) => b ? Math.round(a * 100 / b) : 0;
 const colorPct = p => p >= 80 ? 'var(--gr)' : p >= 60 ? 'var(--am)' : 'var(--rd)';
-function toast(msg, err) { const t = $('toast'); t.textContent = msg; t.className = 'toast on' + (err ? ' err' : ''); clearTimeout(t._h); t._h = setTimeout(() => t.className = 'toast', 2600); }
+const horaAhora = () => new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', hour12: false });
+function toast(msg, err) { const t = $('toast'); t.textContent = msg; t.className = 'toast on' + (err ? ' err' : ''); clearTimeout(t._h); t._h = setTimeout(() => t.className = 'toast', 2800); }
 function setSync(state, txt) { const s = $('sync'); s.className = 'sync ' + (state || ''); $('syncTxt').textContent = txt; }
 
 /* =====================================================================
-   CAPA DE DATOS  (API Google Apps Script  |  modo demo local)
+   CONEXIÓN CON LA PLANILLA (reintentos + caché + cola offline)
    ===================================================================== */
-let DB = null;
-let MODE = 'api';
-const apiUrl = () => (lsGet(LS.url) || API_URL || '').trim();
+let DB = null, ROLE = 'staff', PEND = [], FLUSHING = false, ULTIMA_SYNC = '';
+const isAdmin = () => ROLE === 'admin';
+const pin = () => lsGet(LS.pin) || '';
 
-async function cargarBase() {
-  MODE = lsGet(LS.mode) === 'demo' ? 'demo' : 'api';
-  if (MODE === 'api' && !apiUrl()) { MODE = 'none'; return false; }
-  if (MODE === 'demo') {
-    let raw = lsGet(LS.demo);
-    DB = raw ? JSON.parse(raw) : generarDemo();
-    guardarDemo();
-    normalizar(); setSync('', 'Modo demo');
-    return true;
+async function llamar(params, body, intentos = 3) {
+  let ultimo;
+  for (let i = 0; i < intentos; i++) {
+    const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 35000);
+    try {
+      const url = API_URL + (params ? '?' + new URLSearchParams(Object.assign({ t: Date.now() }, params)) : '');
+      const r = await fetch(url, body ? { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({ pin: pin() }, body)), signal: ctl.signal } : { signal: ctl.signal });
+      clearTimeout(t);
+      const txt = await r.text();
+      let j; try { j = JSON.parse(txt); } catch (e) { throw new Error('Google respondió algo inesperado'); }
+      if (!j.ok) { const e = new Error(j.error || 'Error'); e.fatal = true; throw e; }
+      return j;
+    } catch (e) {
+      clearTimeout(t); ultimo = e;
+      if (e.fatal) throw e;
+      if (i < intentos - 1) await sleep(1200 * (i + 1));
+    }
   }
-  setSync('busy', 'Cargando…');
-  const pin = lsGet(LS.pin) || '';
-  const r = await fetch(apiUrl() + '?action=all&pin=' + encodeURIComponent(pin) + '&t=' + Date.now());
-  const j = await r.json();
-  if (!j.ok) { setSync('err', 'Error'); throw new Error(j.error || 'Error'); }
-  DB = j.data; normalizar(); setSync('', 'Sincronizado');
-  return true;
+  const e = new Error('Sin conexión con la planilla'); e.red = true; e.detalle = ultimo && ultimo.message; throw e;
 }
 
 function normalizar() {
   ['JUGADORES', 'ENTRENADORES', 'SESIONES', 'ASISTENCIA', 'EQUIPOS', 'GIRA'].forEach(k => DB[k] = DB[k] || []);
   DB.CONFIG = DB.CONFIG || {};
   DB.JUGADORES.forEach(j => {
-    j.id = String(j.id); j.nivel = String(j.nivel || '2').toUpperCase();
+    j.id = String(j.id); j.nivel = String(j.nivel || '').toUpperCase();
     j.nivel2 = j.nivel2 === '' || j.nivel2 == null ? null : Number(j.nivel2);
     j.activo = String(j.activo || 'SI').toUpperCase() === 'NO' ? 'NO' : 'SI';
-    j.dni = j.dni == null ? '' : String(j.dni);
+    j.dni = j.dni == null ? '' : String(j.dni); j.fecha_nac = String(j.fecha_nac || '').slice(0, 10);
   });
   DB.ENTRENADORES.forEach(e => {
     e.id = String(e.id); e.hijo_id = e.hijo_id == null || e.hijo_id === '' ? '' : String(e.hijo_id);
     e.activo = String(e.activo || 'SI').toUpperCase() === 'NO' ? 'NO' : 'SI';
     e.asigna_equipos = String(e.asigna_equipos || 'SI').toUpperCase() === 'NO' ? 'NO' : 'SI';
-    e.dni = e.dni == null ? '' : String(e.dni);
+    e.dni = e.dni == null ? '' : String(e.dni); e.fecha_nac = String(e.fecha_nac || '').slice(0, 10);
   });
-  DB.SESIONES.forEach(s => { s.id = String(s.id); s.fecha = String(s.fecha).slice(0, 10); });
-  DB.ASISTENCIA.forEach(a => { a.sesion_id = String(a.sesion_id); a.persona_id = String(a.persona_id); a.fecha = String(a.fecha).slice(0, 10); a.calif = Number(a.calif || 0); });
+  DB.SESIONES.forEach(s => {
+    s.id = String(s.id); s.fecha = String(s.fecha).slice(0, 10); s.hora = String(s.hora || '').slice(0, 5);
+    if (typeof s.archivos === 'string') { try { s.archivos = s.archivos ? JSON.parse(s.archivos) : []; } catch (e) { s.archivos = []; } }
+    s.archivos = Array.isArray(s.archivos) ? s.archivos : [];
+  });
+  DB.ASISTENCIA.forEach(a => { a.sesion_id = String(a.sesion_id); a.persona_id = String(a.persona_id); a.fecha = String(a.fecha).slice(0, 10); a.calif = Number(a.calif || 0); a.motivo = a.motivo || ''; });
   DB.EQUIPOS.forEach(e => { e.grupo_id = String(e.grupo_id); e.persona_id = String(e.persona_id); });
   DB.GIRA.forEach(g => { g.persona_id = String(g.persona_id); g.clave = String(g.clave); });
 }
 
-function guardarDemo() { if (MODE === 'demo') lsSet(LS.demo, JSON.stringify(DB)); }
-
-// aplica una operación sobre DB en memoria (misma lógica que el servidor)
 function aplicarLocal(op) {
-  if (op.sheet === 'CONFIG') { (op.rows || []).forEach(r => { if (r.clave !== 'PIN') DB.CONFIG[r.clave] = r.valor; }); return; }
+  if (op.sheet === 'CONFIG') { (op.rows || []).forEach(r => DB.CONFIG[r.clave] = r.valor); return; }
   const arr = DB[op.sheet];
   if (op.op === 'upsert') {
     op.rows.forEach(r => {
@@ -358,135 +422,174 @@ function aplicarLocal(op) {
     if (op.op === 'replace') op.rows.forEach(r => DB[op.sheet].push(Object.assign({}, r)));
   }
 }
+function guardarCache() { lsSet(LS.cache, JSON.stringify({ pin: pin(), role: ROLE, ts: ULTIMA_SYNC, db: DB })); }
+function guardarPend() { lsSet(LS.pend, JSON.stringify(PEND)); }
 
-async function guardar(ops, msgOk) {
+// guarda: aplica en pantalla al instante y sube a la planilla (si no hay señal, queda en cola)
+async function guardar(ops, msgOk, demora) {
   ops.forEach(aplicarLocal); normalizar();
-  if (MODE === 'demo') { guardarDemo(); if (msgOk) toast(msgOk); return true; }
-  setSync('busy', 'Guardando…');
+  ops.forEach(o => PEND.push(JSON.parse(JSON.stringify(o, (k, v) => k === 'archivos' && Array.isArray(v) ? JSON.stringify(v) : v))));
+  guardarPend(); guardarCache();
+  if (demora) { clearTimeout(guardar._t); setSync('busy', 'Pendiente…'); guardar._t = setTimeout(() => subirPendientes(), demora); return true; }
+  const ok = await subirPendientes();
+  if (msgOk) toast(ok ? msgOk : '📶 Sin señal: quedó guardado en el teléfono y se sube solo', !ok);
+  return ok;
+}
+async function subirPendientes() {
+  if (FLUSHING || !PEND.length) { if (!PEND.length) setSync('', ULTIMA_SYNC ? 'Al día ' + ULTIMA_SYNC : 'Al día'); return !PEND.length; }
+  FLUSHING = true; setSync('busy', 'Guardando…');
+  const lote = PEND.slice();
   try {
-    const r = await fetch(apiUrl(), { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ pin: lsGet(LS.pin) || '', ops }) });
-    const j = await r.json();
-    if (!j.ok) throw new Error(j.error);
-    setSync('', 'Guardado ' + new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', hour12: false }));
-    if (msgOk) toast(msgOk);
+    await llamar(null, { action: 'ops', ops: lote });
+    PEND = PEND.slice(lote.length); guardarPend();
+    ULTIMA_SYNC = horaAhora(); guardarCache();
+    setSync('', 'Guardado ' + ULTIMA_SYNC);
     return true;
   } catch (e) {
-    setSync('err', 'Sin guardar'); toast('⚠️ No se pudo guardar: ' + e.message, true);
+    if (e.fatal) { PEND = PEND.slice(lote.length); guardarPend(); toast('⚠️ ' + e.message, true); setSync('err', 'Error'); return false; }
+    setSync('err', `${PEND.length} cambio(s) sin subir`);
+    return false;
+  } finally { FLUSHING = false; }
+}
+window.addEventListener('online', () => subirPendientes());
+setInterval(() => { if (PEND.length) subirPendientes(); }, 45000);
+
+async function refrescar(enSegundoPlano) {
+  setSync('busy', 'Actualizando…');
+  try {
+    const j = await llamar({ action: 'all', pin: pin() });
+    DB = j.data; ROLE = j.role || 'staff'; normalizar();
+    PEND.forEach(op => { const o = JSON.parse(JSON.stringify(op)); if (o.rows) o.rows.forEach(r => { if (typeof r.archivos === 'string') { try { r.archivos = JSON.parse(r.archivos); } catch (e) {} } }); aplicarLocal(o); });
+    normalizar();
+    ULTIMA_SYNC = horaAhora(); guardarCache(); $('banner').classList.add('hidden');
+    setSync('', 'Al día ' + ULTIMA_SYNC);
+    subirPendientes();
+    if (enSegundoPlano && !(AS && AS.sucio) && !$('modal').classList.contains('on')) { renderTop(); renderTab(); }
+    return true;
+  } catch (e) {
+    if (!enSegundoPlano) throw e;
+    if (e.fatal && /PIN/i.test(e.message)) { salir('El PIN cambió. Ingresalo de nuevo.'); return false; }
+    setSync('err', 'Sin conexión');
+    $('banner').innerHTML = `📶 No se pudo conectar con la planilla. Estás viendo los datos guardados ${ULTIMA_SYNC ? 'de las ' + ULTIMA_SYNC : 'en el teléfono'}. <button class="btn sm" onclick="refrescar(true)">Reintentar</button>`;
+    $('banner').classList.remove('hidden');
     return false;
   }
 }
 
-// cola con demora para cambios chicos (gira, toggles)
-let colaOps = [], colaTimer = null;
-function encolar(op) {
-  aplicarLocal(op); normalizar(); guardarDemo();
-  if (MODE === 'demo') return;
-  colaOps.push(op); setSync('busy', 'Pendiente…');
-  clearTimeout(colaTimer);
-  colaTimer = setTimeout(async () => {
-    const ops = colaOps; colaOps = [];
-    // reenvía sin volver a aplicar localmente
-    setSync('busy', 'Guardando…');
-    try {
-      const r = await fetch(apiUrl(), { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ pin: lsGet(LS.pin) || '', ops }) });
-      const j = await r.json(); if (!j.ok) throw new Error(j.error);
-      setSync('', 'Guardado ' + new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', hour12: false }));
-    } catch (e) { colaOps = ops.concat(colaOps); setSync('err', 'Sin guardar'); toast('⚠️ No se pudo guardar. Reintento al próximo cambio.', true); }
-  }, 900);
+/* ---------- ingreso con PIN ---------- */
+function mostrarLogin(err) {
+  $('loading').classList.add('hidden');
+  $('login').classList.remove('hidden');
+  $('loginErr').textContent = err || '';
+  $('pinIn').value = ''; setTimeout(() => $('pinIn').focus(), 80);
 }
-
-/* ---------- datos demo (ficticios, nunca datos reales en GitHub) ---------- */
-function generarDemo() {
-  let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
-  const ap = ['Acosta', 'Benítez', 'Castro', 'Díaz', 'Escobar', 'Funes', 'García', 'Herrera', 'Ibáñez', 'Juárez', 'Kramer', 'López', 'Molina', 'Núñez', 'Ortiz', 'Paz', 'Quiroga', 'Ríos', 'Sosa', 'Torres', 'Urquiza', 'Vera', 'Wilson', 'Zabala'];
-  const no = ['Bautista', 'Benjamín', 'Felipe', 'Francisco', 'Joaquín', 'Juan', 'Mateo', 'Santiago', 'Tomás', 'Valentín'];
-  const col = ['Colegio A', 'Colegio B', 'Colegio C', 'Colegio D', 'Colegio E'];
-  const J = [];
-  for (let i = 1; i <= 44; i++) {
-    const r = rnd(); const nivel = r < .25 ? 'G' : r < .5 ? '1' : r < .85 ? '2' : '3';
-    J.push({ id: String(i), nombre: `${ap[i % ap.length]}${i > 24 ? ' ' + ap[(i * 7) % ap.length] : ''}, ${no[(i * 3) % no.length]}`, nivel, nivel2: nivel === 'G' ? [1, 2, 3][Math.floor(rnd() * 3)] : null, colegio: col[Math.floor(rnd() * 5)], grado: rnd() < .5 ? '3ro' : '4to', dni: String(56000000 + i * 1371), fecha_nac: `2017-${pad(1 + (i % 12))}-${pad(1 + (i % 27))}`, activo: i === 44 ? 'NO' : 'SI', fecha_baja: i === 44 ? '2026-08-20' : '', motivo_baja: i === 44 ? 'Se mudó' : '', fecha_alta: '2026-03-01', observaciones: '' });
+async function entrar() {
+  const p = $('pinIn').value.trim(); if (!p) return;
+  $('loginBtn').disabled = true; $('loginBtn').innerHTML = '<span class="spin"></span> Entrando…'; $('loginErr').textContent = '';
+  lsSet(LS.pin, p);
+  try {
+    await refrescar(false);
+    $('login').classList.add('hidden'); arrancarUI();
+  } catch (e) {
+    lsDel(LS.pin);
+    $('loginErr').textContent = e.fatal ? (/PIN/i.test(e.message) ? 'PIN incorrecto' : e.message) : 'No hay conexión con la planilla. Probá de nuevo en unos segundos.';
+  } finally { $('loginBtn').disabled = false; $('loginBtn').textContent = 'Entrar'; }
+}
+function salir(msg) {
+  if (PEND.length && !msg && !confirm(`Hay ${PEND.length} cambio(s) sin subir a la planilla. Si salís se pierden. ¿Salir igual?`)) return;
+  lsDel(LS.pin); lsDel(LS.cache); lsDel(LS.pend); PEND = []; DB = null;
+  cerrarModal(); mostrarLogin(msg);
+}
+async function iniciar() {
+  try { PEND = JSON.parse(lsGet(LS.pend) || '[]'); } catch (e) { PEND = []; }
+  if (!pin()) return mostrarLogin();
+  let cache = null; try { cache = JSON.parse(lsGet(LS.cache) || 'null'); } catch (e) {}
+  if (cache && cache.pin === pin() && cache.db) {
+    DB = cache.db; ROLE = cache.role; ULTIMA_SYNC = cache.ts || ''; normalizar();
+    $('loading').classList.add('hidden'); arrancarUI();
+    refrescar(true);
+  } else {
+    try { await refrescar(false); $('loading').classList.add('hidden'); arrancarUI(); }
+    catch (e) { mostrarLogin(e.fatal ? e.message : 'No hay conexión con la planilla. Probá de nuevo.'); }
   }
-  const ap2 = ['Coach Ana', 'Coach Beto', 'Coach Caro', 'Coach Dani', 'Coach Edu', 'Coach Fer', 'Coach Gus', 'Coach Hernán'];
-  const E = ap2.map((n, i) => ({ id: 'E' + pad(i + 1), apodo: n.split(' ')[1], nombre: n, rol: i < 2 ? 'Head Coach' : i === 7 ? 'Manager' : 'Entrenador', hijo_id: String(3 + i * 5), asigna_equipos: i === 7 ? 'NO' : 'SI', activo: 'SI', fecha_baja: '', motivo_baja: '', dni: String(28000000 + i * 99991), fecha_nac: '1982-05-10', observaciones: '' }));
-  const S = [], A = [];
-  const d = new Date(2026, 7, 1), fin = new Date(); fin.setDate(fin.getDate() - 1);
-  const coment = ['Gran actitud en el contacto', 'Muy buen liderazgo en su equipo', 'Distraído, hablar con los padres', 'Excelente tackle', 'Llegó tarde', 'Ayudó a un compañero nuevo'];
-  while (d <= fin) {
-    const wd = d.getDay();
-    if (wd === 3 || wd === 6) {
-      const f = isoDate(d), t = wd === 3 ? 'MIE' : 'SAB', id = f + '_' + t;
-      S.push({ id, fecha: f, tipo: t, detalle: '', notas: '', actualizado: f });
-      J.forEach(j => {
-        if (j.activo === 'NO' && f > j.fecha_baja) return;
-        const base = (Number(j.id) % 7 === 0 ? .45 : .82) - (t === 'MIE' ? .1 : 0);
-        const P = rnd() < base; const rc = rnd(); const calif = P && rc < .05 ? 1 : P && rc < .07 ? -1 : 0;
-        A.push({ sesion_id: id, fecha: f, tipo: t, persona_tipo: 'J', persona_id: j.id, nombre: j.nombre, estado: P ? 'P' : 'A', calif, comentario: calif ? coment[Math.floor(rnd() * coment.length)] : '' });
-      });
-      E.forEach(e => A.push({ sesion_id: id, fecha: f, tipo: t, persona_tipo: 'E', persona_id: e.id, nombre: e.apodo, estado: rnd() < .8 ? 'P' : 'A', calif: 0, comentario: '' }));
-    }
-    d.setDate(d.getDate() + 1);
-  }
-  const G = J.map(j => ({ clave: 'J-' + j.id, persona_tipo: 'J', persona_id: j.id, nombre: j.nombre, va: Number(j.id) % 5 === 0 ? 'NO' : 'SI', rol_gira: 'Jugador', autorizacion: rnd() < .6 ? 'SI' : 'NO', ficha_medica: rnd() < .5 ? 'SI' : 'NO', pago: rnd() < .7 ? 'SI' : 'NO', observaciones: '' }))
-    .concat(E.map(e => ({ clave: 'E-' + e.id, persona_tipo: 'E', persona_id: e.id, nombre: e.nombre, va: 'SI', rol_gira: e.rol, autorizacion: 'NO', ficha_medica: 'NO', pago: 'NO', observaciones: '' })));
-  return { CONFIG: { CLUB: 'Regatas Bella Vista', DIVISION: 'M9', CAMADA: '2017', TEMPORADA: String(new Date().getFullYear()), GIRA_NOMBRE: 'Gira Tandil (demo)', GIRA_DESDE: '', GIRA_HASTA: '', ESCUDO_URL: 'escudo.png' }, JUGADORES: J, ENTRENADORES: E, SESIONES: S, ASISTENCIA: A, EQUIPOS: [], GIRA: G };
+}
+function arrancarUI() { renderTop(); ir(lsGet(LS.tab) || 'inicio'); }
+function renderTop() {
+  $('roleTag').className = 'role ' + ROLE; $('roleTag').textContent = isAdmin() ? 'Admin' : 'Staff';
+  document.querySelectorAll('img.escudo').forEach(i => { if (DB && DB.CONFIG.ESCUDO_URL && !i.dataset.ok) { i.dataset.ok = 1; i.src = DB.CONFIG.ESCUDO_URL; } });
 }
 
 /* =====================================================================
    HELPERS DE DOMINIO
    ===================================================================== */
 const jugActivos = () => DB.JUGADORES.filter(j => j.activo !== 'NO').sort((a, b) => a.nombre.localeCompare(b.nombre));
-const entActivos = () => DB.ENTRENADORES.filter(e => e.activo !== 'NO').sort((a, b) => (a.apodo || a.nombre).localeCompare(b.apodo || b.nombre));
+const entActivos = () => DB.ENTRENADORES.filter(e => e.activo !== 'NO').sort((a, b) => entNom(a).localeCompare(entNom(b)));
 const jugById = id => DB.JUGADORES.find(j => j.id === String(id));
 const entById = id => DB.ENTRENADORES.find(e => e.id === String(id));
 const entNom = e => e ? (e.apodo || e.nombre) : '';
-const nivelTxt = j => j.nivel === 'G' ? 'G' + (j.nivel2 ? ' ' + Number(j.nivel2).toFixed(1) : '') : j.nivel;
-const nivelBadge = j => `<span class="lv lv-${esc(j.nivel)}">${esc(nivelTxt(j))}</span>`;
-const nivelNum = j => j.nivel === 'G' ? (j.nivel2 || 0) : (parseInt(j.nivel) || 0);
+const nivelTxt = j => !j.nivel ? 'S/C' : j.nivel === 'G' ? 'G' + (j.nivel2 ? ' ' + Number(j.nivel2).toFixed(1) : '') : j.nivel;
+const nivelBadge = j => isAdmin() ? `<span class="lv lv-${esc(j.nivel || '2')}">${esc(nivelTxt(j))}</span>` : '';
+const nivelNum = j => j.nivel === 'G' ? (j.nivel2 || 0) : (parseInt(j.nivel) || 2);
 const giraDe = (t, id) => DB.GIRA.find(g => g.clave === t + '-' + id);
-const viaja = (t, id) => { const g = giraDe(t, id); return g && String(g.va).toUpperCase() === 'SI'; };
+const viaja = (t, id) => { const g = giraDe(t, id); return !!g && String(g.va).toUpperCase() === 'SI'; };
+const conAsistencia = () => new Set(DB.ASISTENCIA.map(a => a.sesion_id));
 const sesionesOrd = () => [...DB.SESIONES].sort((a, b) => (b.fecha + b.tipo).localeCompare(a.fecha + a.tipo));
 const tipoDeFecha = f => { const w = parseISO(f).getDay(); return w === 3 ? 'MIE' : w === 6 ? 'SAB' : 'OTR'; };
-function proximoEntreno() {
-  const d = new Date(); d.setHours(0, 0, 0, 0);
-  for (let i = 0; i < 8; i++) { const w = d.getDay(); if (w === 3 || w === 6) return isoDate(d); d.setDate(d.getDate() + 1); }
-  return hoyISO();
+const nombreEntreno = s => `${fmtFC(s.fecha)} · ${TIPOS_C[s.tipo] || s.tipo}${s.hora ? ' ' + s.hora + ' h' : ''}`;
+function proximoEntreno() { const d = new Date(); d.setHours(0, 0, 0, 0); for (let i = 0; i < 8; i++) { const w = d.getDay(); if (w === 3 || w === 6) return isoDate(d); d.setDate(d.getDate() + 1); } return hoyISO(); }
+
+/* ---------- tablas ordenables (todas las columnas) ---------- */
+const SORTS = {};
+function tabla(id, cols, rows, def, rowAttr) {
+  const s = SORTS[id] || (SORTS[id] = Object.assign({}, def));
+  const col = cols.find(c => c.k === s.k);
+  if (col) {
+    const v = col.v || (r => r[col.k]);
+    rows = [...rows].sort((a, b) => {
+      const x = v(a), y = v(b);
+      const vacio = z => z === null || z === undefined || z === '' || (typeof z === 'number' && isNaN(z));
+      if (vacio(x) && vacio(y)) return 0; if (vacio(x)) return 1; if (vacio(y)) return -1;
+      const c = typeof x === 'number' && typeof y === 'number' ? x - y : String(x).localeCompare(String(y), 'es', { numeric: true, sensitivity: 'base' });
+      return s.desc ? -c : c;
+    });
+  }
+  return `<div class="tbl-wrap"><table><thead><tr>${cols.map(c => c.k ? `<th class="${c.num ? 'num' : ''}" onclick="ordenar('${id}','${c.k}',${c.num ? 1 : 0})">${c.t}${s.k === c.k ? `<span class="ar">${s.desc ? ' ↓' : ' ↑'}</span>` : ''}</th>` : `<th class="nos ${c.num ? 'num' : ''}">${c.t}</th>`).join('')}</tr></thead>
+  <tbody>${rows.length ? rows.map((r, i) => `<tr ${rowAttr ? rowAttr(r) : ''}>${cols.map(c => `<td class="${c.num ? 'num' : ''}">${c.h(r, i)}</td>`).join('')}</tr>`).join('') : `<tr><td colspan="${cols.length}" class="empty">Sin datos</td></tr>`}</tbody></table></div>`;
 }
+function ordenar(id, k, num) { const s = SORTS[id]; if (s.k === k) s.desc = !s.desc; else { s.k = k; s.desc = !!num; } renderTab(); }
 
 /* =====================================================================
    NAVEGACIÓN
    ===================================================================== */
 let TAB = 'inicio';
 function renderNav() {
-  const h = TABS.map(([k, i, n]) => `<button class="${TAB === k ? 'on' : ''}" onclick="ir('${k}')"><span>${i}</span>${n}</button>`).join('');
-  $('navBottom').innerHTML = h;
+  $('navBottom').innerHTML = TABS.map(([k, i, n]) => `<button class="${TAB === k ? 'on' : ''}" onclick="ir('${k}')"><span>${i}</span>${n}</button>`).join('');
   $('tabsTop').innerHTML = TABS.map(([k, i, n]) => `<button class="${TAB === k ? 'on' : ''}" onclick="ir('${k}')">${i} ${n}</button>`).join('');
 }
 function ir(tab) {
+  if (!TABS.some(t => t[0] === tab)) tab = 'inicio';
   TAB = tab; lsSet(LS.tab, tab);
   TABS.forEach(([k]) => $('v-' + k).classList.toggle('hidden', k !== tab));
   renderNav(); renderTab(); window.scrollTo(0, 0);
 }
-function renderTab() {
-  ({ inicio: renderInicio, asistencia: renderAsistencia, equipos: renderEquipos, plantel: renderPlantel, gira: renderGira, stats: renderStats })[TAB]();
-}
+function renderTab() { if (!DB) return; ({ inicio: renderInicio, asistencia: renderAsistencia, equipos: renderEquipos, plantel: renderPlantel, gira: renderGira, stats: renderStats })[TAB](); }
 
 /* =====================================================================
-   ESTADÍSTICAS (motor)
+   MOTOR DE ESTADÍSTICAS
    ===================================================================== */
-function calcStats(filtro) {
-  filtro = filtro || {};
-  const ses = DB.SESIONES.filter(s =>
-    (!filtro.anio || s.fecha.slice(0, 4) === String(filtro.anio)) &&
-    (!filtro.mes || Number(s.fecha.slice(5, 7)) === Number(filtro.mes)) &&
-    (!filtro.tipo || s.tipo === filtro.tipo));
+function calcStats(f) {
+  f = f || {};
+  const cA = conAsistencia();
+  const ses = DB.SESIONES.filter(s => cA.has(s.id) && (!f.anio || s.fecha.slice(0, 4) === String(f.anio)) && (!f.mes || Number(s.fecha.slice(5, 7)) === Number(f.mes)) && (!f.tipo || s.tipo === f.tipo));
   const ids = new Set(ses.map(s => s.id));
   const recs = DB.ASISTENCIA.filter(a => ids.has(a.sesion_id)).sort((a, b) => a.fecha.localeCompare(b.fecha));
   const per = {};
   recs.forEach(a => {
     const k = a.persona_tipo + '-' + a.persona_id;
-    const p = per[k] || (per[k] = { k, tipo: a.persona_tipo, id: a.persona_id, P: 0, A: 0, MIE: [0, 0], SAB: [0, 0], PAR: [0, 0], up: 0, dn: 0, hist: [] });
+    const p = per[k] || (per[k] = { k, tipo: a.persona_tipo, id: a.persona_id, P: 0, A: 0, aviso: 0, MIE: [0, 0], SAB: [0, 0], PAR: [0, 0], OTR: [0, 0], up: 0, dn: 0, hist: [] });
     const pr = a.estado === 'P';
     pr ? p.P++ : p.A++;
+    if (!pr && a.motivo && a.motivo !== 'Sin aviso') p.aviso++;
     if (p[a.tipo]) { p[a.tipo][1]++; if (pr) p[a.tipo][0]++; }
     if (a.calif > 0) p.up++; if (a.calif < 0) p.dn++;
     p.hist.push(a);
@@ -499,25 +602,26 @@ function calcStats(filtro) {
   });
   const porSesion = ses.map(s => {
     const r = recs.filter(a => a.sesion_id === s.id);
-    const jp = r.filter(a => a.persona_tipo === 'J' && a.estado === 'P').length, jt = r.filter(a => a.persona_tipo === 'J').length;
-    const ep = r.filter(a => a.persona_tipo === 'E' && a.estado === 'P').length;
-    return { s, jp, jt, ep };
+    return { s, jp: r.filter(a => a.persona_tipo === 'J' && a.estado === 'P').length, jt: r.filter(a => a.persona_tipo === 'J').length, ep: r.filter(a => a.persona_tipo === 'E' && a.estado === 'P').length, et: r.filter(a => a.persona_tipo === 'E').length };
   }).sort((a, b) => a.s.fecha.localeCompare(b.s.fecha));
   return { ses, recs, per, porSesion };
 }
-
+const vacioStat = () => ({ P: 0, A: 0, aviso: 0, tot: 0, pct: 0, MIE: [0, 0], SAB: [0, 0], PAR: [0, 0], up: 0, dn: 0, hist: [], racha: null });
 function alertas() {
-  const out = [];
-  const st = calcStats({ anio: new Date().getFullYear() });
+  const out = []; const st = calcStats({ anio: new Date().getFullYear() });
   jugActivos().forEach(j => {
     const p = st.per['J-' + j.id]; if (!p) return;
     if (p.racha && p.racha.e === 'A' && p.racha.n >= 3) out.push({ t: 'rd', j, txt: `${p.racha.n} faltas seguidas` });
-    else {
-      const ult = p.hist.slice(-8); const pr = ult.filter(a => a.estado === 'P').length;
-      if (ult.length >= 6 && pr / ult.length < .5) out.push({ t: 'am', j, txt: `vino ${pr} de las últimas ${ult.length}` });
-    }
+    else { const u = p.hist.slice(-8), pr = u.filter(a => a.estado === 'P').length; if (u.length >= 6 && pr / u.length < .5) out.push({ t: 'am', j, txt: `vino ${pr} de los últimos ${u.length}` }); }
   });
   return out;
+}
+function cumpleanos() {
+  const hoy = new Date(), m = hoy.getMonth() + 1;
+  const L = [];
+  jugActivos().forEach(j => j.fecha_nac.length === 10 && Number(j.fecha_nac.slice(5, 7)) === m && L.push({ n: j.nombre, f: j.fecha_nac, t: '👦' }));
+  entActivos().forEach(e => e.fecha_nac.length === 10 && Number(e.fecha_nac.slice(5, 7)) === m && L.push({ n: e.nombre || e.apodo, f: e.fecha_nac, t: '🧢', staff: 1 }));
+  return L.sort((a, b) => a.f.slice(8).localeCompare(b.f.slice(8)));
 }
 
 /* =====================================================================
@@ -526,289 +630,428 @@ function alertas() {
 function renderInicio() {
   const C = DB.CONFIG, anio = new Date().getFullYear();
   const st = calcStats({ anio });
-  const jp = Object.values(st.per).filter(p => p.tipo === 'J');
-  const prom = st.porSesion.length ? Math.round(st.porSesion.reduce((s, x) => s + pct(x.jp, x.jt), 0) / st.porSesion.length) : 0;
+  const prom = st.porSesion.length ? Math.round(st.porSesion.reduce((s, x) => s + pct(x.jp, x.jt), 0) / st.porSesion.length) : null;
   const vj = DB.GIRA.filter(g => g.persona_tipo === 'J' && String(g.va).toUpperCase() === 'SI').length;
   const vs = DB.GIRA.filter(g => g.persona_tipo === 'E' && String(g.va).toUpperCase() === 'SI').length;
-  const prox = proximoEntreno();
-  const al = alertas();
-  const ult = sesionesOrd().slice(0, 6);
+  const prox = proximoEntreno(), proxT = tipoDeFecha(prox);
+  const proxS = DB.SESIONES.find(s => s.id === prox + '_' + proxT);
+  const al = alertas(), cu = cumpleanos(), hoyMD = hoyISO().slice(5);
+  const cA = conAsistencia();
+  const ult = sesionesOrd().filter(s => cA.has(s.id)).slice(0, 6);
   let cuenta = '';
-  if (C.GIRA_DESDE) { const dd = Math.ceil((parseISO(C.GIRA_DESDE) - new Date(new Date().toDateString())) / 864e5); cuenta = dd > 0 ? `Faltan <b>${dd}</b> días` : dd === 0 ? '<b>¡Es hoy!</b>' : 'Gira realizada'; }
+  if (C.GIRA_DESDE) { const dd = Math.ceil((parseISO(C.GIRA_DESDE) - new Date(new Date().toDateString())) / 864e5); cuenta = dd > 0 ? `Faltan ${dd} días` : dd === 0 ? '¡Es hoy!' : 'Gira realizada'; }
   $('v-inicio').innerHTML = `
   <div class="hero">
     <img src="${esc(C.ESCUDO_URL || 'escudo.png')}" onerror="this.src=ESCUDO_FALLBACK" alt="Escudo Club Regatas Bella Vista">
     <h1>${esc(C.CLUB || 'Regatas Bella Vista')}</h1>
     <div class="sub">Camada ${esc(C.CAMADA || '2017')} · ${esc(C.DIVISION || 'M9')} ${esc(C.TEMPORADA || anio)}</div>
-    <div class="chips"><span>Entrenamientos: Miércoles y Sábados</span>${MODE === 'demo' ? '<span style="color:var(--am2);border-color:var(--am)">MODO DEMO · datos ficticios</span>' : ''}</div>
+    <div class="chips"><span>Entrenamientos: Miércoles y Sábados</span></div>
   </div>
   <div class="kpis">
     <div class="kpi"><div class="l">Plantel activo</div><div class="v" style="color:var(--cy)">${jugActivos().length}</div><div class="s">${DB.JUGADORES.length - jugActivos().length} no vienen más</div></div>
     <div class="kpi"><div class="l">Entrenadores</div><div class="v" style="color:var(--vi2)">${entActivos().length}</div><div class="s">staff activo</div></div>
-    <div class="kpi"><div class="l">Sesiones ${anio}</div><div class="v">${st.ses.length}</div><div class="s">registradas</div></div>
-    <div class="kpi"><div class="l">Asistencia prom.</div><div class="v" style="color:${st.ses.length ? colorPct(prom) : 'var(--tx3)'}">${st.ses.length ? prom + '%' : '—'}</div><div class="s">jugadores por sesión</div></div>
+    <div class="kpi"><div class="l">Entrenamientos ${anio}</div><div class="v">${st.ses.length}</div><div class="s">con asistencia tomada</div></div>
+    <div class="kpi"><div class="l">Asistencia prom.</div><div class="v" style="color:${prom == null ? 'var(--tx3)' : colorPct(prom)}">${prom == null ? '—' : prom + '%'}</div><div class="s">jugadores por entrenamiento</div></div>
     <div class="kpi"><div class="l">Gira</div><div class="v" style="color:var(--gr)">${vj}</div><div class="s">jugadores + ${vs} adultos</div></div>
   </div>
-  <div class="qa">
-    <button onclick="irAsistencia('${prox}')">✅ Tomar asistencia<small>${fmtFC(prox)} · ${TIPOS[tipoDeFecha(prox)]}</small></button>
-    <button onclick="ir('equipos')">🧩 Armar equipos<small>con los presentes del día</small></button>
-    <button onclick="ir('gira')">🚌 ${esc(C.GIRA_NOMBRE || 'Gira')}<small>${cuenta || 'quiénes viajan'}</small></button>
-    <button onclick="ir('stats')">📊 Estadísticas<small>asistencia y destacados</small></button>
-  </div>
   <div class="grid g2">
-    <div class="card"><h3>⚠️ Para seguir de cerca <span class="sp"></span><span class="pill" style="background:rgba(239,68,68,.15);color:var(--rd2)">${al.length}</span></h3>
-      ${al.length ? al.slice(0, 10).map(a => `<div class="alert ${a.t === 'am' ? 'am' : ''} clk" onclick="fichaJugador('${a.j.id}')"><b class="grow">${esc(a.j.nombre)}</b><span class="small">${a.txt}</span></div>`).join('') + (al.length > 10 ? `<div class="muted small">y ${al.length - 10} más en Estadísticas</div>` : '') : '<div class="empty">Sin alertas de asistencia 👌</div>'}
+    <div class="card"><h3>📅 Próximo entrenamiento<span class="sp"></span><span class="pill t-${proxT}">${TIPOS_C[proxT]}</span></h3>
+      <div style="font-size:1.2rem;font-weight:900">${prox === hoyISO() ? 'HOY · ' : ''}${fmtFC(prox)}${proxS && proxS.hora ? ' · ' + proxS.hora + ' h' : ''}</div>
+      ${proxS && (proxS.notas || proxS.archivos.length) ? `<div class="sub-h">📋 Planificación ${proxS.archivos.length ? `<span class="pill" style="background:rgba(6,182,212,.15);color:#67e8f9">📎 ${proxS.archivos.length}</span>` : ''}</div>${proxS.notas ? `<div class="plan-prev">${esc(proxS.notas)}</div>` : ''}` : '<div class="muted small" style="margin-top:6px">Todavía sin planificación cargada.</div>'}
+      <div class="row" style="margin-top:10px"><button class="btn pri" onclick="irAsistencia('${prox}')">✅ Tomar asistencia</button><button class="btn" onclick="irAsistencia('${prox}',null,true)">📋 Planificación</button></div>
     </div>
-    <div class="card"><h3>🗓️ Últimas sesiones</h3>
-      ${ult.length ? ult.map(s => { const x = st.porSesion.find(p => p.s.id === s.id) || calcStats({}).porSesion.find(p => p.s.id === s.id) || { jp: 0, jt: 0, ep: 0 }; return `<div class="list-i clk" onclick="irAsistencia('${s.fecha}','${s.tipo}')"><span class="pill t-${s.tipo}">${TIPOS[s.tipo] || s.tipo}</span><span class="grow"><b>${fmtFC(s.fecha)}</b> ${s.detalle ? '· ' + esc(s.detalle) : ''}</span><span class="small"><b style="color:var(--gr2)">${x.jp}</b>/${x.jt} · ${x.ep} ent.</span></div>`; }).join('') : '<div class="empty">Todavía no hay asistencias cargadas.<br><br><button class="btn pri" onclick="irAsistencia()">Cargar la primera</button></div>'}
+    <div class="qa" style="margin:0;grid-template-columns:1fr 1fr">
+      <button onclick="ir('equipos')">🧩 Armar equipos<small>con los presentes del día</small></button>
+      <button onclick="ir('gira')">🚌 ${esc(C.GIRA_NOMBRE || 'Gira')}<small>${cuenta || 'quiénes viajan'}</small></button>
+      <button onclick="ir('stats')">📊 Estadísticas<small>asistencia y destacados</small></button>
+      <button onclick="ir('plantel')">👥 Plantel<small>altas, bajas y datos</small></button>
+    </div>
+  </div>
+  <div class="grid g3">
+    <div class="card"><h3>⚠️ Para seguir de cerca <span class="sp"></span><span class="pill" style="background:rgba(239,68,68,.15);color:var(--rd2)">${al.length}</span></h3>
+      ${al.length ? al.slice(0, 8).map(a => `<div class="alert ${a.t === 'am' ? 'am' : ''} clk" onclick="fichaJugador('${a.j.id}')"><b class="grow">${esc(a.j.nombre)}</b><span class="small">${a.txt}</span></div>`).join('') + (al.length > 8 ? `<div class="muted small">y ${al.length - 8} más en Estadísticas</div>` : '') : '<div class="empty">Sin alertas de asistencia 👌</div>'}
+    </div>
+    <div class="card"><h3>🎂 Cumpleaños de ${MESES_L[new Date().getMonth()]}<span class="sp"></span><span class="pill" style="background:rgba(139,92,246,.18);color:#ddd6fe">${cu.length}</span></h3>
+      <div style="max-height:330px;overflow-y:auto">${cu.length ? cu.map(c => `<div class="bday ${c.f.slice(5) === hoyMD ? 'hoy' : ''}"><div class="d">${c.f.slice(8)}<small>${MESES[Number(c.f.slice(5, 7)) - 1]}</small></div><div class="grow"><b>${esc(c.n)}</b><div class="small muted">${c.t} cumple ${new Date().getFullYear() - Number(c.f.slice(0, 4))}${c.f.slice(5) === hoyMD ? ' · ¡HOY! 🎉' : ''}</div></div></div>`).join('') : '<div class="empty">Nadie cumple este mes</div>'}</div>
+    </div>
+    <div class="card"><h3>🗓️ Últimos entrenamientos</h3>
+      ${ult.length ? ult.map(s => { const x = st.porSesion.find(p => p.s.id === s.id) || calcStats({}).porSesion.find(p => p.s.id === s.id) || { jp: 0, jt: 0, ep: 0 }; return `<div class="list-i clk" onclick="irAsistencia('${s.fecha}','${s.tipo}')"><span class="pill t-${s.tipo}">${TIPOS_C[s.tipo] || s.tipo}</span><span class="grow"><b>${fmtFC(s.fecha)}</b>${s.archivos.length ? ' 📎' : ''}</span><span class="small"><b style="color:var(--gr2)">${x.jp}</b>/${x.jt} · ${x.ep} ent.</span></div>`; }).join('') : `<div class="empty">Todavía no hay entrenamientos cargados.<br><br><button class="btn pri" onclick="irAsistencia()">Cargar entrenamiento</button></div>`}
     </div>
   </div>`;
 }
 
 /* =====================================================================
-   ASISTENCIA
+   ASISTENCIA + PLANIFICACIÓN
    ===================================================================== */
-let AS = null; // {fecha,tipo,detalle,notas,vista,filtro,marcas:{'J-1':{estado,calif,comentario}},abiertos:Set}
-function irAsistencia(fecha, tipo) { AS = null; cargarSesionAS(fecha || hoyISO(), tipo); ir('asistencia'); }
+let AS = null;
+function irAsistencia(fecha, tipo, plan) { AS = null; cargarSesionAS(fecha || hoyISO(), tipo); ir('asistencia'); if (plan) setTimeout(() => { const e = $('asPlanCard'); if (e) e.scrollIntoView({ behavior: 'smooth' }); }, 80); }
 function cargarSesionAS(fecha, tipo) {
   tipo = tipo || tipoDeFecha(fecha);
   const id = fecha + '_' + tipo;
   const s = DB.SESIONES.find(x => x.id === id);
+  const regs = DB.ASISTENCIA.filter(a => a.sesion_id === id);
   const marcas = {};
-  DB.ASISTENCIA.filter(a => a.sesion_id === id).forEach(a => marcas[a.persona_tipo + '-' + a.persona_id] = { estado: a.estado, calif: Number(a.calif || 0), comentario: a.comentario || '' });
-  AS = { fecha, tipo, detalle: s ? s.detalle || '' : '', notas: s ? s.notas || '' : '', vista: (AS && AS.vista) || 'J', filtro: '', marcas, abiertos: new Set(), existe: !!s, sucio: false };
+  regs.forEach(a => marcas[a.persona_tipo + '-' + a.persona_id] = { estado: a.estado === 'A' ? 'A' : 'P', calif: Number(a.calif || 0), comentario: a.comentario || '', motivo: a.motivo || '' });
+  AS = { fecha, tipo, id, hora: s ? s.hora : '', detalle: s ? s.detalle || '' : '', notas: s ? s.notas || '' : '', archivos: s ? [...s.archivos] : [], vista: (AS && AS.vista) || 'J', filtro: '', marcas, abiertos: new Set(), existe: !!s, tomada: regs.length > 0, sucio: false };
+  personasAS().J.concat(personasAS().E).forEach(p => { if (!AS.marcas[p.k]) AS.marcas[p.k] = { estado: 'P', calif: 0, comentario: '', motivo: '' }; });
 }
 function personasAS() {
-  const conReg = new Set(Object.keys(AS.marcas));
-  const J = DB.JUGADORES.filter(j => j.activo !== 'NO' || conReg.has('J-' + j.id)).sort((a, b) => a.nombre.localeCompare(b.nombre)).map(j => ({ k: 'J-' + j.id, t: 'J', id: j.id, nombre: j.nombre, sub: `${j.colegio || ''} ${j.grado && j.grado !== 'N/A' ? '· ' + j.grado : ''}`, inactivo: j.activo === 'NO' }));
+  const conReg = new Set(DB.ASISTENCIA.filter(a => a.sesion_id === (AS && AS.id)).map(a => a.persona_tipo + '-' + a.persona_id));
+  const J = DB.JUGADORES.filter(j => j.activo !== 'NO' || conReg.has('J-' + j.id)).sort((a, b) => a.nombre.localeCompare(b.nombre)).map(j => ({ k: 'J-' + j.id, t: 'J', id: j.id, nombre: j.nombre, sub: `${j.colegio && j.colegio !== 'N/A' ? j.colegio : ''}${j.grado && j.grado !== 'N/A' ? ' · ' + j.grado : ''}`, inactivo: j.activo === 'NO' }));
   const E = DB.ENTRENADORES.filter(e => e.activo !== 'NO' || conReg.has('E-' + e.id)).sort((a, b) => entNom(a).localeCompare(entNom(b))).map(e => ({ k: 'E-' + e.id, t: 'E', id: e.id, nombre: entNom(e), sub: e.rol || '', inactivo: e.activo === 'NO' }));
   return { J, E };
 }
+function contarAS(arr) { let P = 0, A = 0; arr.forEach(p => (AS.marcas[p.k] && AS.marcas[p.k].estado === 'A') ? A++ : P++); return { P, A }; }
 function renderAsistencia() {
   if (!AS) cargarSesionAS(hoyISO());
   const { J, E } = personasAS();
-  const lista = (AS.vista === 'J' ? J : E).filter(p => !AS.filtro || p.nombre.toLowerCase().includes(AS.filtro.toLowerCase()));
-  const cont = arr => { let P = 0, A = 0; arr.forEach(p => { const m = AS.marcas[p.k]; if (m && m.estado === 'P') P++; else if (m && m.estado === 'A') A++; }); return { P, A, N: arr.length - P - A }; };
-  const cj = cont(J), ce = cont(E);
-  const hist = sesionesOrd().slice(0, 30);
+  const cj = contarAS(J), ce = contarAS(E);
+  const cA = conAsistencia();
+  const hist = sesionesOrd().map(s => { const r = DB.ASISTENCIA.filter(a => a.sesion_id === s.id); return { s, jp: r.filter(a => a.persona_tipo === 'J' && a.estado === 'P').length, jt: r.filter(a => a.persona_tipo === 'J').length, ep: r.filter(a => a.persona_tipo === 'E' && a.estado === 'P').length, tomada: cA.has(s.id) }; });
   $('v-asistencia').innerHTML = `
-  <h2 class="sec">✅ Asistencia <span class="sp"></span>${AS.existe ? '<span class="pill" style="background:rgba(34,197,94,.15);color:var(--gr2)">Sesión guardada · editando</span>' : '<span class="pill" style="background:rgba(245,158,11,.15);color:var(--am2)">Sesión nueva</span>'}</h2>
+  <h2 class="sec">✅ Entrenamiento <span class="sp"></span>${AS.tomada ? '<span class="pill" style="background:rgba(34,197,94,.15);color:var(--gr2)">Asistencia guardada · editando</span>' : AS.existe ? '<span class="pill" style="background:rgba(6,182,212,.15);color:#67e8f9">Planificado · falta asistencia</span>' : '<span class="pill" style="background:rgba(245,158,11,.15);color:var(--am2)">Entrenamiento nuevo</span>'}</h2>
   <div class="card">
-    <div class="att-head">
+    <div class="att-head" style="grid-template-columns:1fr 1fr">
       <div><label class="tiny muted">Fecha</label><input type="date" id="asFecha" value="${AS.fecha}" onchange="cambiarSesionAS()"></div>
-      <div><label class="tiny muted">Tipo</label><select id="asTipo" onchange="cambiarSesionAS()">${Object.entries(TIPOS).map(([k, v]) => `<option value="${k}" ${AS.tipo === k ? 'selected' : ''}>${k === 'MIE' || k === 'SAB' ? 'Entrenamiento ' + v : v}</option>`).join('')}</select></div>
-      <div class="full"><label class="tiny muted">${AS.tipo === 'PAR' ? 'Rival / lugar' : 'Detalle (opcional)'}</label><input id="asDet" value="${esc(AS.detalle)}" placeholder="${AS.tipo === 'PAR' ? 'vs. ...' : 'Ej: lluvia, cancha 3, trabajo de tackle'}" oninput="AS.detalle=this.value;AS.sucio=true"></div>
+      <div><label class="tiny muted">Horario</label><input type="time" id="asHora" value="${esc(AS.hora)}" onchange="AS.hora=this.value;AS.sucio=true"></div>
+      <div><label class="tiny muted">Tipo</label><select id="asTipo" onchange="cambiarSesionAS()">${Object.entries(TIPOS).map(([k, v]) => `<option value="${k}" ${AS.tipo === k ? 'selected' : ''}>${v}</option>`).join('')}</select></div>
+      <div><label class="tiny muted">${AS.tipo === 'PAR' ? 'Rival / lugar' : 'Detalle (opcional)'}</label><input id="asDet" value="${esc(AS.detalle)}" placeholder="${AS.tipo === 'PAR' ? 'vs. …' : 'Ej: cancha 3, lluvia'}" oninput="AS.detalle=this.value;AS.sucio=true"></div>
     </div>
-    <div style="margin-top:8px"><label class="tiny muted">Notas del día (staff)</label><textarea id="asNotas" rows="2" placeholder="Situaciones generales del entrenamiento…" oninput="AS.notas=this.value;AS.sucio=true">${esc(AS.notas)}</textarea></div>
   </div>
+  <div class="card" id="asPlanCard"><h3>📋 Planificación del entrenamiento del día</h3>
+    <textarea id="asNotas" rows="3" placeholder="Objetivos, bloques, ejercicios, tiempos…" oninput="AS.notas=this.value;AS.sucio=true">${esc(AS.notas)}</textarea>
+    <div class="files" id="asFiles">${filesHTML(AS.archivos, true)}<label class="upl" id="uplBtn"><span>📎</span>Foto o PDF<input type="file" accept="image/*,application/pdf" multiple class="hidden" onchange="subirArchivosAS(this.files);this.value=''"></label></div>
+    <div class="row" style="margin-top:10px"><button class="btn sm" onclick="guardarPlanAS()">💾 Guardar solo la planificación</button><span class="small muted">Podés cargarla antes del entrenamiento.</span></div>
+  </div>
+  <h3 class="sub-h">👥 Asistencia <span class="small muted" style="font-weight:500">— todos arrancan presentes: tocá solo a los que faltan</span></h3>
   <div class="att-tools">
     <div class="seg"><button class="${AS.vista === 'J' ? 'on' : ''}" onclick="AS.vista='J';renderAsistencia()">Jugadores (${J.length})</button><button class="${AS.vista === 'E' ? 'on' : ''}" onclick="AS.vista='E';renderAsistencia()">Entrenadores (${E.length})</button></div>
     <input class="grow" style="max-width:260px" placeholder="🔎 Buscar…" value="${esc(AS.filtro)}" oninput="AS.filtro=this.value;renderListaAS()" id="asBuscar">
-    <button class="btn sm" onclick="marcarTodosAS('P')">✓ Todos presentes</button>
-    <button class="btn sm" onclick="marcarTodosAS(null)">Limpiar</button>
+    <button class="btn sm" onclick="todosPresentesAS()">↺ Todos presentes</button>
   </div>
-  <div class="small muted" style="margin-bottom:6px">Tocá ✓ / ✗ para presente/ausente · ▲ ▼ destacan algo puntual del día · 💬 agrega un comentario.</div>
   <div class="att-list" id="asLista"></div>
   <div class="stick">
-    <div class="grow cnt small">
-      <div>👦 <b style="color:var(--gr2)">${cj.P}</b> P · <b style="color:var(--rd2)">${cj.A}</b> A · <b class="muted">${cj.N}</b> sin marcar</div>
-      <div>🧢 <b style="color:var(--gr2)">${ce.P}</b> P · <b style="color:var(--rd2)">${ce.A}</b> A · <b class="muted">${ce.N}</b> sin marcar</div>
-    </div>
+    <div class="grow cnt small" id="asCont"></div>
     <button class="btn grn" onclick="guardarAS()">💾 Guardar</button>
   </div>
   <div class="row" style="margin-top:12px">
-    <button class="btn vio" onclick="equiposDesdeSesion('${AS.fecha}_${AS.tipo}')" ${AS.existe ? '' : 'disabled'}>🧩 Armar equipos con estos presentes</button>
-    ${AS.existe ? `<button class="btn red sm" onclick="borrarSesionAS()">🗑 Borrar sesión</button>` : ''}
+    <button class="btn vio" onclick="equiposDesdeSesion('${AS.id}')" ${AS.tomada ? '' : 'disabled'}>🧩 Armar equipos con estos presentes</button>
+    <button class="btn pri" onclick="fichaEntrenamiento('${AS.id}')" ${AS.existe ? '' : 'disabled'}>📄 Ficha del entrenamiento (PDF / imagen)</button>
+    ${AS.existe ? `<button class="btn red sm" onclick="borrarSesionAS()">🗑 Borrar entrenamiento</button>` : ''}
   </div>
-  <div class="card" style="margin-top:14px"><h3>🗂️ Historial de sesiones</h3>
-    ${hist.length ? `<div class="tbl-wrap"><table><thead><tr><th>Fecha</th><th>Tipo</th><th>Detalle</th><th class="num">Jug.</th><th class="num">Ent.</th></tr></thead><tbody>
-    ${hist.map(s => { const r = DB.ASISTENCIA.filter(a => a.sesion_id === s.id); const jp = r.filter(a => a.persona_tipo === 'J' && a.estado === 'P').length, jt = r.filter(a => a.persona_tipo === 'J').length, ep = r.filter(a => a.persona_tipo === 'E' && a.estado === 'P').length; return `<tr class="clk" onclick="cargarSesionAS('${s.fecha}','${s.tipo}');renderAsistencia()"><td><b>${fmtFC(s.fecha)}</b></td><td><span class="pill t-${s.tipo}">${TIPOS[s.tipo] || s.tipo}</span></td><td class="muted">${esc(s.detalle || '')}</td><td class="num"><b>${jp}</b>/${jt}</td><td class="num">${ep}</td></tr>`; }).join('')}
-    </tbody></table></div>` : '<div class="empty">Sin sesiones aún.</div>'}
+  <div class="card" style="margin-top:14px"><h3>🗂️ Historial de entrenamientos</h3>
+    ${tabla('hist', [
+      { k: 'fecha', t: 'Fecha', v: r => r.s.fecha, h: r => `<b>${fmtFC(r.s.fecha)}</b> <span class="muted small">${r.s.fecha.slice(0, 4)}</span>` },
+      { k: 'tipo', t: 'Tipo', v: r => TIPOS_C[r.s.tipo], h: r => `<span class="pill t-${r.s.tipo}">${TIPOS_C[r.s.tipo] || r.s.tipo}</span>` },
+      { k: 'hora', t: 'Hora', v: r => r.s.hora, h: r => esc(r.s.hora) },
+      { k: 'det', t: 'Detalle', v: r => r.s.detalle, h: r => `<span class="muted">${esc(r.s.detalle || '')}</span>` },
+      { k: 'jp', t: 'Jug.', num: 1, v: r => r.tomada ? r.jp : null, h: r => r.tomada ? `<b>${r.jp}</b>/${r.jt}` : '<span class="muted small">planificado</span>' },
+      { k: 'ep', t: 'Ent.', num: 1, v: r => r.tomada ? r.ep : null, h: r => r.tomada ? r.ep : '' },
+      { k: 'plan', t: 'Plan', num: 1, v: r => (r.s.notas ? 1 : 0) + r.s.archivos.length, h: r => (r.s.notas ? '📝' : '') + (r.s.archivos.length ? ' 📎' + r.s.archivos.length : '') }
+    ], hist, { k: 'fecha', desc: true }, r => `class="clk" onclick="cargarSesionAS('${r.s.fecha}','${r.s.tipo}');renderAsistencia();window.scrollTo(0,0)"`)}
   </div>`;
-  renderListaAS();
+  renderListaAS(); cargarThumbs();
+}
+function renderContAS() {
+  const { J, E } = personasAS(); const cj = contarAS(J), ce = contarAS(E);
+  const el = $('asCont'); if (el) el.innerHTML = `<div>👦 <b style="color:var(--gr2)">${cj.P}</b> presentes · <b style="color:var(--rd2)">${cj.A}</b> ausentes</div><div>🧢 <b style="color:var(--gr2)">${ce.P}</b> presentes · <b style="color:var(--rd2)">${ce.A}</b> ausentes</div>`;
 }
 function renderListaAS() {
   const { J, E } = personasAS();
   const lista = (AS.vista === 'J' ? J : E).filter(p => !AS.filtro || p.nombre.toLowerCase().includes(AS.filtro.toLowerCase()));
-  $('asLista').innerHTML = lista.length ? lista.map(p => {
-    const m = AS.marcas[p.k] || {}; const ab = AS.abiertos.has(p.k);
-    return `<div class="att ${m.estado || ''}" id="att-${p.k}">
-      <div class="main">
-        <div class="nm"><b>${esc(p.nombre)}${p.inactivo ? ' <span class="pill" style="background:rgba(148,163,184,.2)">baja</span>' : ''}</b><small>${esc(p.sub)}</small></div>
-        <button class="cb up ${m.calif > 0 ? 'on' : ''}" onclick="califAS('${p.k}',1)" title="Destacar positivo">▲</button>
-        <button class="cb dn ${m.calif < 0 ? 'on' : ''}" onclick="califAS('${p.k}',-1)" title="Destacar negativo">▼</button>
-        <button class="cb cm ${m.comentario ? 'on' : ''}" onclick="toggleCmtAS('${p.k}')" title="Comentario">💬</button>
-        <button class="sb p ${m.estado === 'P' ? 'on' : ''}" onclick="estadoAS('${p.k}','P')">✓</button>
-        <button class="sb a ${m.estado === 'A' ? 'on' : ''}" onclick="estadoAS('${p.k}','A')">✗</button>
-      </div>
-      ${ab || m.comentario ? `<div class="cmt"><input placeholder="Comentario del día…" value="${esc(m.comentario || '')}" oninput="cmtAS('${p.k}',this.value)"></div>` : ''}
-    </div>`;
-  }).join('') : '<div class="empty">Nadie con ese nombre.</div>';
+  $('asLista').innerHTML = lista.length ? lista.map(p => attHTML(p)).join('') : '<div class="empty">Nadie con ese nombre.</div>';
+  renderContAS();
 }
-function mk(k) { return AS.marcas[k] || (AS.marcas[k] = { estado: null, calif: 0, comentario: '' }); }
-function refrescarContadorAS() { const y = window.scrollY; renderAsistencia(); const b = $('asBuscar'); window.scrollTo(0, y); if (AS.filtro && b) { b.focus(); b.setSelectionRange(b.value.length, b.value.length); } }
-function estadoAS(k, e) { const m = mk(k); m.estado = m.estado === e ? null : e; AS.sucio = true; refrescarContadorAS(); }
-function califAS(k, v) { const m = mk(k); m.calif = m.calif === v ? 0 : v; if (m.calif !== 0 && !m.estado) m.estado = 'P'; AS.sucio = true; if (m.calif !== 0) AS.abiertos.add(k); refrescarContadorAS(); }
-function toggleCmtAS(k) { AS.abiertos.has(k) ? AS.abiertos.delete(k) : AS.abiertos.add(k); renderListaAS(); const i = document.querySelector(`#att-${CSS.escape(k)} .cmt input`); if (i) i.focus(); }
-function cmtAS(k, v) { mk(k).comentario = v; AS.sucio = true; }
-function marcarTodosAS(e) {
-  const { J, E } = personasAS();
-  (AS.vista === 'J' ? J : E).forEach(p => { if (e === null) { if (AS.marcas[p.k]) AS.marcas[p.k].estado = null; } else if (!AS.marcas[p.k] || !AS.marcas[p.k].estado) mk(p.k).estado = e; });
-  AS.sucio = true; refrescarContadorAS();
+function attHTML(p) {
+  const m = AS.marcas[p.k] || { estado: 'P' }; const ab = AS.abiertos.has(p.k);
+  return `<div class="att ${m.estado}" id="att-${p.k}">
+    <div class="main">
+      <div class="nm"><b>${esc(p.nombre)}${p.inactivo ? ' <span class="pill" style="background:rgba(148,163,184,.2)">baja</span>' : ''}</b><small>${esc(p.sub)}</small></div>
+      <button class="cb up ${m.calif > 0 ? 'on' : ''}" onclick="califAS('${p.k}',1)" title="Destacar positivo">▲</button>
+      <button class="cb dn ${m.calif < 0 ? 'on' : ''}" onclick="califAS('${p.k}',-1)" title="A mejorar">▼</button>
+      <button class="cb cm ${m.comentario ? 'on' : ''}" onclick="toggleCmtAS('${p.k}')" title="Comentario">💬</button>
+      <button class="tog ${m.estado}" onclick="estadoAS('${p.k}')">${m.estado === 'A' ? '✗ Ausente' : '✓ Presente'}</button>
+    </div>
+    ${m.estado === 'A' ? `<div class="motivos">${MOTIVOS.map(mo => `<button class="${(m.motivo || 'Sin aviso') === mo ? 'on' : ''}" onclick="motivoAS('${p.k}','${mo}')">${mo}</button>`).join('')}</div>` : ''}
+    ${ab || m.comentario ? `<div class="cmt" style="margin-top:.45rem"><input placeholder="Comentario del día…" value="${esc(m.comentario || '')}" oninput="cmtAS('${p.k}',this.value)"></div>` : ''}
+  </div>`;
 }
+function reRow(k) { const el = document.getElementById('att-' + k); const p = personasAS()[k[0]].find(x => x.k === k); if (el && p) el.outerHTML = attHTML(p); renderContAS(); }
+const mk = k => AS.marcas[k] || (AS.marcas[k] = { estado: 'P', calif: 0, comentario: '', motivo: '' });
+function estadoAS(k) { const m = mk(k); m.estado = m.estado === 'A' ? 'P' : 'A'; if (m.estado === 'A' && !m.motivo) m.motivo = 'Sin aviso'; if (m.estado === 'P') m.motivo = ''; AS.sucio = true; reRow(k); }
+function motivoAS(k, mo) { mk(k).motivo = mo; AS.sucio = true; reRow(k); }
+function califAS(k, v) { const m = mk(k); m.calif = m.calif === v ? 0 : v; AS.sucio = true; if (m.calif !== 0) AS.abiertos.add(k); reRow(k); const i = document.querySelector(`#att-${CSS.escape(k)} .cmt input`); if (i && m.calif !== 0 && !m.comentario) i.focus(); }
+function toggleCmtAS(k) { AS.abiertos.has(k) ? AS.abiertos.delete(k) : AS.abiertos.add(k); reRow(k); const i = document.querySelector(`#att-${CSS.escape(k)} .cmt input`); if (i) i.focus(); }
+function cmtAS(k, v) { mk(k).comentario = v; AS.sucio = true; const b = document.querySelector(`#att-${CSS.escape(k)} .cb.cm`); if (b) b.classList.toggle('on', !!v); }
+function todosPresentesAS() { const { J, E } = personasAS(); (AS.vista === 'J' ? J : E).forEach(p => { const m = mk(p.k); m.estado = 'P'; m.motivo = ''; }); AS.sucio = true; renderListaAS(); }
 function cambiarSesionAS() {
   const f = $('asFecha').value, t = $('asTipo').value;
-  if (AS.sucio && !confirm('Hay cambios sin guardar en esta sesión. ¿Descartarlos?')) { $('asFecha').value = AS.fecha; $('asTipo').value = AS.tipo; return; }
-  const tipo = f !== AS.fecha && t === AS.tipo ? tipoDeFecha(f) : t;
-  cargarSesionAS(f, tipo); renderAsistencia();
+  if (AS.sucio && !confirm('Hay cambios sin guardar. ¿Descartarlos?')) { $('asFecha').value = AS.fecha; $('asTipo').value = AS.tipo; return; }
+  cargarSesionAS(f, f !== AS.fecha && t === AS.tipo ? tipoDeFecha(f) : t); renderAsistencia();
 }
+function filaSesionAS() { return { id: AS.id, fecha: AS.fecha, tipo: AS.tipo, hora: AS.hora || '', detalle: AS.detalle, notas: AS.notas, archivos: AS.archivos, actualizado: hoyISO() + ' ' + horaAhora() }; }
 async function guardarAS() {
-  if (!AS.fecha) return toast('Elegí la fecha', true);
-  const { J, E } = personasAS();
-  const todos = J.concat(E);
-  const sin = todos.filter(p => !AS.marcas[p.k] || !AS.marcas[p.k].estado);
-  const marcados = todos.length - sin.length;
-  if (!marcados) return toast('No marcaste a nadie todavía', true);
-  if (sin.length && !confirm(`${sin.length} persona(s) sin marcar se van a guardar como AUSENTES.\n\n¿Continuar?`)) return;
-  const id = AS.fecha + '_' + AS.tipo;
-  const rows = todos.map(p => { const m = AS.marcas[p.k] || {}; return { sesion_id: id, fecha: AS.fecha, tipo: AS.tipo, persona_tipo: p.t, persona_id: p.id, nombre: p.nombre, estado: m.estado || 'A', calif: m.calif || 0, comentario: m.comentario || '' }; });
-  const ok = await guardar([
-    { op: 'upsert', sheet: 'SESIONES', key: 'id', rows: [{ id, fecha: AS.fecha, tipo: AS.tipo, detalle: AS.detalle, notas: AS.notas, actualizado: new Date().toISOString().slice(0, 16).replace('T', ' ') }] },
-    { op: 'replace', sheet: 'ASISTENCIA', field: 'sesion_id', value: id, rows }
-  ], '✅ Asistencia guardada');
-  if (ok) { cargarSesionAS(AS.fecha, AS.tipo); renderAsistencia(); }
+  const { J, E } = personasAS(); const todos = J.concat(E);
+  const rows = todos.map(p => { const m = AS.marcas[p.k] || {}; const est = m.estado === 'A' ? 'A' : 'P'; return { sesion_id: AS.id, fecha: AS.fecha, tipo: AS.tipo, persona_tipo: p.t, persona_id: p.id, nombre: p.nombre, estado: est, calif: m.calif || 0, comentario: m.comentario || '', motivo: est === 'A' ? (m.motivo || 'Sin aviso') : '' }; });
+  await guardar([{ op: 'upsert', sheet: 'SESIONES', key: 'id', rows: [filaSesionAS()] }, { op: 'replace', sheet: 'ASISTENCIA', field: 'sesion_id', value: AS.id, rows }], '✅ Asistencia guardada');
+  const f = AS.fecha, t = AS.tipo; cargarSesionAS(f, t); renderAsistencia();
+}
+async function guardarPlanAS() {
+  await guardar([{ op: 'upsert', sheet: 'SESIONES', key: 'id', rows: [filaSesionAS()] }], '📋 Planificación guardada');
+  const marcas = AS.marcas, tomada = AS.tomada; AS.existe = true; AS.sucio = tomada ? AS.sucio : false; AS.marcas = marcas; renderAsistencia();
 }
 async function borrarSesionAS() {
-  const id = AS.fecha + '_' + AS.tipo;
-  if (!confirm(`¿Borrar la sesión ${fmtF(AS.fecha)} (${TIPOS[AS.tipo]}) y toda su asistencia?`)) return;
-  await guardar([{ op: 'remove', sheet: 'SESIONES', field: 'id', value: id }, { op: 'remove', sheet: 'ASISTENCIA', field: 'sesion_id', value: id }], 'Sesión borrada');
+  if (!confirm(`¿Borrar el entrenamiento del ${fmtF(AS.fecha)} (${TIPOS_C[AS.tipo]}) con su asistencia y planificación?`)) return;
+  const arch = AS.archivos.slice();
+  await guardar([{ op: 'remove', sheet: 'SESIONES', field: 'id', value: AS.id }, { op: 'remove', sheet: 'ASISTENCIA', field: 'sesion_id', value: AS.id }, { op: 'remove', sheet: 'EQUIPOS', field: 'grupo_id', value: AS.id }], 'Entrenamiento borrado');
+  arch.forEach(a => llamar(null, { action: 'deleteFile', id: a.id }, 1).catch(() => {}));
   cargarSesionAS(AS.fecha, AS.tipo); renderAsistencia();
 }
 
+/* ---------- archivos de planificación (Drive privado vía planilla) ---------- */
+const FILECACHE = {};
+function filesHTML(arr, editable) {
+  return (arr || []).map(f => `<div class="fthumb" onclick="abrirArchivo('${f.id}')" title="${esc(f.nombre)}">${/^image\//.test(f.mime) ? `<img data-fid="${f.id}" alt="">` : '<span class="ic">📄</span>'}<span style="position:relative;z-index:1;${/^image\//.test(f.mime) ? 'display:none' : ''}">${esc((f.nombre || '').slice(0, 22))}</span>${editable ? `<button class="del" onclick="event.stopPropagation();quitarArchivoAS('${f.id}')">✕</button>` : ''}</div>`).join('');
+}
+async function getArchivo(id) {
+  if (FILECACHE[id]) return FILECACHE[id];
+  const j = await llamar({ action: 'file', id, pin: pin() }, null, 2);
+  FILECACHE[id] = { mime: j.file.mime, nombre: j.file.nombre, url: `data:${j.file.mime};base64,${j.file.b64}`, b64: j.file.b64 };
+  return FILECACHE[id];
+}
+function cargarThumbs() {
+  document.querySelectorAll('img[data-fid]').forEach(async img => {
+    if (img.src) return;
+    try { const f = await getArchivo(img.dataset.fid); img.src = f.url; } catch (e) { img.replaceWith(Object.assign(document.createElement('span'), { className: 'ic', textContent: '🖼️' })); }
+  });
+}
+async function abrirArchivo(id) {
+  toast('Abriendo…');
+  try {
+    const f = await getArchivo(id);
+    const bin = atob(f.b64), arr = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+    const url = URL.createObjectURL(new Blob([arr], { type: f.mime }));
+    if (/^image\//.test(f.mime)) abrirModal(`<h3>🖼️ ${esc(f.nombre)}<span class="sp"></span><button class="x" onclick="cerrarModal()">×</button></h3><img src="${url}" style="width:100%;border-radius:10px"><div class="mact"><a class="btn" href="${url}" download="${esc(f.nombre)}">⬇️ Descargar</a></div>`);
+    else { const w = window.open(url, '_blank'); if (!w) { const a = document.createElement('a'); a.href = url; a.download = f.nombre; a.click(); } }
+  } catch (e) { toast('No se pudo abrir el archivo', true); }
+}
+function comprimirImagen(file) {
+  return new Promise((res, rej) => {
+    const img = new Image(); const u = URL.createObjectURL(file);
+    img.onload = () => { const M = 1600, s = Math.min(1, M / Math.max(img.width, img.height)); const c = document.createElement('canvas'); c.width = Math.round(img.width * s); c.height = Math.round(img.height * s); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(u); res(c.toDataURL('image/jpeg', .82).split(',')[1]); };
+    img.onerror = () => rej(new Error('No se pudo leer la imagen')); img.src = u;
+  });
+}
+const leerB64 = file => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result).split(',')[1]); r.onerror = rej; r.readAsDataURL(file); });
+async function subirArchivosAS(files) {
+  for (const file of files) {
+    const esImg = /^image\//.test(file.type), esPdf = file.type === 'application/pdf';
+    if (!esImg && !esPdf) { toast('Solo fotos o PDF', true); continue; }
+    if (esPdf && file.size > 15e6) { toast('El PDF supera 15 MB', true); continue; }
+    const btn = $('uplBtn'); if (btn) btn.innerHTML = '<span class="spin"></span>Subiendo…';
+    try {
+      const b64 = esImg ? await comprimirImagen(file) : await leerB64(file);
+      const mime = esImg ? 'image/jpeg' : 'application/pdf';
+      const nombre = `${AS.fecha}_${AS.tipo}_${file.name.replace(/\.[^.]+$/, '')}${esImg ? '.jpg' : '.pdf'}`;
+      const j = await llamar(null, { action: 'upload', nombre, mime, b64 }, 2);
+      FILECACHE[j.file.id] = { mime, nombre, url: `data:${mime};base64,${b64}`, b64 };
+      AS.archivos.push({ id: j.file.id, nombre, mime });
+      await guardar([{ op: 'upsert', sheet: 'SESIONES', key: 'id', rows: [filaSesionAS()] }]);
+      AS.existe = true; toast('📎 Archivo subido');
+    } catch (e) { toast('⚠️ No se pudo subir: ' + (e.red ? 'sin conexión' : e.message), true); }
+  }
+  renderAsistencia();
+}
+async function quitarArchivoAS(id) {
+  if (!confirm('¿Quitar este archivo de la planificación?')) return;
+  AS.archivos = AS.archivos.filter(a => a.id !== id);
+  await guardar([{ op: 'upsert', sheet: 'SESIONES', key: 'id', rows: [filaSesionAS()] }], 'Archivo quitado');
+  llamar(null, { action: 'deleteFile', id }, 1).catch(() => {});
+  renderAsistencia();
+}
+
+/* ---------- ficha del entrenamiento (PDF / imagen) ---------- */
+async function fichaEntrenamiento(sid) {
+  const s = DB.SESIONES.find(x => x.id === sid); if (!s) return toast('Guardá primero el entrenamiento', true);
+  abrirModal(`<h3>📄 Ficha del entrenamiento<span class="sp"></span><button class="x" onclick="cerrarModal()">×</button></h3><div class="empty"><span class="spin"></span> Preparando…</div>`);
+  const imgs = [];
+  for (const a of s.archivos.filter(a => /^image\//.test(a.mime))) { try { imgs.push((await getArchivo(a.id)).url); } catch (e) {} }
+  const html = fichaHTML(s, imgs);
+  abrirModal(`<h3>📄 Ficha del entrenamiento<span class="sp"></span><button class="x" onclick="cerrarModal()">×</button></h3>
+    <div class="mact" style="margin:0 0 12px"><button class="btn pri" onclick="fichaPDF()">🖨️ PDF</button><button class="btn vio" id="btnImg" onclick="fichaImagen('${sid}')">🖼️ Imagen (WhatsApp)</button></div>
+    <div id="fichaDoc">${html}</div>`);
+}
+function fichaHTML(s, imgs) {
+  const C = DB.CONFIG;
+  const r = DB.ASISTENCIA.filter(a => a.sesion_id === s.id);
+  const jp = r.filter(a => a.persona_tipo === 'J' && a.estado === 'P').length, jt = r.filter(a => a.persona_tipo === 'J').length;
+  const ep = r.filter(a => a.persona_tipo === 'E' && a.estado === 'P').length, et = r.filter(a => a.persona_tipo === 'E').length;
+  const aus = r.filter(a => a.estado === 'A').sort((a, b) => a.persona_tipo.localeCompare(b.persona_tipo) || a.nombre.localeCompare(b.nombre));
+  let eqRows = DB.EQUIPOS.filter(x => x.grupo_id === s.id), borrador = false, eqs;
+  if (eqRows.length) { const nombres = [...new Set(eqRows.map(x => x.equipo))]; eqs = nombres.map(n => ({ nombre: n, E: eqRows.filter(x => x.equipo === n && x.persona_tipo === 'E').map(x => x.nombre), J: eqRows.filter(x => x.equipo === n && x.persona_tipo === 'J').map(x => x.nombre) })); }
+  else if (EQ.fuente === 'S:' + s.id && EQ.equipos.length) { borrador = true; eqs = EQ.equipos.map(e => ({ nombre: e.nombre, E: e.entrenadores.map(id => entNom(entById(id))), J: e.jugadores.map(id => (jugById(id) || {}).nombre || '') })); }
+  const titulo = s.tipo === 'PAR' ? 'PARTIDO' + (s.detalle ? ' vs ' + esc(s.detalle) : '') : 'ENTRENAMIENTO ' + (TIPOS_C[s.tipo] || '').toUpperCase();
+  return `<div class="ficha">
+    <div class="fh"><img src="${esc(C.ESCUDO_URL || 'escudo.png')}" onerror="this.src=ESCUDO_FALLBACK"><div><div class="a">${esc(C.CLUB || 'Regatas Bella Vista')}</div><div class="b">${esc(C.DIVISION || 'M9')} · Camada ${esc(C.CAMADA || '2017')}</div></div><div class="c">${titulo}<br>📅 ${fmtF(s.fecha)}${s.hora ? ' · ' + s.hora + ' h' : ''}${s.tipo !== 'PAR' && s.detalle ? '<br>' + esc(s.detalle) : ''}</div></div>
+    ${jt ? `<div class="kp"><div>Jugadores presentes<b>${jp} / ${jt}</b></div><div>Entrenadores<b>${ep} / ${et}</b></div><div>Asistencia<b>${pct(jp, jt)}%</b></div>${eqs ? `<div>Equipos<b>${eqs.length}</b></div>` : ''}</div>` : ''}
+    ${s.notas || imgs.length ? `<h4>📋 Planificación</h4>${s.notas ? `<div class="plan">${esc(s.notas)}</div>` : ''}${imgs.length ? `<div class="pimgs" style="margin-top:8px">${imgs.map(u => `<img src="${u}">`).join('')}</div>` : ''}${s.archivos.some(a => a.mime === 'application/pdf') ? `<div class="aus" style="margin-top:6px">📎 PDF adjunto: ${s.archivos.filter(a => a.mime === 'application/pdf').map(a => esc(a.nombre)).join(', ')}</div>` : ''}` : ''}
+    ${eqs ? `<h4>🧩 Equipos ${borrador ? '(borrador, sin guardar)' : 'confirmados'}</h4><div class="pg">${eqs.map(e => `<div class="pt"><h5>${esc(e.nombre)} · ${e.J.length}</h5><div class="pc">Entrenadores: ${esc(e.E.join(', ') || 'Sin asignar')}</div><ol>${e.J.map(n => `<li>${esc(n)}</li>`).join('')}</ol></div>`).join('')}</div>` : (jt ? '<h4>🧩 Equipos</h4><div class="aus">Todavía no hay equipos guardados para este entrenamiento.</div>' : '')}
+    ${aus.length ? `<h4>🚫 Ausentes (${aus.length})</h4><div class="aus">${aus.map(a => `${a.persona_tipo === 'E' ? '🧢 ' : ''}${esc(a.nombre)}${a.motivo && a.motivo !== 'Sin aviso' ? ' <i>(' + esc(a.motivo.toLowerCase()) + ')</i>' : ''}`).join(' · ')}</div>` : ''}
+    <div class="ft">Regatas Bella Vista · M9 Camada 2017 · generado ${fmtF(hoyISO())} ${horaAhora()}</div>
+  </div>`;
+}
+function fichaPDF() { $('printArea').innerHTML = $('fichaDoc').innerHTML; setTimeout(() => window.print(), 200); }
+function cargarScript(src) { return new Promise((res, rej) => { if (document.querySelector(`script[src="${src}"]`)) return res(); const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); }); }
+async function fichaImagen(sid) {
+  const b = $('btnImg'); b.disabled = true; b.innerHTML = '<span class="spin"></span> Generando…';
+  try {
+    await cargarScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+    const tmp = document.createElement('div'); tmp.style.cssText = 'position:fixed;left:-10000px;top:0;width:820px'; tmp.innerHTML = $('fichaDoc').innerHTML; document.body.appendChild(tmp);
+    const esc0 = tmp.querySelector('.fh img'); if (esc0 && !esc0.complete) await new Promise(r => { esc0.onload = esc0.onerror = r; setTimeout(r, 1500); });
+    const canvas = await html2canvas(tmp.firstElementChild, { scale: 2, backgroundColor: '#ffffff', useCORS: true });
+    tmp.remove();
+    const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+    const nombre = `M9_entrenamiento_${sid}.png`, file = new File([blob], nombre, { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'Entrenamiento M9' }).catch(() => {}); }
+    else { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = nombre; a.click(); toast('🖼️ Imagen descargada'); }
+  } catch (e) { toast('No se pudo generar la imagen', true); }
+  b.disabled = false; b.innerHTML = '🖼️ Imagen (WhatsApp)';
+}
+
 /* =====================================================================
-   EQUIPOS  (lógica del monitor original + mejoras)
+   EQUIPOS
    ===================================================================== */
-let EQ = { fuente: '', modo: 'mixtos', n: 6, presentesJ: new Set(), presentesE: new Set(), equipos: [], sel: null, verNiveles: true, ajustar: false, tipoEvento: 'entrenamiento', rival: '', fecha: '' };
-function equiposDesdeSesion(sid) { setFuenteEQ('S:' + sid); ir('equipos'); }
+let EQ = { fuente: '', modo: 'mixtos', n: 6, presentesJ: new Set(), presentesE: new Set(), equipos: [], sel: null, verNiveles: true, ajustar: false, tipoEvento: 'entrenamiento', rival: '', fecha: '', cargando: false };
+function equiposDesdeSesion(sid) { EQ.fuente = ''; setFuenteEQ('S:' + sid); ir('equipos'); }
 function equiposDesdeGira() { setFuenteEQ('GIRA'); ir('equipos'); }
 function setFuenteEQ(f) {
   EQ.fuente = f; EQ.equipos = []; EQ.sel = null;
   const J = jugActivos(), E = entActivos().filter(e => e.asigna_equipos !== 'NO');
   if (f.startsWith('S:')) {
-    const sid = f.slice(2); const r = DB.ASISTENCIA.filter(a => a.sesion_id === sid && a.estado === 'P');
+    const sid = f.slice(2), r = DB.ASISTENCIA.filter(a => a.sesion_id === sid && a.estado === 'P');
     EQ.presentesJ = new Set(r.filter(a => a.persona_tipo === 'J').map(a => a.persona_id));
     EQ.presentesE = new Set(r.filter(a => a.persona_tipo === 'E').map(a => a.persona_id));
     const s = DB.SESIONES.find(x => x.id === sid); EQ.fecha = s ? s.fecha : hoyISO();
     EQ.tipoEvento = s && s.tipo === 'PAR' ? 'partido' : 'entrenamiento'; EQ.rival = s && s.tipo === 'PAR' ? s.detalle || '' : '';
   } else if (f === 'GIRA') {
-    EQ.presentesJ = new Set(J.filter(j => viaja('J', j.id)).map(j => j.id));
-    EQ.presentesE = new Set(E.filter(e => viaja('E', e.id)).map(e => e.id));
-    EQ.fecha = DB.CONFIG.GIRA_DESDE || hoyISO();
-  } else {
-    EQ.presentesJ = new Set(J.map(j => j.id)); EQ.presentesE = new Set(E.map(e => e.id)); EQ.fecha = hoyISO();
-  }
-  const guardado = DB.EQUIPOS.filter(x => x.grupo_id === grupoIdEQ());
-  if (guardado.length) cargarGuardadoEQ(true); else generarEQ();
+    EQ.presentesJ = new Set(J.filter(j => viaja('J', j.id)).map(j => j.id)); EQ.presentesE = new Set(E.filter(e => viaja('E', e.id)).map(e => e.id)); EQ.fecha = DB.CONFIG.GIRA_DESDE || hoyISO();
+  } else { EQ.presentesJ = new Set(J.map(j => j.id)); EQ.presentesE = new Set(E.map(e => e.id)); EQ.fecha = hoyISO(); }
+  if (DB.EQUIPOS.some(x => x.grupo_id === grupoIdEQ())) cargarGuardadoEQ(true); else generarEQ();
 }
-function grupoIdEQ() { return EQ.fuente.startsWith('S:') ? EQ.fuente.slice(2) : EQ.fuente === 'GIRA' ? 'GIRA' : 'LIBRE_' + (EQ.fecha || hoyISO()); }
-function fuenteDefault() { const s = sesionesOrd()[0]; return s && s.fecha === hoyISO() ? 'S:' + s.id : 'TODOS'; }
+const grupoIdEQ = () => EQ.fuente.startsWith('S:') ? EQ.fuente.slice(2) : EQ.fuente === 'GIRA' ? 'GIRA' : 'LIBRE_' + (EQ.fecha || hoyISO());
+function fuenteDefault() { const cA = conAsistencia(); const s = sesionesOrd().find(x => cA.has(x.id)); return s && s.fecha === hoyISO() ? 'S:' + s.id : 'TODOS'; }
 
-function generarEQ() {
-  const pres = jugActivos().filter(j => EQ.presentesJ.has(j.id));
-  let n = EQ.n; const equipos = [];
-  if (!pres.length) { EQ.equipos = []; return; }
-  const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const k = Math.floor(Math.random() * (i + 1)); [a[i], a[k]] = [a[k], a[i]]; } return a; };
-  const ord = { G: 0, '1': 1, '2': 2, '3': 3 };
-  const porNivel = arr => { const g = {}; arr.forEach(j => (g[j.nivel === 'G' ? 'G' + (j.nivel2 || 9) : j.nivel] = g[j.nivel === 'G' ? 'G' + (j.nivel2 || 9) : j.nivel] || []).push(j)); return Object.keys(g).sort((a, b) => (ord[a[0]] - ord[b[0]]) || a.localeCompare(b)).flatMap(k => shuffle(g[k])); };
-  const snake = (lista, eqs) => { let i = 0, dir = 1; lista.forEach(j => { eqs[i].jugadores.push(j); i += dir; if (i === eqs.length) { i = eqs.length - 1; dir = -1; } else if (i < 0) { i = 0; dir = 1; } }); };
-  if (EQ.modo === 'por-nivel' && pres.some(j => j.nivel === 'G')) {
+// MISMA función que en Code.gs (el servidor la usa para el staff, que no ve niveles)
+function armarEquipos(J, E, presJ, presE, modo, n) {
+  var pj = {}; presJ.forEach(function (x) { pj[String(x)] = 1; });
+  var pe = {}; presE.forEach(function (x) { pe[String(x)] = 1; });
+  var pres = J.filter(function (j) { return pj[j.id]; });
+  if (!pres.length) return [];
+  var shuffle = function (a) { for (var i = a.length - 1; i > 0; i--) { var k = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[k]; a[k] = t; } return a; };
+  var ord = { G: 0, '1': 1, '2': 2, '3': 3 };
+  var porNivel = function (arr) {
+    var g = {};
+    arr.forEach(function (j) { var k = j.nivel === 'G' ? 'G' + (j.nivel2 || 9) : (j.nivel || '2'); (g[k] = g[k] || []).push(j); });
+    return Object.keys(g).sort(function (a, b) { return ((ord[a[0]] || 2) - (ord[b[0]] || 2)) || (a < b ? -1 : a > b ? 1 : 0); })
+      .reduce(function (acc, k) { return acc.concat(shuffle(g[k])); }, []);
+  };
+  var snake = function (lista, eqs) { var i = 0, dir = 1; lista.forEach(function (j) { eqs[i].jugadores.push(j); i += dir; if (i === eqs.length) { i = eqs.length - 1; dir = -1; } else if (i < 0) { i = 0; dir = 1; } }); };
+  var equipos = [], i;
+  var hayG = pres.some(function (j) { return j.nivel === 'G'; });
+  if (modo === 'por-nivel' && hayG) {
     n = Math.max(n, 3);
     equipos.push({ id: 1, nombre: 'Gloriosa A', jugadores: [], entrenadores: [] }, { id: 2, nombre: 'Gloriosa B', jugadores: [], entrenadores: [] });
-    snake(porNivel(pres.filter(j => j.nivel === 'G')), equipos.slice(0, 2));
-    const resto = Array.from({ length: n - 2 }, (_, i) => ({ id: i + 3, nombre: `Equipo ${i + 3}`, jugadores: [], entrenadores: [] }));
-    snake(porNivel(pres.filter(j => j.nivel !== 'G')), resto); equipos.push(...resto);
+    snake(porNivel(pres.filter(function (j) { return j.nivel === 'G'; })), equipos.slice(0, 2));
+    var resto = [];
+    for (i = 0; i < n - 2; i++) resto.push({ id: i + 3, nombre: 'Equipo ' + (i + 3), jugadores: [], entrenadores: [] });
+    snake(porNivel(pres.filter(function (j) { return j.nivel !== 'G'; })), resto);
+    equipos = equipos.concat(resto);
   } else {
-    for (let i = 0; i < n; i++) equipos.push({ id: i + 1, nombre: `Equipo ${i + 1}`, jugadores: [], entrenadores: [] });
+    for (i = 0; i < n; i++) equipos.push({ id: i + 1, nombre: 'Equipo ' + (i + 1), jugadores: [], entrenadores: [] });
     snake(porNivel(pres), equipos);
   }
-  // entrenadores: primero con su hijo, el resto repartido parejo
-  const ents = entActivos().filter(e => e.asigna_equipos !== 'NO' && EQ.presentesE.has(e.id));
-  const sinHijo = [];
-  shuffle(ents).forEach(e => {
-    const eq = e.hijo_id && equipos.find(q => q.jugadores.some(j => j.id === e.hijo_id));
+  var ents = shuffle(E.filter(function (e) { return e.asigna_equipos !== 'NO' && pe[e.id]; }));
+  var sinHijo = [];
+  ents.forEach(function (e) {
+    var eq = null;
+    if (e.hijo_id) equipos.forEach(function (q) { if (!eq && q.jugadores.some(function (j) { return j.id === e.hijo_id; })) eq = q; });
     if (eq && eq.entrenadores.length < 2) eq.entrenadores.push(e.id); else sinHijo.push(e);
   });
-  sinHijo.forEach(e => { const eq = [...equipos].sort((a, b) => a.entrenadores.length - b.entrenadores.length)[0]; eq.entrenadores.push(e.id); });
-  equipos.forEach(e => e.jugadores = e.jugadores.map(j => j.id));
-  EQ.equipos = equipos; EQ.sel = null; guardarBorradorEQ();
+  sinHijo.forEach(function (e) { var eq = equipos.slice().sort(function (a, b) { return a.entrenadores.length - b.entrenadores.length; })[0]; eq.entrenadores.push(e.id); });
+  equipos.forEach(function (e) { e.jugadores = e.jugadores.map(function (j) { return j.id; }); });
+  return equipos;
 }
+async function generarEQ() {
+  const presJ = [...EQ.presentesJ].filter(id => (jugById(id) || {}).activo !== 'NO'), presE = [...EQ.presentesE];
+  if (isAdmin()) { EQ.equipos = armarEquipos(jugActivos(), entActivos(), presJ, presE, EQ.modo, EQ.n); EQ.sel = null; guardarBorradorEQ(); return; }
+  EQ.cargando = true; if (TAB === 'equipos') renderEquipos();
+  try { const j = await llamar(null, { action: 'equipos', presJ, presE, modo: EQ.modo, n: EQ.n }); EQ.equipos = j.equipos; EQ.sel = null; guardarBorradorEQ(); }
+  catch (e) { toast('⚠️ Para mezclar equipos hace falta conexión', true); }
+  EQ.cargando = false; if (TAB === 'equipos') renderEquipos();
+}
+async function regenerarEQ() { await generarEQ(); renderEquipos(); }
 function guardarBorradorEQ() { lsSet(LS.draft, JSON.stringify({ fuente: EQ.fuente, equipos: EQ.equipos, modo: EQ.modo, n: EQ.n })); }
 function promEQ(eq) { const js = eq.jugadores.map(jugById).filter(Boolean); return js.length ? js.reduce((s, j) => s + nivelNum(j), 0) / js.length : 0; }
-
 function renderEquipos() {
   if (!EQ.fuente) {
     let d = null; try { d = JSON.parse(lsGet(LS.draft) || 'null'); } catch (e) {}
-    if (d && d.equipos && d.equipos.length) { setFuenteEQ(d.fuente || fuenteDefault()); EQ.equipos = d.equipos; EQ.modo = d.modo || EQ.modo; EQ.n = d.n || EQ.n; }
+    if (d && d.equipos && d.equipos.length) { const f = d.fuente || fuenteDefault(); EQ.fuente = f; setFuenteEQ(f); EQ.equipos = d.equipos; EQ.modo = d.modo || EQ.modo; EQ.n = d.n || EQ.n; }
     else setFuenteEQ(fuenteDefault());
   }
-  const ses = sesionesOrd().slice(0, 40);
+  const cA = conAsistencia(); const ses = sesionesOrd().filter(s => cA.has(s.id)).slice(0, 40);
   const J = jugActivos(), E = entActivos();
   const nPres = J.filter(j => EQ.presentesJ.has(j.id)).length;
-  const proms = EQ.equipos.map(promEQ);
-  const dif = proms.length ? Math.max(...proms) - Math.min(...proms) : 0;
+  const adm = isAdmin(), verN = adm && EQ.verNiveles;
+  const proms = EQ.equipos.map(promEQ); const dif = proms.length ? Math.max(...proms) - Math.min(...proms) : 0;
   const asignadosE = new Set(EQ.equipos.flatMap(e => e.entrenadores));
-  const libresE = E.filter(e => EQ.presentesE.has(e.id) && !asignadosE.has(e.id));
+  const libresE = E.filter(e => EQ.presentesE.has(e.id) && e.asigna_equipos !== 'NO' && !asignadosE.has(e.id));
   const hayGuardado = DB.EQUIPOS.some(x => x.grupo_id === grupoIdEQ());
+  const sid = EQ.fuente.startsWith('S:') ? EQ.fuente.slice(2) : '';
   $('v-equipos').innerHTML = `
-  <h2 class="sec">🧩 Armado de equipos</h2>
+  <h2 class="sec">🧩 Armado de equipos ${EQ.cargando ? '<span class="spin"></span>' : ''}</h2>
   <div class="grid g3">
     <div class="card"><h3>📥 ¿Con quiénes?</h3>
       <select onchange="setFuenteEQ(this.value);renderEquipos()">
         <option value="TODOS" ${EQ.fuente === 'TODOS' ? 'selected' : ''}>Todo el plantel activo</option>
         <option value="GIRA" ${EQ.fuente === 'GIRA' ? 'selected' : ''}>🚌 Los que viajan a la gira</option>
-        <optgroup label="Presentes de una sesión">${ses.map(s => `<option value="S:${s.id}" ${EQ.fuente === 'S:' + s.id ? 'selected' : ''}>${fmtFC(s.fecha)} · ${TIPOS[s.tipo] || s.tipo}${s.detalle ? ' · ' + esc(s.detalle) : ''}</option>`).join('')}</optgroup>
+        <optgroup label="Presentes de un entrenamiento">${ses.map(s => `<option value="S:${s.id}" ${EQ.fuente === 'S:' + s.id ? 'selected' : ''}>${nombreEntreno(s)}${s.detalle ? ' · ' + esc(s.detalle) : ''}</option>`).join('')}</optgroup>
       </select>
       <div class="info" style="margin-top:8px">👦 ${nPres} jugadores · 🧢 ${E.filter(e => EQ.presentesE.has(e.id)).length} entrenadores</div>
       <button class="btn sm" style="width:100%;margin-top:8px" onclick="EQ.ajustar=!EQ.ajustar;renderEquipos()">${EQ.ajustar ? '↑ Ocultar' : '↓ Ajustar'} presentes / ausentes</button>
     </div>
     <div class="card"><h3>⚙️ Tipo de equipos</h3>
-      <div class="seg" style="width:100%;display:grid;grid-template-columns:1fr 1fr"><button class="${EQ.modo === 'mixtos' ? 'on' : ''}" onclick="EQ.modo='mixtos';generarEQ();renderEquipos()">🔀 Mixtos</button><button class="${EQ.modo === 'por-nivel' ? 'on' : ''}" onclick="EQ.modo='por-nivel';if(EQ.n<3)EQ.n=3;generarEQ();renderEquipos()">📊 Por nivel</button></div>
-      <div class="info" style="margin-top:8px">${EQ.modo === 'mixtos' ? '✓ Todos los equipos con niveles mezclados (reparto en serpentina)' : '✓ 2 equipos Gloriosa + el resto por nivel'}</div>
+      <div class="seg" style="width:100%;display:grid;grid-template-columns:1fr 1fr"><button class="${EQ.modo === 'mixtos' ? 'on' : ''}" onclick="EQ.modo='mixtos';regenerarEQ()">🔀 Mixtos</button><button class="${EQ.modo === 'por-nivel' ? 'on' : ''}" onclick="EQ.modo='por-nivel';if(EQ.n<3)EQ.n=3;regenerarEQ()">📊 Por nivel</button></div>
+      <div class="info" style="margin-top:8px">${EQ.modo === 'mixtos' ? '✓ Equipos parejos, niveles mezclados' : '✓ 2 equipos Gloriosa + el resto por nivel'}</div>
     </div>
     <div class="card"><h3>🔢 Cantidad de equipos</h3>
-      <div class="nums">${[2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => `<button class="${EQ.n === n ? 'on' : ''}" onclick="EQ.n=${n};generarEQ();renderEquipos()">${n}</button>`).join('')}</div>
+      <div class="nums">${[2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => `<button class="${EQ.n === n ? 'on' : ''}" onclick="EQ.n=${n};regenerarEQ()">${n}</button>`).join('')}</div>
       <div class="info" style="margin-top:8px">~${EQ.n ? Math.ceil(nPres / EQ.n) : 0} jugadores por equipo</div>
     </div>
   </div>
   ${EQ.ajustar ? `<div class="card"><div class="grid g2">
     <div><h3>👦 Jugadores <span class="sp"></span><button class="btn sm" onclick="todosEQ('J',true)">Todos</button><button class="btn sm" onclick="todosEQ('J',false)">Ninguno</button></h3><div class="ckl">${J.map(j => `<label><input type="checkbox" ${EQ.presentesJ.has(j.id) ? 'checked' : ''} onchange="togglePresEQ('J','${j.id}',this.checked)"> ${esc(j.nombre)} ${nivelBadge(j)}</label>`).join('')}</div></div>
     <div><h3>🧢 Entrenadores</h3><div class="ckl">${E.map(e => `<label><input type="checkbox" ${EQ.presentesE.has(e.id) ? 'checked' : ''} onchange="togglePresEQ('E','${e.id}',this.checked)"> ${esc(entNom(e))} <span class="muted small">${esc(e.rol || '')}${e.asigna_equipos === 'NO' ? ' · no se asigna' : ''}</span></label>`).join('')}</div></div>
-  </div><button class="btn pri" style="margin-top:10px" onclick="generarEQ();renderEquipos()">🔄 Rearmar con esta selección</button></div>` : ''}
+  </div><button class="btn pri" style="margin-top:10px" onclick="regenerarEQ()">🔄 Rearmar con esta selección</button></div>` : ''}
   <div class="row" style="margin:6px 0 10px">
-    <button class="btn vio" onclick="generarEQ();renderEquipos()">🔄 Mezclar de nuevo</button>
-    <button class="btn pri" onclick="copiarEQ()">📋 Copiar (WhatsApp)</button>
-    <button class="btn grn" onclick="guardarEQ()">💾 Guardar en planilla</button>
-    ${hayGuardado ? `<button class="btn sm" onclick="cargarGuardadoEQ();renderEquipos()">↩︎ Cargar los guardados</button>` : ''}
-    <label class="small row" style="gap:.3rem;margin-left:auto"><input type="checkbox" style="width:auto" ${EQ.verNiveles ? 'checked' : ''} onchange="EQ.verNiveles=this.checked;renderEquipos()"> ver niveles</label>
+    <button class="btn vio" onclick="regenerarEQ()" ${EQ.cargando ? 'disabled' : ''}>🔄 Mezclar de nuevo</button>
+    <button class="btn grn" onclick="guardarEQ()">💾 Guardar / confirmar</button>
+    <button class="btn pri" onclick="copiarEQ()">📋 WhatsApp</button>
+    ${sid ? `<button class="btn" onclick="fichaEntrenamiento('${sid}')">📄 Ficha del entrenamiento</button>` : `<button class="btn" onclick="imprimirEQ()">🖨️ PDF</button>`}
+    ${hayGuardado ? `<button class="btn sm" onclick="cargarGuardadoEQ();renderEquipos()">↩︎ Volver a los guardados</button>` : ''}
+    ${adm ? `<label class="small row" style="gap:.3rem;margin-left:auto"><input type="checkbox" style="width:auto" ${EQ.verNiveles ? 'checked' : ''} onchange="EQ.verNiveles=this.checked;renderEquipos()"> ver niveles</label>` : ''}
   </div>
-  <div class="card"><div class="row">
-    <div class="seg"><button class="${EQ.tipoEvento === 'entrenamiento' ? 'on' : ''}" onclick="EQ.tipoEvento='entrenamiento';renderEquipos()">🏋️ Entrenamiento</button><button class="${EQ.tipoEvento === 'partido' ? 'on' : ''}" onclick="EQ.tipoEvento='partido';renderEquipos()">🏉 Partido</button></div>
-    ${EQ.tipoEvento === 'partido' ? `<input style="max-width:200px" placeholder="vs. (rival)" value="${esc(EQ.rival)}" oninput="EQ.rival=this.value">` : ''}
-    <input type="date" style="max-width:170px" value="${EQ.fecha}" onchange="EQ.fecha=this.value">
-    <button class="btn" onclick="imprimirEQ()">🖨️ Imprimir / PDF (sin niveles)</button>
-  </div></div>
-  ${dif >= .5 ? `<div class="warn">⚠️ Diferencia de nivel entre equipos: ${dif.toFixed(2)} (mín ${Math.min(...proms).toFixed(1)} · máx ${Math.max(...proms).toFixed(1)}). Mezclá de nuevo o mové jugadores.</div>` : ''}
-  ${libresE.length ? `<div class="warn">🧢 Entrenadores presentes sin equipo: ${libresE.map(e => `<span class="chip" onclick="selEQ('E','${e.id}',0)">${esc(entNom(e))}</span>`).join('')} <span class="small">(tocá uno y después "Mover acá")</span></div>` : ''}
-  ${EQ.sel ? `<div class="info" style="margin:8px 0">👉 Seleccionado: <b>${esc(EQ.sel.t === 'J' ? (jugById(EQ.sel.id) || {}).nombre : entNom(entById(EQ.sel.id)))}</b>. Tocá "Mover acá" en el equipo destino. <button class="btn sm" onclick="EQ.sel=null;renderEquipos()">Cancelar</button></div>` : '<div class="small muted" style="margin:8px 0">En compu: arrastrá jugadores/entrenadores. En el celu: tocá uno y después "Mover acá".</div>'}
-  <div class="teams">${EQ.equipos.map(eq => teamHTML(eq)).join('') || '<div class="empty">No hay jugadores seleccionados.</div>'}</div>`;
+  ${!sid ? `<div class="card"><div class="row"><div class="seg"><button class="${EQ.tipoEvento === 'entrenamiento' ? 'on' : ''}" onclick="EQ.tipoEvento='entrenamiento';renderEquipos()">🏋️ Entrenamiento</button><button class="${EQ.tipoEvento === 'partido' ? 'on' : ''}" onclick="EQ.tipoEvento='partido';renderEquipos()">🏉 Partido</button></div>${EQ.tipoEvento === 'partido' ? `<input style="max-width:200px" placeholder="vs. (rival)" value="${esc(EQ.rival)}" oninput="EQ.rival=this.value">` : ''}<input type="date" style="max-width:170px" value="${EQ.fecha}" onchange="EQ.fecha=this.value"></div></div>` : ''}
+  ${verN && dif >= .5 ? `<div class="warn">⚠️ Diferencia de nivel entre equipos: ${dif.toFixed(2)}. Mezclá de nuevo o mové jugadores.</div>` : ''}
+  ${libresE.length ? `<div class="warn">🧢 Entrenadores presentes sin equipo: ${libresE.map(e => `<span class="chip" onclick="selEQ('E','${e.id}',0)">${esc(entNom(e))}</span>`).join('')}</div>` : ''}
+  ${EQ.sel ? `<div class="info" style="margin:8px 0">👉 Seleccionado: <b>${esc(EQ.sel.t === 'J' ? (jugById(EQ.sel.id) || {}).nombre : entNom(entById(EQ.sel.id)))}</b>. Tocá "Mover acá" en el equipo destino. <button class="btn sm" onclick="EQ.sel=null;renderEquipos()">Cancelar</button></div>` : '<div class="small muted" style="margin:8px 0">En compu: arrastrá. En el celu: tocá un jugador o entrenador y después "Mover acá". El nombre del equipo se puede editar tocándolo.</div>'}
+  <div class="teams">${EQ.equipos.map(eq => teamHTML(eq, verN)).join('') || '<div class="empty">No hay jugadores seleccionados.</div>'}</div>`;
 }
-function teamHTML(eq) {
-  const p = promEQ(eq);
-  return `<div class="team" data-team="${eq.id}" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="dropEQ(event,${eq.id})">
-    <div class="th"><h4 contenteditable="true" onblur="renombrarEQ(${eq.id},this.textContent)">${esc(eq.nombre)}</h4><div class="ts"><span>👥 ${eq.jugadores.length}</span>${EQ.verNiveles ? `<span>📊 ${p.toFixed(1)}</span>` : ''}</div></div>
+function teamHTML(eq, verN) {
+  return `<div class="team" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="dropEQ(event,${eq.id})">
+    <div class="th"><h4 contenteditable="true" onblur="renombrarEQ(${eq.id},this.textContent)">${esc(eq.nombre)}</h4><div class="ts"><span>👥 ${eq.jugadores.length}</span>${verN ? `<span>📊 ${promEQ(eq).toFixed(1)}</span>` : ''}</div></div>
     <div class="tb">
       <div class="coaches"><strong>Entrenadores</strong>${eq.entrenadores.length ? eq.entrenadores.map(id => `<span class="chip ${EQ.sel && EQ.sel.t === 'E' && EQ.sel.id === id ? 'sel' : ''}" draggable="true" ondragstart="dragEQ(event,'E','${id}',${eq.id})" onclick="selEQ('E','${id}',${eq.id})">${esc(entNom(entById(id)))}</span>`).join('') : '<span class="small muted">Sin asignar</span>'}</div>
-      ${eq.jugadores.map((id, i) => { const j = jugById(id); if (!j) return ''; return `<div class="pl ${EQ.sel && EQ.sel.t === 'J' && EQ.sel.id === id ? 'sel' : ''}" draggable="true" ondragstart="dragEQ(event,'J','${id}',${eq.id})" onclick="selEQ('J','${id}',${eq.id})"><span class="n">${i + 1}.</span><span class="nm">${esc(j.nombre)}<small>${esc(j.colegio || '')}${j.grado && j.grado !== 'N/A' ? ', ' + esc(j.grado) : ''}</small></span>${EQ.verNiveles ? nivelBadge(j) : ''}<button class="btn sm" style="padding:.2rem .4rem" onclick="event.stopPropagation();editarJugador('${id}')">✏️</button></div>`; }).join('')}
+      ${eq.jugadores.map((id, i) => { const j = jugById(id); if (!j) return ''; return `<div class="pl ${EQ.sel && EQ.sel.t === 'J' && EQ.sel.id === id ? 'sel' : ''}" draggable="true" ondragstart="dragEQ(event,'J','${id}',${eq.id})" onclick="selEQ('J','${id}',${eq.id})"><span class="n">${i + 1}.</span><span class="nm">${esc(j.nombre)}<small>${esc(j.colegio && j.colegio !== 'N/A' ? j.colegio : '')}${j.grado && j.grado !== 'N/A' ? ', ' + esc(j.grado) : ''}</small></span>${verN ? nivelBadge(j) : ''}${isAdmin() ? `<button class="btn sm" style="padding:.2rem .4rem" onclick="event.stopPropagation();editarJugador('${id}')">✏️</button>` : ''}</div>`; }).join('')}
       ${EQ.sel && EQ.sel.from !== eq.id ? `<button class="moveto" onclick="moverEQ(${eq.id})">⇢ Mover acá</button>` : ''}
     </div></div>`;
 }
@@ -818,8 +1061,7 @@ function dropEQ(ev, to) { ev.preventDefault(); if (!DRAG) return; EQ.sel = DRAG;
 function selEQ(t, id, from) { EQ.sel = EQ.sel && EQ.sel.t === t && EQ.sel.id === id ? null : { t, id, from }; renderEquipos(); }
 function moverEQ(to) {
   const s = EQ.sel; if (!s) return;
-  const dest = EQ.equipos.find(e => e.id === to); const orig = EQ.equipos.find(e => e.id === s.from);
-  const campo = s.t === 'J' ? 'jugadores' : 'entrenadores';
+  const dest = EQ.equipos.find(e => e.id === to), orig = EQ.equipos.find(e => e.id === s.from), campo = s.t === 'J' ? 'jugadores' : 'entrenadores';
   if (orig) orig[campo] = orig[campo].filter(x => x !== s.id);
   if (!dest[campo].includes(s.id)) dest[campo].push(s.id);
   EQ.sel = null; guardarBorradorEQ(); renderEquipos();
@@ -828,35 +1070,27 @@ function renombrarEQ(id, txt) { const e = EQ.equipos.find(x => x.id === id); if 
 function togglePresEQ(t, id, on) { const s = t === 'J' ? EQ.presentesJ : EQ.presentesE; on ? s.add(id) : s.delete(id); }
 function todosEQ(t, on) { const s = t === 'J' ? EQ.presentesJ : EQ.presentesE; s.clear(); if (on) (t === 'J' ? jugActivos() : entActivos()).forEach(x => s.add(x.id)); renderEquipos(); }
 function textoEQ() {
-  const tit = `🏉 REGATAS M9 · Camada 2017\n${EQ.tipoEvento === 'partido' ? 'PARTIDO' + (EQ.rival ? ' vs ' + EQ.rival : '') : 'ENTRENAMIENTO'} · ${fmtF(EQ.fecha)}\n`;
-  return tit + '\n' + EQ.equipos.map(eq => `*${eq.nombre}* (${eq.jugadores.length})\n🧢 ${eq.entrenadores.map(id => entNom(entById(id))).join(', ') || 'Sin asignar'}\n` + eq.jugadores.map((id, i) => `${i + 1}. ${(jugById(id) || {}).nombre || ''}`).join('\n')).join('\n\n');
+  const s = EQ.fuente.startsWith('S:') && DB.SESIONES.find(x => x.id === EQ.fuente.slice(2));
+  const cab = s ? `${s.tipo === 'PAR' ? 'PARTIDO' + (s.detalle ? ' vs ' + s.detalle : '') : 'ENTRENAMIENTO'} · ${fmtF(s.fecha)}${s.hora ? ' ' + s.hora + ' h' : ''}` : `${EQ.tipoEvento === 'partido' ? 'PARTIDO' + (EQ.rival ? ' vs ' + EQ.rival : '') : 'ENTRENAMIENTO'} · ${fmtF(EQ.fecha)}`;
+  return `🏉 *REGATAS M9 · Camada 2017*\n${cab}\n\n` + EQ.equipos.map(eq => `*${eq.nombre}* (${eq.jugadores.length})\n🧢 ${eq.entrenadores.map(id => entNom(entById(id))).join(', ') || 'Sin asignar'}\n` + eq.jugadores.map((id, i) => `${i + 1}. ${(jugById(id) || {}).nombre || ''}`).join('\n')).join('\n\n');
 }
-function copiarEQ() {
-  const t = textoEQ();
-  (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast('📋 Copiado: pegalo en WhatsApp')).catch(() => { prompt('Copiá el texto:', t); });
-}
+function copiarTexto(t, ok) { (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast(ok)).catch(() => prompt('Copiá el texto:', t)); }
+function copiarEQ() { copiarTexto(textoEQ(), '📋 Copiado: pegalo en WhatsApp'); }
 async function guardarEQ() {
-  const g = grupoIdEQ();
-  const ctx = EQ.fuente === 'GIRA' ? 'Gira' : EQ.fuente.startsWith('S:') ? 'Sesión' : 'Libre';
-  const rows = [];
+  const g = grupoIdEQ(), ctx = EQ.fuente === 'GIRA' ? 'Gira' : EQ.fuente.startsWith('S:') ? 'Entrenamiento' : 'Libre', rows = [];
   EQ.equipos.forEach(eq => {
     eq.entrenadores.forEach(id => rows.push({ grupo_id: g, fecha: EQ.fecha, contexto: ctx, equipo: eq.nombre, persona_tipo: 'E', persona_id: id, nombre: entNom(entById(id)) }));
     eq.jugadores.forEach(id => rows.push({ grupo_id: g, fecha: EQ.fecha, contexto: ctx, equipo: eq.nombre, persona_tipo: 'J', persona_id: id, nombre: (jugById(id) || {}).nombre || '' }));
   });
-  await guardar([{ op: 'replace', sheet: 'EQUIPOS', field: 'grupo_id', value: g, rows }], '💾 Equipos guardados en la planilla');
+  await guardar([{ op: 'replace', sheet: 'EQUIPOS', field: 'grupo_id', value: g, rows }], '💾 Equipos confirmados y guardados');
   renderEquipos();
 }
 function cargarGuardadoEQ(silencioso) {
-  const rows = DB.EQUIPOS.filter(x => x.grupo_id === grupoIdEQ());
-  const nombres = [...new Set(rows.map(r => r.equipo))];
+  const rows = DB.EQUIPOS.filter(x => x.grupo_id === grupoIdEQ()), nombres = [...new Set(rows.map(r => r.equipo))];
   EQ.equipos = nombres.map((n, i) => ({ id: i + 1, nombre: n, jugadores: rows.filter(r => r.equipo === n && r.persona_tipo === 'J').map(r => r.persona_id), entrenadores: rows.filter(r => r.equipo === n && r.persona_tipo === 'E').map(r => r.persona_id) }));
-  EQ.n = nombres.length || EQ.n; EQ.sel = null;
-  if (!silencioso) toast('Equipos guardados cargados');
+  EQ.n = nombres.length || EQ.n; EQ.sel = null; if (!silencioso) toast('Equipos guardados cargados');
 }
-function cabeceraPrint(derecha) {
-  const C = DB.CONFIG;
-  return `<div class="ph"><img src="${esc(C.ESCUDO_URL || 'escudo.png')}" onerror="this.src=ESCUDO_FALLBACK"><div><div class="a">${esc(C.CLUB || 'Regatas Bella Vista')}</div><div class="b">${esc(C.DIVISION || 'M9')} · Camada ${esc(C.CAMADA || '2017')}</div></div><div class="c">${derecha}</div></div>`;
-}
+function cabeceraPrint(derecha) { const C = DB.CONFIG; return `<div class="ph"><img src="${esc(C.ESCUDO_URL || 'escudo.png')}" onerror="this.src=ESCUDO_FALLBACK"><div><div class="a">${esc(C.CLUB || 'Regatas Bella Vista')}</div><div class="b">${esc(C.DIVISION || 'M9')} · Camada ${esc(C.CAMADA || '2017')}</div></div><div class="c">${derecha}</div></div>`; }
 function imprimirEQ() {
   if (!EQ.equipos.length) return toast('No hay equipos armados', true);
   const ev = EQ.tipoEvento === 'partido' ? '🏉 PARTIDO' + (EQ.rival ? ' vs ' + esc(EQ.rival) : '') : '🏋️ ENTRENAMIENTO';
@@ -865,37 +1099,54 @@ function imprimirEQ() {
 }
 
 /* =====================================================================
-   PLANTEL (altas, bajas, edición)
+   PLANTEL
    ===================================================================== */
 let PL = { vista: 'J', filtro: '', nivel: '' };
 function renderPlantel() {
+  const adm = isAdmin();
   const st = calcStats({ anio: new Date().getFullYear() });
   const f = PL.filtro.toLowerCase();
-  const J = jugActivos().filter(j => (!f || (j.nombre + ' ' + j.colegio).toLowerCase().includes(f)) && (!PL.nivel || j.nivel === PL.nivel));
+  const J = jugActivos().filter(j => (!f || (j.nombre + ' ' + j.colegio).toLowerCase().includes(f)) && (!adm || !PL.nivel || j.nivel === PL.nivel));
   const E = entActivos().filter(e => !f || (e.apodo + ' ' + e.nombre).toLowerCase().includes(f));
-  const bajasJ = DB.JUGADORES.filter(j => j.activo === 'NO'), bajasE = DB.ENTRENADORES.filter(e => e.activo === 'NO');
+  const bajas = DB.JUGADORES.filter(j => j.activo === 'NO').map(j => ({ t: 'J', id: j.id, nombre: j.nombre, tipo: 'Jugador', f: j.fecha_baja, m: j.motivo_baja })).concat(DB.ENTRENADORES.filter(e => e.activo === 'NO').map(e => ({ t: 'E', id: e.id, nombre: entNom(e), tipo: 'Entrenador', f: e.fecha_baja, m: e.motivo_baja })));
   const cntN = n => jugActivos().filter(j => j.nivel === n).length;
+  const edad = f => f && f.length === 10 ? Math.floor((new Date() - parseISO(f)) / 31557600000) : null;
   let body = '';
   if (PL.vista === 'J') body = `
-    <div class="row" style="margin-bottom:8px"><div class="seg">${['', 'G', '1', '2', '3'].map(n => `<button class="${PL.nivel === n ? 'on' : ''}" onclick="PL.nivel='${n}';renderPlantel()">${n ? (n === 'G' ? 'Gloriosa' : 'Nivel ' + n) + ' (' + cntN(n) + ')' : 'Todos'}</button>`).join('')}</div></div>
-    <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Jugador</th><th>Nivel</th><th>Colegio</th><th>Grado</th><th class="num">Asist.</th><th>Gira</th><th></th></tr></thead><tbody>
-    ${J.map((j, i) => { const p = st.per['J-' + j.id]; const pc = p ? p.pct : null; return `<tr><td class="muted">${i + 1}</td><td class="clk" onclick="fichaJugador('${j.id}')"><b>${esc(j.nombre)}</b>${j.observaciones ? ' <span title="' + esc(j.observaciones) + '">📝</span>' : ''}</td><td>${nivelBadge(j)}</td><td>${esc(j.colegio)}</td><td>${esc(j.grado)}</td><td class="num">${pc == null ? '<span class="muted">—</span>' : `<b style="color:${colorPct(pc)}">${pc}%</b>`}</td><td>${viaja('J', j.id) ? '✈️' : ''}</td><td><button class="btn sm" onclick="editarJugador('${j.id}')">✏️ Editar</button></td></tr>`; }).join('')}
-    </tbody></table></div>`;
-  else if (PL.vista === 'E') body = `
-    <div class="tbl-wrap"><table><thead><tr><th>Apodo</th><th>Nombre</th><th>Rol</th><th>Hijo</th><th>Arma equipos</th><th class="num">Asist.</th><th>Gira</th><th></th></tr></thead><tbody>
-    ${E.map(e => { const p = st.per['E-' + e.id]; const h = jugById(e.hijo_id); return `<tr><td class="clk" onclick="fichaEntrenador('${e.id}')"><b>${esc(e.apodo)}</b></td><td>${esc(e.nombre)}</td><td>${esc(e.rol)}</td><td class="muted">${h ? esc(h.nombre) : ''}</td><td>${e.asigna_equipos === 'NO' ? 'No' : 'Sí'}</td><td class="num">${p ? `<b style="color:${colorPct(p.pct)}">${p.pct}%</b>` : '<span class="muted">—</span>'}</td><td>${viaja('E', e.id) ? '✈️' : ''}</td><td><button class="btn sm" onclick="editarEntrenador('${e.id}')">✏️ Editar</button></td></tr>`; }).join('')}
-    </tbody></table></div>`;
-  else body = `
-    <div class="info" style="margin-bottom:10px">Siguen guardados en la base con todo su historial, pero no aparecen en la asistencia ni en el armado de equipos. Si vuelven, tocá "Vuelve".</div>
-    ${bajasJ.length + bajasE.length ? `<div class="tbl-wrap"><table><thead><tr><th>Nombre</th><th>Tipo</th><th>Desde</th><th>Motivo</th><th></th></tr></thead><tbody>
-    ${bajasJ.map(j => `<tr><td><b class="clk" onclick="fichaJugador('${j.id}')">${esc(j.nombre)}</b></td><td>Jugador</td><td>${fmtF(j.fecha_baja)}</td><td class="muted">${esc(j.motivo_baja || '')}</td><td><button class="btn sm grn" onclick="reactivar('J','${j.id}')">↩︎ Vuelve</button></td></tr>`).join('')}
-    ${bajasE.map(e => `<tr><td><b>${esc(entNom(e))}</b></td><td>Entrenador</td><td>${fmtF(e.fecha_baja)}</td><td class="muted">${esc(e.motivo_baja || '')}</td><td><button class="btn sm grn" onclick="reactivar('E','${e.id}')">↩︎ Vuelve</button></td></tr>`).join('')}
-    </tbody></table></div>` : '<div class="empty">Nadie dado de baja 🙌</div>'}`;
+    ${adm ? `<div class="row" style="margin-bottom:8px"><div class="seg">${['', 'G', '1', '2', '3'].map(n => `<button class="${PL.nivel === n ? 'on' : ''}" onclick="PL.nivel='${n}';renderPlantel()">${n ? (n === 'G' ? 'Gloriosa' : 'Nivel ' + n) + ' (' + cntN(n) + ')' : 'Todos'}</button>`).join('')}</div></div>` : ''}
+    ${tabla('plJ', [
+      { t: '#', h: (r, i) => `<span class="muted">${i + 1}</span>` },
+      { k: 'nombre', t: 'Jugador', h: r => `<b class="clk" onclick="fichaJugador('${r.id}')">${esc(r.nombre)}</b>${r.observaciones ? ' <span title="' + esc(r.observaciones) + '">📝</span>' : ''}` },
+      ...(adm ? [{ k: 'nivel', t: 'Nivel', v: r => r.nivel === 'G' ? (r.nivel2 || 0) / 10 : nivelNum(r), h: r => nivelBadge(r) }] : []),
+      { k: 'colegio', t: 'Colegio', h: r => esc(r.colegio) },
+      { k: 'grado', t: 'Grado', h: r => esc(r.grado) },
+      { k: 'nac', t: 'Edad', num: 1, v: r => edad(r.fecha_nac), h: r => edad(r.fecha_nac) == null ? '' : edad(r.fecha_nac) },
+      { k: 'asis', t: 'Asist.', num: 1, v: r => st.per['J-' + r.id] ? st.per['J-' + r.id].pct : null, h: r => { const p = st.per['J-' + r.id]; return p ? `<b style="color:${colorPct(p.pct)}">${p.pct}%</b>` : '<span class="muted">—</span>'; } },
+      { k: 'gira', t: 'Gira', v: r => viaja('J', r.id) ? 1 : 0, h: r => viaja('J', r.id) ? '✈️' : '' },
+      { t: '', h: r => `<button class="btn sm" onclick="editarJugador('${r.id}')">✏️ Editar</button>` }
+    ], J, { k: 'nombre', desc: false })}`;
+  else if (PL.vista === 'E') body = tabla('plE', [
+      { k: 'apodo', t: 'Apodo', v: r => entNom(r), h: r => `<b class="clk" onclick="fichaEntrenador('${r.id}')">${esc(entNom(r))}</b>` },
+      { k: 'nombre', t: 'Nombre', h: r => esc(r.nombre) },
+      { k: 'rol', t: 'Rol', h: r => esc(r.rol) },
+      { k: 'hijo', t: 'Hijo', v: r => (jugById(r.hijo_id) || {}).nombre || '', h: r => `<span class="muted">${esc((jugById(r.hijo_id) || {}).nombre || '')}</span>` },
+      { k: 'asig', t: 'Arma equipos', v: r => r.asigna_equipos, h: r => r.asigna_equipos === 'NO' ? 'No' : 'Sí' },
+      { k: 'asis', t: 'Asist.', num: 1, v: r => st.per['E-' + r.id] ? st.per['E-' + r.id].pct : null, h: r => { const p = st.per['E-' + r.id]; return p ? `<b style="color:${colorPct(p.pct)}">${p.pct}%</b>` : '<span class="muted">—</span>'; } },
+      { k: 'gira', t: 'Gira', v: r => viaja('E', r.id) ? 1 : 0, h: r => viaja('E', r.id) ? '✈️' : '' },
+      { t: '', h: r => `<button class="btn sm" onclick="editarEntrenador('${r.id}')">✏️ Editar</button>` }
+    ], E, { k: 'apodo', desc: false });
+  else body = `<div class="info" style="margin-bottom:10px">Siguen guardados en la base con todo su historial, pero no aparecen en la asistencia ni en el armado de equipos. Si vuelven, tocá "Vuelve".</div>` + tabla('plB', [
+      { k: 'nombre', t: 'Nombre', h: r => `<b class="clk" onclick="${r.t === 'J' ? 'fichaJugador' : 'fichaEntrenador'}('${r.id}')">${esc(r.nombre)}</b>` },
+      { k: 'tipo', t: 'Tipo', h: r => r.tipo },
+      { k: 'f', t: 'Desde', h: r => fmtF(r.f) },
+      { k: 'm', t: 'Motivo', h: r => `<span class="muted">${esc(r.m || '')}</span>` },
+      { t: '', h: r => `<button class="btn sm grn" onclick="reactivar('${r.t}','${r.id}')">↩︎ Vuelve</button>` }
+    ], bajas, { k: 'f', desc: true });
   $('v-plantel').innerHTML = `
   <h2 class="sec">👥 Plantel <span class="sp"></span><button class="btn sm pri" onclick="editarJugador()">➕ Jugador</button><button class="btn sm vio" onclick="editarEntrenador()">➕ Entrenador</button></h2>
   <div class="row" style="margin-bottom:10px">
-    <div class="seg"><button class="${PL.vista === 'J' ? 'on' : ''}" onclick="PL.vista='J';renderPlantel()">Jugadores (${jugActivos().length})</button><button class="${PL.vista === 'E' ? 'on' : ''}" onclick="PL.vista='E';renderPlantel()">Entrenadores (${entActivos().length})</button><button class="${PL.vista === 'B' ? 'on' : ''}" onclick="PL.vista='B';renderPlantel()">No vienen más (${bajasJ.length + bajasE.length})</button></div>
-    ${PL.vista !== 'B' ? `<input class="grow" style="max-width:260px" placeholder="🔎 Buscar nombre o colegio…" value="${esc(PL.filtro)}" oninput="PL.filtro=this.value;clearTimeout(window._pf);window._pf=setTimeout(()=>{renderPlantel();const i=document.querySelector('#v-plantel input.grow');i.focus();i.setSelectionRange(i.value.length,i.value.length)},250)">` : ''}
+    <div class="seg"><button class="${PL.vista === 'J' ? 'on' : ''}" onclick="PL.vista='J';renderPlantel()">Jugadores (${jugActivos().length})</button><button class="${PL.vista === 'E' ? 'on' : ''}" onclick="PL.vista='E';renderPlantel()">Entrenadores (${entActivos().length})</button><button class="${PL.vista === 'B' ? 'on' : ''}" onclick="PL.vista='B';renderPlantel()">No vienen más (${bajas.length})</button></div>
+    ${PL.vista !== 'B' ? `<input class="grow" id="plBuscar" style="max-width:260px" placeholder="🔎 Buscar nombre o colegio…" value="${esc(PL.filtro)}" oninput="PL.filtro=this.value;clearTimeout(window._pf);window._pf=setTimeout(()=>{renderPlantel();const i=$('plBuscar');i.focus();i.setSelectionRange(i.value.length,i.value.length)},250)">` : ''}
   </div>${body}`;
 }
 function abrirModal(html) { $('mbox').innerHTML = html; $('modal').classList.add('on'); }
@@ -903,16 +1154,17 @@ function cerrarModal() { $('modal').classList.remove('on'); }
 $('modal').addEventListener('click', e => { if (e.target.id === 'modal') cerrarModal(); });
 
 function editarJugador(id) {
+  const adm = isAdmin();
   const j = id ? jugById(id) : { id: '', nombre: '', nivel: '2', nivel2: null, colegio: '', grado: '3ro', dni: '', fecha_nac: '', observaciones: '', activo: 'SI' };
   abrirModal(`<h3>${id ? '✏️ ' + esc(j.nombre) : '➕ Nuevo jugador'}<span class="sp"></span><button class="x" onclick="cerrarModal()">×</button></h3>
   <div class="fgrid">
     <div class="fg full"><label>Apellido, Nombre</label><input id="fNom" value="${esc(j.nombre)}" placeholder="Apellido, Nombre"></div>
-    <div class="fg"><label>Calificación (nivel)</label><select id="fNiv" onchange="$('fN2w').classList.toggle('hidden',this.value!=='G')">${[['G', 'Gloriosa'], ['1', 'Nivel 1'], ['2', 'Nivel 2'], ['3', 'Nivel 3']].map(([v, t]) => `<option value="${v}" ${j.nivel === v ? 'selected' : ''}>${t}</option>`).join('')}</select></div>
-    <div class="fg ${j.nivel === 'G' ? '' : 'hidden'}" id="fN2w"><label>Sub-nivel Gloriosa (1.0–3.0)</label><input id="fN2" type="number" min="1" max="3" step="0.1" value="${j.nivel2 == null ? '' : j.nivel2}"></div>
-    <div class="fg"><label>Colegio</label><input id="fCol" value="${esc(j.colegio === 'N/A' ? '' : j.colegio)}" list="colegios"><datalist id="colegios">${[...new Set(DB.JUGADORES.map(x => x.colegio).filter(Boolean))].sort().map(c => `<option value="${esc(c)}">`).join('')}</datalist></div>
+    ${adm ? `<div class="fg"><label>Calificación (nivel) · solo admin</label><select id="fNiv" onchange="$('fN2w').classList.toggle('hidden',this.value!=='G')">${[['G', 'Gloriosa'], ['1', 'Nivel 1'], ['2', 'Nivel 2'], ['3', 'Nivel 3']].map(([v, t]) => `<option value="${v}" ${(j.nivel || '2') === v ? 'selected' : ''}>${t}</option>`).join('')}</select></div>
+    <div class="fg ${j.nivel === 'G' ? '' : 'hidden'}" id="fN2w"><label>Sub-nivel Gloriosa (1.0–3.0)</label><input id="fN2" type="number" min="1" max="3" step="0.1" value="${j.nivel2 == null ? '' : j.nivel2}"></div>` : ''}
+    <div class="fg"><label>Colegio</label><input id="fCol" value="${esc(j.colegio === 'N/A' ? '' : j.colegio)}" list="colegios"><datalist id="colegios">${[...new Set(DB.JUGADORES.map(x => x.colegio).filter(c => c && c !== 'N/A'))].sort().map(c => `<option value="${esc(c)}">`).join('')}</datalist></div>
     <div class="fg"><label>Grado</label><select id="fGra">${['3ro', '4to', 'N/A'].map(g => `<option ${j.grado === g ? 'selected' : ''}>${g}</option>`).join('')}</select></div>
     <div class="fg"><label>DNI / Pasaporte</label><input id="fDni" value="${esc(j.dni)}"></div>
-    <div class="fg"><label>Fecha de nacimiento</label><input id="fNac" type="date" value="${esc(String(j.fecha_nac || '').length === 10 ? j.fecha_nac : '')}"></div>
+    <div class="fg"><label>Fecha de nacimiento</label><input id="fNac" type="date" value="${esc(j.fecha_nac.length === 10 ? j.fecha_nac : '')}"></div>
     <div class="fg full"><label>Observaciones (staff)</label><textarea id="fObs" rows="2">${esc(j.observaciones || '')}</textarea></div>
   </div>
   <div class="mact"><button class="btn" onclick="cerrarModal()">Cancelar</button><button class="btn vio" onclick="guardarJugador('${id || ''}')">💾 Guardar</button></div>
@@ -921,16 +1173,14 @@ function editarJugador(id) {
 }
 async function guardarJugador(id) {
   const nombre = $('fNom').value.trim(); if (!nombre) return toast('Falta el nombre', true);
-  const nivel = $('fNiv').value;
   const nuevo = !id;
   if (nuevo) id = String(Math.max(0, ...DB.JUGADORES.map(j => Number(j.id) || 0)) + 1);
-  const row = { id, nombre, nivel, nivel2: nivel === 'G' ? (parseFloat($('fN2').value) || '') : '', colegio: $('fCol').value.trim() || 'N/A', grado: $('fGra').value, dni: $('fDni').value.trim(), fecha_nac: $('fNac').value, observaciones: $('fObs').value.trim() };
+  const row = { id, nombre, colegio: $('fCol').value.trim() || 'N/A', grado: $('fGra').value, dni: $('fDni').value.trim(), fecha_nac: $('fNac').value, observaciones: $('fObs').value.trim() };
+  if (isAdmin()) { row.nivel = $('fNiv').value; row.nivel2 = row.nivel === 'G' ? (parseFloat($('fN2').value) || '') : ''; }
   if (nuevo) Object.assign(row, { activo: 'SI', fecha_alta: hoyISO(), fecha_baja: '', motivo_baja: '' });
   const ops = [{ op: 'upsert', sheet: 'JUGADORES', key: 'id', rows: [row] }];
   const g = giraDe('J', id); if (g && g.nombre !== nombre) ops.push({ op: 'upsert', sheet: 'GIRA', key: 'clave', rows: [{ clave: 'J-' + id, nombre }] });
-  cerrarModal();
-  await guardar(ops, nuevo ? '➕ Jugador agregado' : '💾 Cambios guardados');
-  renderTab();
+  cerrarModal(); await guardar(ops, nuevo ? '➕ Jugador agregado' : '💾 Cambios guardados'); renderTab();
 }
 function editarEntrenador(id) {
   const e = id ? entById(id) : { id: '', apodo: '', nombre: '', rol: 'Entrenador', hijo_id: '', asigna_equipos: 'SI', dni: '', fecha_nac: '', observaciones: '', activo: 'SI' };
@@ -942,7 +1192,7 @@ function editarEntrenador(id) {
     <div class="fg full"><label>Hijo en la división (va al mismo equipo)</label><select id="fHijo"><option value="">—</option>${jugActivos().map(j => `<option value="${j.id}" ${e.hijo_id === j.id ? 'selected' : ''}>${esc(j.nombre)}</option>`).join('')}</select></div>
     <div class="fg"><label>¿Se asigna a equipos?</label><select id="fAsig"><option value="SI" ${e.asigna_equipos !== 'NO' ? 'selected' : ''}>Sí</option><option value="NO" ${e.asigna_equipos === 'NO' ? 'selected' : ''}>No</option></select></div>
     <div class="fg"><label>DNI</label><input id="fDniE" value="${esc(e.dni)}"></div>
-    <div class="fg"><label>Fecha de nacimiento</label><input id="fNacE" type="date" value="${esc(String(e.fecha_nac || '').length === 10 ? e.fecha_nac : '')}"></div>
+    <div class="fg"><label>Fecha de nacimiento</label><input id="fNacE" type="date" value="${esc(e.fecha_nac.length === 10 ? e.fecha_nac : '')}"></div>
     <div class="fg full"><label>Observaciones</label><textarea id="fObsE" rows="2">${esc(e.observaciones || '')}</textarea></div>
   </div>
   <div class="mact"><button class="btn" onclick="cerrarModal()">Cancelar</button><button class="btn vio" onclick="guardarEntrenador('${id || ''}')">💾 Guardar</button></div>
@@ -955,9 +1205,7 @@ async function guardarEntrenador(id) {
   if (nuevo) id = 'E' + pad(Math.max(0, ...DB.ENTRENADORES.map(e => parseInt(String(e.id).replace(/\D/g, '')) || 0)) + 1);
   const row = { id, apodo: apodo || nombre, nombre, rol: $('fRol').value, hijo_id: $('fHijo').value, asigna_equipos: $('fAsig').value, dni: $('fDniE').value.trim(), fecha_nac: $('fNacE').value, observaciones: $('fObsE').value.trim() };
   if (nuevo) Object.assign(row, { activo: 'SI', fecha_baja: '', motivo_baja: '' });
-  cerrarModal();
-  await guardar([{ op: 'upsert', sheet: 'ENTRENADORES', key: 'id', rows: [row] }], nuevo ? '➕ Entrenador agregado' : '💾 Cambios guardados');
-  renderTab();
+  cerrarModal(); await guardar([{ op: 'upsert', sheet: 'ENTRENADORES', key: 'id', rows: [row] }], nuevo ? '➕ Entrenador agregado' : '💾 Cambios guardados'); renderTab();
 }
 function darBaja(t, id) {
   const p = t === 'J' ? jugById(id) : entById(id);
@@ -971,36 +1219,46 @@ async function confirmarBaja(t, id) {
   const row = { id, activo: 'NO', fecha_baja: $('fBajaF').value, motivo_baja: $('fBajaM').value.trim() };
   cerrarModal();
   EQ.equipos.forEach(e => { e.jugadores = e.jugadores.filter(x => !(t === 'J' && x === id)); e.entrenadores = e.entrenadores.filter(x => !(t === 'E' && x === id)); });
-  await guardar([{ op: 'upsert', sheet: t === 'J' ? 'JUGADORES' : 'ENTRENADORES', key: 'id', rows: [row] }], 'Movido a "No vienen más"');
-  renderTab();
+  await guardar([{ op: 'upsert', sheet: t === 'J' ? 'JUGADORES' : 'ENTRENADORES', key: 'id', rows: [row] }], 'Movido a "No vienen más"'); renderTab();
 }
-async function reactivar(t, id) {
-  await guardar([{ op: 'upsert', sheet: t === 'J' ? 'JUGADORES' : 'ENTRENADORES', key: 'id', rows: [{ id, activo: 'SI', fecha_baja: '', motivo_baja: '' }] }], '↩︎ Reactivado');
-  renderTab();
-}
+async function reactivar(t, id) { await guardar([{ op: 'upsert', sheet: t === 'J' ? 'JUGADORES' : 'ENTRENADORES', key: 'id', rows: [{ id, activo: 'SI', fecha_baja: '', motivo_baja: '' }] }], '↩︎ Reactivado'); renderTab(); }
 
 /* =====================================================================
-   GIRA
+   GIRA (jugadores y entrenadores en planillas separadas)
    ===================================================================== */
 let GI = { vista: 'SI', filtro: '' };
 function filasGira() {
-  const J = DB.JUGADORES.map(j => ({ t: 'J', id: j.id, nombre: j.nombre, rol: 'Jugador', dni: j.dni, nac: j.fecha_nac, activo: j.activo, x: j }));
-  const E = DB.ENTRENADORES.map(e => ({ t: 'E', id: e.id, nombre: e.nombre || e.apodo, rol: e.rol, dni: e.dni, nac: e.fecha_nac, activo: e.activo, x: e }));
+  const J = DB.JUGADORES.map(j => ({ t: 'J', id: j.id, nombre: j.nombre, rol: 'Jugador', dni: j.dni, nac: j.fecha_nac, activo: j.activo }));
+  const E = DB.ENTRENADORES.map(e => ({ t: 'E', id: e.id, nombre: e.nombre || e.apodo, rol: e.rol, dni: e.dni, nac: e.fecha_nac, activo: e.activo }));
   return J.concat(E).map(p => { const g = giraDe(p.t, p.id) || {}; return Object.assign(p, { va: String(g.va || '').toUpperCase() === 'SI' ? 'SI' : 'NO', rol_gira: g.rol_gira || p.rol, aut: g.autorizacion === 'SI', fic: g.ficha_medica === 'SI', pag: g.pago === 'SI', obs: g.observaciones || '' }); })
     .filter(p => p.activo !== 'NO' || p.va === 'SI');
 }
+const ordRol = p => /head/i.test(p.rol_gira) ? 0 : /manager/i.test(p.rol_gira) ? 1 : 2;
+function tablaGira(id, lista, esJ) {
+  const st = calcStats({ anio: new Date().getFullYear() });
+  const cols = [
+    { t: '#', h: (r, i) => `<span class="muted">${i + 1}</span>` },
+    { k: 'nombre', t: 'Nombre', h: r => `<b>${esc(r.nombre)}</b>${r.activo === 'NO' ? ' <span class="pill" style="background:rgba(148,163,184,.2)">baja</span>' : ''}` },
+    ...(esJ ? [] : [{ k: 'rol', t: 'Rol', v: r => ordRol(r) + r.rol_gira, h: r => `<span class="small">${esc(r.rol_gira)}</span>` }]),
+    { k: 'dni', t: 'DNI', h: r => `<span class="small">${esc(r.dni)}</span>` },
+    { k: 'nac', t: 'Nac.', h: r => `<span class="small">${fmtF(r.nac)}</span>` }
+  ];
+  if (GI.vista === 'SI') cols.push(
+    { k: 'pap', t: 'Papeles', num: 1, v: r => r.aut + r.fic + r.pag, h: r => `<button class="tg ${r.aut ? 'on' : ''}" onclick="toggleGira('${r.t}','${r.id}','autorizacion')">Aut.</button> <button class="tg ${r.fic ? 'on' : ''}" onclick="toggleGira('${r.t}','${r.id}','ficha_medica')">Ficha</button> <button class="tg ${r.pag ? 'on' : ''}" onclick="toggleGira('${r.t}','${r.id}','pago')">Pago</button>` },
+    { k: 'obs', t: 'Obs.', h: r => `<button class="btn sm" onclick="obsGira('${r.t}','${r.id}')" title="${esc(r.obs)}">${r.obs ? '📝 ' + esc(r.obs.slice(0, 18)) : '＋'}</button>` });
+  else if (esJ) cols.push({ k: 'asis', t: 'Asist. año', num: 1, v: r => st.per['J-' + r.id] ? st.per['J-' + r.id].pct : null, h: r => { const p = st.per['J-' + r.id]; return p ? `<b style="color:${colorPct(p.pct)}">${p.pct}%</b>` : '—'; } });
+  cols.push({ t: '', h: r => r.va === 'SI' ? `<button class="btn sm red" onclick="setVa('${r.t}','${r.id}','NO')">✕ No viaja</button>` : `<button class="btn sm grn" onclick="setVa('${r.t}','${r.id}','SI')">＋ Viaja</button>` });
+  return tabla(id, cols, lista, esJ ? { k: 'nombre', desc: false } : { k: 'rol', desc: false });
+}
 function renderGira() {
-  const C = DB.CONFIG;
-  const F = filasGira();
+  const C = DB.CONFIG, F = filasGira();
   const vJ = F.filter(p => p.t === 'J' && p.va === 'SI'), vE = F.filter(p => p.t === 'E' && p.va === 'SI');
   const nJ = F.filter(p => p.t === 'J' && p.va === 'NO'), nE = F.filter(p => p.t === 'E' && p.va === 'NO');
   const pend = vJ.filter(p => !p.aut || !p.fic || !p.pag).length;
   let cuenta = '—', sub = 'Cargá la fecha de salida en ⚙️';
   if (C.GIRA_DESDE) { const dd = Math.ceil((parseISO(C.GIRA_DESDE) - new Date(new Date().toDateString())) / 864e5); cuenta = dd > 0 ? dd : dd === 0 ? 'HOY' : '✓'; sub = dd > 0 ? 'días para la salida' : dd === 0 ? '¡salimos hoy!' : 'gira realizada'; }
-  const f = GI.filtro.toLowerCase();
-  const lista = (GI.vista === 'SI' ? vJ.concat(vE) : nJ.concat(nE)).filter(p => !f || p.nombre.toLowerCase().includes(f));
-  const ordRol = p => p.t === 'J' ? 9 : /head/i.test(p.rol_gira) ? 0 : /manager/i.test(p.rol_gira) ? 1 : 2;
-  lista.sort((a, b) => ordRol(a) - ordRol(b) || a.nombre.localeCompare(b.nombre));
+  const f = GI.filtro.toLowerCase(), fil = l => l.filter(p => !f || p.nombre.toLowerCase().includes(f));
+  const LJ = fil(GI.vista === 'SI' ? vJ : nJ), LE = fil(GI.vista === 'SI' ? vE : nE);
   $('v-gira').innerHTML = `
   <h2 class="sec">🚌 ${esc(C.GIRA_NOMBRE || 'Gira')} <span class="sp"></span><button class="btn sm" onclick="configGira()">⚙️ Datos de la gira</button></h2>
   <div class="gira-hero">
@@ -1010,37 +1268,35 @@ function renderGira() {
   </div>
   <div class="kpis">
     <div class="kpi"><div class="l">Jugadores que viajan</div><div class="v" style="color:var(--gr)">${vJ.length}</div><div class="s">de ${vJ.length + nJ.length} activos (${pct(vJ.length, vJ.length + nJ.length)}%)</div></div>
-    <div class="kpi"><div class="l">Staff que viaja</div><div class="v" style="color:var(--vi2)">${vE.length}</div><div class="s">${vE.filter(p => /head|entren|ayud/i.test(p.rol_gira)).length} entrenadores · ${vE.filter(p => /manager/i.test(p.rol_gira)).length} managers</div></div>
+    <div class="kpi"><div class="l">Staff que viaja</div><div class="v" style="color:var(--vi2)">${vE.length}</div><div class="s">${vE.filter(p => !/manager/i.test(p.rol_gira)).length} entrenadores · ${vE.filter(p => /manager/i.test(p.rol_gira)).length} managers</div></div>
     <div class="kpi"><div class="l">No viajan</div><div class="v" style="color:var(--rd)">${nJ.length}</div><div class="s">jugadores (+${nE.length} adultos)</div></div>
     <div class="kpi"><div class="l">Papeles pendientes</div><div class="v" style="color:var(--am)">${pend}</div><div class="s">jugadores con algo sin entregar</div></div>
   </div>
   <div class="row" style="margin-bottom:10px">
     <div class="seg"><button class="${GI.vista === 'SI' ? 'on' : ''}" onclick="GI.vista='SI';renderGira()">✈️ Viajan (${vJ.length + vE.length})</button><button class="${GI.vista === 'NO' ? 'on' : ''}" onclick="GI.vista='NO';renderGira()">🏠 No viajan (${nJ.length + nE.length})</button></div>
-    <input class="grow" style="max-width:240px" placeholder="🔎 Buscar…" value="${esc(GI.filtro)}" oninput="GI.filtro=this.value;clearTimeout(window._gf);window._gf=setTimeout(()=>{renderGira();const i=document.querySelector('#v-gira input.grow');i.focus();i.setSelectionRange(i.value.length,i.value.length)},250)">
+    <input class="grow" id="giBuscar" style="max-width:240px" placeholder="🔎 Buscar…" value="${esc(GI.filtro)}" oninput="GI.filtro=this.value;clearTimeout(window._gf);window._gf=setTimeout(()=>{renderGira();const i=$('giBuscar');i.focus();i.setSelectionRange(i.value.length,i.value.length)},250)">
     <button class="btn sm" onclick="imprimirGira()">🖨️ Listado de pasajeros</button>
     <button class="btn sm" onclick="copiarGira()">📋 Copiar listas</button>
   </div>
-  ${GI.vista === 'SI' ? `<div class="small muted" style="margin-bottom:6px">Tocá Aut. / Ficha / Pago para marcar lo entregado. Se guarda solo.</div>` : ''}
-  <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Nombre</th><th>Rol</th><th>DNI</th><th>Nac.</th>${GI.vista === 'SI' ? '<th>Papeles</th><th>Obs.</th>' : '<th>Asist. año</th>'}<th></th></tr></thead><tbody>
-  ${lista.map((p, i) => { const st = GI.vista === 'NO' && p.t === 'J' ? (calcStats({ anio: new Date().getFullYear() }).per['J-' + p.id] || null) : null; return `<tr>
-    <td class="muted">${i + 1}</td><td><b>${esc(p.nombre)}</b>${p.activo === 'NO' ? ' <span class="pill" style="background:rgba(148,163,184,.2)">baja</span>' : ''}</td><td class="small">${esc(p.rol_gira)}</td><td class="small">${esc(p.dni)}</td><td class="small">${fmtF(p.nac)}</td>
-    ${GI.vista === 'SI' ? `<td><button class="tg ${p.aut ? 'on' : ''}" onclick="toggleGira('${p.t}','${p.id}','autorizacion')">Aut.</button> <button class="tg ${p.fic ? 'on' : ''}" onclick="toggleGira('${p.t}','${p.id}','ficha_medica')">Ficha</button> <button class="tg ${p.pag ? 'on' : ''}" onclick="toggleGira('${p.t}','${p.id}','pago')">Pago</button></td><td><button class="btn sm" onclick="obsGira('${p.t}','${p.id}')" title="${esc(p.obs)}">${p.obs ? '📝' : '＋'}</button></td>` : `<td class="small">${st ? `<b style="color:${colorPct(st.pct)}">${st.pct}%</b>` : '—'}</td>`}
-    <td>${p.va === 'SI' ? `<button class="btn sm red" onclick="setVa('${p.t}','${p.id}','NO')">✕ No viaja</button>` : `<button class="btn sm grn" onclick="setVa('${p.t}','${p.id}','SI')">＋ Viaja</button>`}</td></tr>`; }).join('') || '<tr><td colspan="8" class="empty">Sin personas en esta lista</td></tr>'}
-  </tbody></table></div>`;
+  ${GI.vista === 'SI' ? `<div class="small muted" style="margin-bottom:6px">Tocá Aut. / Ficha / Pago para marcar lo entregado. Se guarda solo. Tocá los títulos para ordenar.</div>` : ''}
+  <h3 class="sub-h">👦 Jugadores <span class="pill" style="background:rgba(34,197,94,.15);color:var(--gr2)">${LJ.length}</span></h3>
+  ${tablaGira('giJ', LJ, true)}
+  <h3 class="sub-h" style="margin-top:18px">🧢 Entrenadores y staff <span class="pill" style="background:rgba(139,92,246,.18);color:#ddd6fe">${LE.length}</span></h3>
+  ${tablaGira('giE', LE, false)}`;
 }
 function filaGiraBase(t, id) {
   const g = giraDe(t, id); if (g) return { clave: g.clave };
   const p = t === 'J' ? jugById(id) : entById(id);
   return { clave: t + '-' + id, persona_tipo: t, persona_id: id, nombre: t === 'J' ? p.nombre : (p.nombre || p.apodo), va: 'NO', rol_gira: t === 'J' ? 'Jugador' : p.rol, autorizacion: 'NO', ficha_medica: 'NO', pago: 'NO', observaciones: '' };
 }
-function setVa(t, id, v) { encolar({ op: 'upsert', sheet: 'GIRA', key: 'clave', rows: [Object.assign(filaGiraBase(t, id), { va: v })] }); renderGira(); toast(v === 'SI' ? '✈️ Agregado a la gira' : '🏠 Pasado a "No viajan"'); }
-function toggleGira(t, id, campo) { const g = giraDe(t, id); const val = g && g[campo] === 'SI' ? 'NO' : 'SI'; encolar({ op: 'upsert', sheet: 'GIRA', key: 'clave', rows: [Object.assign(filaGiraBase(t, id), { [campo]: val })] }); renderGira(); }
-function obsGira(t, id) { const g = giraDe(t, id) || {}; const v = prompt('Observación para la gira (habitación, contacto, comida, etc.):', g.observaciones || ''); if (v === null) return; encolar({ op: 'upsert', sheet: 'GIRA', key: 'clave', rows: [Object.assign(filaGiraBase(t, id), { observaciones: v })] }); renderGira(); }
+function setVa(t, id, v) { guardar([{ op: 'upsert', sheet: 'GIRA', key: 'clave', rows: [Object.assign(filaGiraBase(t, id), { va: v })] }], null, 900); renderGira(); toast(v === 'SI' ? '✈️ Agregado a la gira' : '🏠 Pasado a "No viajan"'); }
+function toggleGira(t, id, campo) { const g = giraDe(t, id); const val = g && g[campo] === 'SI' ? 'NO' : 'SI'; guardar([{ op: 'upsert', sheet: 'GIRA', key: 'clave', rows: [Object.assign(filaGiraBase(t, id), { [campo]: val })] }], null, 900); renderGira(); }
+function obsGira(t, id) { const g = giraDe(t, id) || {}; const v = prompt('Observación para la gira (habitación, contacto, comida, etc.):', g.observaciones || ''); if (v === null) return; guardar([{ op: 'upsert', sheet: 'GIRA', key: 'clave', rows: [Object.assign(filaGiraBase(t, id), { observaciones: v })] }], null, 900); renderGira(); }
 function configGira() {
   const C = DB.CONFIG;
   abrirModal(`<h3>⚙️ Datos de la gira<span class="sp"></span><button class="x" onclick="cerrarModal()">×</button></h3>
   <div class="fg"><label>Nombre</label><input id="gNom" value="${esc(C.GIRA_NOMBRE || '')}"></div>
-  <div class="fgrid"><div class="fg"><label>Salida</label><input type="date" id="gDes" value="${esc(C.GIRA_DESDE || '')}"></div><div class="fg"><label>Regreso</label><input type="date" id="gHas" value="${esc(C.GIRA_HASTA || '')}"></div></div>
+  <div class="fgrid"><div class="fg"><label>Salida</label><input type="date" id="gDes" value="${esc(String(C.GIRA_DESDE || '').slice(0, 10))}"></div><div class="fg"><label>Regreso</label><input type="date" id="gHas" value="${esc(String(C.GIRA_HASTA || '').slice(0, 10))}"></div></div>
   <div class="mact"><button class="btn" onclick="cerrarModal()">Cancelar</button><button class="btn vio" onclick="guardarConfigGira()">💾 Guardar</button></div>`);
 }
 async function guardarConfigGira() {
@@ -1049,176 +1305,154 @@ async function guardarConfigGira() {
 }
 function imprimirGira() {
   const F = filasGira().filter(p => p.va === 'SI');
-  const ordRol = p => p.t === 'J' ? 9 : /head/i.test(p.rol_gira) ? 0 : /manager/i.test(p.rol_gira) ? 1 : 2;
   const J = F.filter(p => p.t === 'J').sort((a, b) => a.nombre.localeCompare(b.nombre)), E = F.filter(p => p.t === 'E').sort((a, b) => ordRol(a) - ordRol(b) || a.nombre.localeCompare(b.nombre));
-  const all = J.concat(E);
-  $('printArea').innerHTML = cabeceraPrint(`🚌 ${esc(DB.CONFIG.GIRA_NOMBRE || 'Gira')}<br>Listado de pasajeros · ${all.length}`) +
-    `<table class="ptab"><thead><tr><th>#</th><th>Apellido y Nombre</th><th>DNI/Pasaporte</th><th>Fecha de Nac.</th><th>Perfil</th></tr></thead><tbody>${all.map((p, i) => `<tr><td>${i + 1}</td><td>${esc(p.nombre.toUpperCase())}</td><td>${esc(p.dni)}</td><td>${fmtF(p.nac)}</td><td>${esc(p.rol_gira)}</td></tr>`).join('')}</tbody></table>
-    <p style="margin-top:10px;font-size:11px;color:#475569">Jugadores: ${J.length} · Adultos: ${E.length} · Generado ${fmtF(hoyISO())}</p>`;
+  const tab = (arr, ini) => `<table class="ptab"><thead><tr><th>#</th><th>Apellido y Nombre</th><th>DNI/Pasaporte</th><th>Fecha de Nac.</th><th>Perfil</th></tr></thead><tbody>${arr.map((p, i) => `<tr><td>${ini + i + 1}</td><td>${esc(p.nombre.toUpperCase())}</td><td>${esc(p.dni)}</td><td>${fmtF(p.nac)}</td><td>${esc(p.rol_gira)}</td></tr>`).join('')}</tbody></table>`;
+  $('printArea').innerHTML = cabeceraPrint(`🚌 ${esc(DB.CONFIG.GIRA_NOMBRE || 'Gira')}<br>Listado de pasajeros · ${F.length}`) +
+    `<h4 style="margin:6px 0">Jugadores (${J.length})</h4>${tab(J, 0)}<h4 style="margin:14px 0 6px">Entrenadores y staff (${E.length})</h4>${tab(E, J.length)}<p style="margin-top:10px;font-size:11px;color:#475569">Total pasajeros: ${F.length} · Generado ${fmtF(hoyISO())}</p>`;
   setTimeout(() => window.print(), 150);
 }
 function copiarGira() {
-  const F = filasGira();
-  const vj = F.filter(p => p.t === 'J' && p.va === 'SI'), ve = F.filter(p => p.t === 'E' && p.va === 'SI'), nj = F.filter(p => p.t === 'J' && p.va === 'NO');
-  const t = `🚌 ${DB.CONFIG.GIRA_NOMBRE || 'Gira'}\n\n✈️ VIAJAN (${vj.length} jugadores)\n${vj.map((p, i) => `${i + 1}. ${p.nombre}`).join('\n')}\n\n🧢 ADULTOS (${ve.length})\n${ve.map(p => `• ${p.nombre} (${p.rol_gira})`).join('\n')}\n\n🏠 NO VIAJAN (${nj.length})\n${nj.map(p => `• ${p.nombre}`).join('\n')}`;
-  (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast('📋 Listas copiadas')).catch(() => prompt('Copiá el texto:', t));
+  const F = filasGira(), vj = F.filter(p => p.t === 'J' && p.va === 'SI').sort((a, b) => a.nombre.localeCompare(b.nombre)), ve = F.filter(p => p.t === 'E' && p.va === 'SI').sort((a, b) => ordRol(a) - ordRol(b)), nj = F.filter(p => p.t === 'J' && p.va === 'NO');
+  copiarTexto(`🚌 ${DB.CONFIG.GIRA_NOMBRE || 'Gira'}\n\n✈️ JUGADORES QUE VIAJAN (${vj.length})\n${vj.map((p, i) => `${i + 1}. ${p.nombre}`).join('\n')}\n\n🧢 ENTRENADORES Y STAFF (${ve.length})\n${ve.map(p => `• ${p.nombre} (${p.rol_gira})`).join('\n')}\n\n🏠 NO VIAJAN (${nj.length})\n${nj.map(p => `• ${p.nombre}`).join('\n')}`, '📋 Listas copiadas');
 }
 
 /* =====================================================================
-   ESTADÍSTICAS (vista)
+   ESTADÍSTICAS
    ===================================================================== */
-let ST = { anio: String(new Date().getFullYear()), mes: '', tipo: '', vista: 'J', orden: 'pct', desc: true, dest: 'todos' };
+let ST = { anio: String(new Date().getFullYear()), mes: '', tipo: '', vista: 'J', dest: 'todos' };
 function renderStats() {
-  const anios = [...new Set(DB.SESIONES.map(s => s.fecha.slice(0, 4)))].sort().reverse();
+  const adm = isAdmin();
+  const cA = conAsistencia();
+  const anios = [...new Set(DB.SESIONES.filter(s => cA.has(s.id)).map(s => s.fecha.slice(0, 4)))].sort().reverse();
   if (!anios.includes(ST.anio) && anios.length) ST.anio = anios[0];
-  const S = calcStats({ anio: ST.anio, mes: ST.mes, tipo: ST.tipo });
-  const pj = S.porSesion;
-  const promJ = pj.length ? Math.round(pj.reduce((s, x) => s + pct(x.jp, x.jt), 0) / pj.length) : 0;
+  const S = calcStats({ anio: ST.anio, mes: ST.mes, tipo: ST.tipo }), pj = S.porSesion;
+  const promJ = pj.length ? Math.round(pj.reduce((s, x) => s + pct(x.jp, x.jt), 0) / pj.length) : null;
   const promPres = pj.length ? (pj.reduce((s, x) => s + x.jp, 0) / pj.length).toFixed(1) : 0;
-  const Ep = Object.values(S.per).filter(p => p.tipo === 'E'); const promE = Ep.length ? Math.round(Ep.reduce((s, p) => s + p.pct, 0) / Ep.length) : 0;
+  const Ep = Object.values(S.per).filter(p => p.tipo === 'E'), promE = Ep.length ? Math.round(Ep.reduce((s, p) => s + p.pct, 0) / Ep.length) : null;
   const up = S.recs.filter(a => a.calif > 0).length, dn = S.recs.filter(a => a.calif < 0).length;
-  // tabla
-  const filas = (ST.vista === 'J' ? DB.JUGADORES : DB.ENTRENADORES).map(x => {
-    const p = S.per[ST.vista + '-' + x.id] || { P: 0, A: 0, tot: 0, pct: 0, MIE: [0, 0], SAB: [0, 0], PAR: [0, 0], up: 0, dn: 0, hist: [], racha: null };
-    return { x, p, nombre: ST.vista === 'J' ? x.nombre : entNom(x) };
-  }).filter(r => r.p.tot > 0 || r.x.activo !== 'NO');
-  const key = { nombre: r => r.nombre, P: r => r.p.P, A: r => r.p.A, pct: r => r.p.tot ? r.p.pct : -1, MIE: r => r.p.MIE[1] ? pct(...r.p.MIE) : -1, SAB: r => r.p.SAB[1] ? pct(...r.p.SAB) : -1, up: r => r.p.up, dn: r => r.p.dn, nivel: r => ST.vista === 'J' ? nivelNum(r.x) + (r.x.nivel === 'G' ? 0 : 10) : 0 }[ST.orden] || (r => r.p.pct);
-  filas.sort((a, b) => { const va = key(a), vb = key(b); const c = typeof va === 'string' ? va.localeCompare(vb) : va - vb; return (ST.desc ? -c : c) || a.nombre.localeCompare(b.nombre); });
-  const th = (k, t, cls) => `<th class="${cls || ''}" onclick="ordenST('${k}')">${t}${ST.orden === k ? (ST.desc ? ' ↓' : ' ↑') : ''}</th>`;
-  // destacados
+  const filas = (ST.vista === 'J' ? DB.JUGADORES : DB.ENTRENADORES).map(x => ({ x, p: S.per[ST.vista + '-' + x.id] || vacioStat(), nombre: ST.vista === 'J' ? x.nombre : entNom(x) })).filter(r => r.p.tot > 0 || r.x.activo !== 'NO');
   const dest = S.recs.filter(a => (a.calif !== 0 || a.comentario) && (ST.dest === 'todos' || (ST.dest === 'up' && a.calif > 0) || (ST.dest === 'dn' && a.calif < 0) || (ST.dest === 'cm' && a.comentario))).sort((a, b) => b.fecha.localeCompare(a.fecha));
-  // por colegio
   const col = {};
   Object.values(S.per).filter(p => p.tipo === 'J').forEach(p => { const j = jugById(p.id); if (!j) return; const c = j.colegio || 'N/A'; col[c] = col[c] || { P: 0, T: 0, n: 0 }; col[c].P += p.P; col[c].T += p.tot; col[c].n++; });
   const cols = Object.entries(col).map(([c, v]) => ({ c, pc: pct(v.P, v.T), n: v.n })).sort((a, b) => b.pc - a.pc);
-  // mensual
-  const mes = {};
-  S.recs.filter(a => a.persona_tipo === 'J').forEach(a => { const m = a.fecha.slice(0, 7); mes[m] = mes[m] || [0, 0]; mes[m][1]++; if (a.estado === 'P') mes[m][0]++; });
+  const mot = {}; S.recs.filter(a => a.persona_tipo === 'J' && a.estado === 'A').forEach(a => { const m = a.motivo || 'Sin aviso'; mot[m] = (mot[m] || 0) + 1; });
+  const totAus = Object.values(mot).reduce((a, b) => a + b, 0);
+  const mes = {}; S.recs.filter(a => a.persona_tipo === 'J').forEach(a => { const m = a.fecha.slice(0, 7); mes[m] = mes[m] || [0, 0]; mes[m][1]++; if (a.estado === 'P') mes[m][0]++; });
   const meses = Object.keys(mes).sort();
-
+  const pctT = (p, t) => p[t][1] ? pct(...p[t]) : null;
   $('v-stats').innerHTML = `
   <h2 class="sec">📊 Estadísticas <span class="sp"></span><button class="btn sm" onclick="exportarCSV()">⬇️ Exportar CSV</button></h2>
   <div class="row" style="margin-bottom:12px">
     <select style="max-width:110px" onchange="ST.anio=this.value;renderStats()">${(anios.length ? anios : [ST.anio]).map(a => `<option ${a === ST.anio ? 'selected' : ''}>${a}</option>`).join('')}</select>
     <select style="max-width:150px" onchange="ST.mes=this.value;renderStats()"><option value="">Todo el año</option>${MESES.map((m, i) => `<option value="${i + 1}" ${String(ST.mes) === String(i + 1) ? 'selected' : ''}>${m}</option>`).join('')}</select>
-    <div class="seg">${[['', 'Todas'], ['MIE', 'Miércoles'], ['SAB', 'Sábados'], ['PAR', 'Partidos']].map(([k, t]) => `<button class="${ST.tipo === k ? 'on' : ''}" onclick="ST.tipo='${k}';renderStats()">${t}</button>`).join('')}</div>
+    <div class="seg">${[['', 'Todos'], ['MIE', 'Miércoles'], ['SAB', 'Sábados'], ['PAR', 'Partidos']].map(([k, t]) => `<button class="${ST.tipo === k ? 'on' : ''}" onclick="ST.tipo='${k}';renderStats()">${t}</button>`).join('')}</div>
   </div>
   <div class="kpis">
-    <div class="kpi"><div class="l">Sesiones</div><div class="v">${S.ses.length}</div><div class="s">${S.ses.filter(s => s.tipo === 'MIE').length} mié · ${S.ses.filter(s => s.tipo === 'SAB').length} sáb · ${S.ses.filter(s => s.tipo === 'PAR').length} part.</div></div>
-    <div class="kpi"><div class="l">Asistencia jugadores</div><div class="v" style="color:${colorPct(promJ)}">${promJ}%</div><div class="s">${promPres} presentes por sesión</div></div>
-    <div class="kpi"><div class="l">Asistencia entrenadores</div><div class="v" style="color:${colorPct(promE)}">${promE}%</div><div class="s">promedio del staff</div></div>
+    <div class="kpi"><div class="l">Entrenamientos</div><div class="v">${S.ses.length}</div><div class="s">${S.ses.filter(s => s.tipo === 'MIE').length} mié · ${S.ses.filter(s => s.tipo === 'SAB').length} sáb · ${S.ses.filter(s => s.tipo === 'PAR').length} part.</div></div>
+    <div class="kpi"><div class="l">Asistencia jugadores</div><div class="v" style="color:${promJ == null ? 'var(--tx3)' : colorPct(promJ)}">${promJ == null ? '—' : promJ + '%'}</div><div class="s">${promPres} presentes por entrenamiento</div></div>
+    <div class="kpi"><div class="l">Asistencia entrenadores</div><div class="v" style="color:${promE == null ? 'var(--tx3)' : colorPct(promE)}">${promE == null ? '—' : promE + '%'}</div><div class="s">promedio del staff</div></div>
     <div class="kpi"><div class="l">Destacados</div><div class="v"><span class="up">▲${up}</span> <span class="dn">▼${dn}</span></div><div class="s">marcas del período</div></div>
   </div>
   <div class="grid g2">
-    <div class="card chart"><h3>👦 Presentes por sesión</h3>${chartSesiones(pj)}<div class="legend"><span><i style="background:#06b6d4"></i>Miércoles</span><span><i style="background:#8b5cf6"></i>Sábado</span><span><i style="background:#f59e0b"></i>Partido</span><span><i style="background:#94a3b8"></i>Otro</span></div></div>
+    <div class="card chart"><h3>👦 Presentes por entrenamiento</h3>${chartSesiones(pj)}<div class="legend"><span><i style="background:#06b6d4"></i>Miércoles</span><span><i style="background:#8b5cf6"></i>Sábado</span><span><i style="background:#f59e0b"></i>Partido</span><span><i style="background:#94a3b8"></i>Otro</span></div></div>
     <div class="card chart"><h3>📅 % asistencia por mes</h3>${chartMeses(meses, mes)}</div>
   </div>
   <div class="card">
     <h3>🏅 Ranking de asistencia <span class="sp"></span><div class="seg"><button class="${ST.vista === 'J' ? 'on' : ''}" onclick="ST.vista='J';renderStats()">Jugadores</button><button class="${ST.vista === 'E' ? 'on' : ''}" onclick="ST.vista='E';renderStats()">Entrenadores</button></div></h3>
-    <div class="tbl-wrap"><table><thead><tr><th>#</th>${th('nombre', 'Nombre')}${ST.vista === 'J' ? th('nivel', 'Nivel') : '<th>Rol</th>'}${th('P', 'Pres.', 'num')}${th('A', 'Aus.', 'num')}${th('pct', '%', 'num')}<th></th>${th('MIE', '% Mié', 'num')}${th('SAB', '% Sáb', 'num')}${th('up', '▲', 'num')}${th('dn', '▼', 'num')}<th>Racha</th><th>Últimas 10</th></tr></thead><tbody>
-    ${filas.map((r, i) => { const p = r.p; const ult = p.hist.slice(-10); return `<tr class="clk" onclick="${ST.vista === 'J' ? `fichaJugador('${r.x.id}')` : `fichaEntrenador('${r.x.id}')`}"><td class="muted">${i + 1}</td><td><b>${esc(r.nombre)}</b>${r.x.activo === 'NO' ? ' <span class="pill" style="background:rgba(148,163,184,.2)">baja</span>' : ''}</td><td>${ST.vista === 'J' ? nivelBadge(r.x) : esc(r.x.rol || '')}</td><td class="num">${p.P}</td><td class="num">${p.A}</td><td class="num"><b style="color:${p.tot ? colorPct(p.pct) : 'var(--tx4)'}">${p.tot ? p.pct + '%' : '—'}</b></td><td><div class="bar"><i style="width:${p.pct}%;background:${colorPct(p.pct)}"></i></div></td><td class="num">${p.MIE[1] ? pct(...p.MIE) + '%' : '—'}</td><td class="num">${p.SAB[1] ? pct(...p.SAB) + '%' : '—'}</td><td class="num up">${p.up || ''}</td><td class="num dn">${p.dn || ''}</td><td>${p.racha ? `<span class="pill" style="background:${p.racha.e === 'P' ? 'rgba(34,197,94,.18);color:var(--gr2)' : 'rgba(239,68,68,.18);color:var(--rd2)'}">${p.racha.n} ${p.racha.e === 'P' ? 'pres.' : 'aus.'}</span>` : ''}</td><td><span class="dots">${ult.map(a => `<i class="d${a.estado}" title="${fmtF(a.fecha)}"></i>`).join('')}</span></td></tr>`; }).join('')}
-    </tbody></table></div>
+    <div class="small muted" style="margin-bottom:6px">Tocá cualquier título para ordenar de mayor a menor o al revés.</div>
+    ${tabla('st' + ST.vista, [
+      { t: '#', h: (r, i) => `<span class="muted">${i + 1}</span>` },
+      { k: 'nombre', t: 'Nombre', h: r => `<b>${esc(r.nombre)}</b>${r.x.activo === 'NO' ? ' <span class="pill" style="background:rgba(148,163,184,.2)">baja</span>' : ''}` },
+      ...(ST.vista === 'J' ? (adm ? [{ k: 'nivel', t: 'Nivel', v: r => r.x.nivel === 'G' ? (r.x.nivel2 || 0) / 10 : nivelNum(r.x), h: r => nivelBadge(r.x) }] : []) : [{ k: 'rol', t: 'Rol', v: r => r.x.rol, h: r => esc(r.x.rol || '') }]),
+      { k: 'P', t: 'Pres.', num: 1, v: r => r.p.P, h: r => r.p.P },
+      { k: 'A', t: 'Aus.', num: 1, v: r => r.p.A, h: r => r.p.A },
+      { k: 'aviso', t: 'Avisó', num: 1, v: r => r.p.aviso, h: r => r.p.aviso || '' },
+      { k: 'pct', t: '%', num: 1, v: r => r.p.tot ? r.p.pct : null, h: r => `<b style="color:${r.p.tot ? colorPct(r.p.pct) : 'var(--tx4)'}">${r.p.tot ? r.p.pct + '%' : '—'}</b>` },
+      { t: '', h: r => `<div class="bar"><i style="width:${r.p.pct}%;background:${colorPct(r.p.pct)}"></i></div>` },
+      { k: 'MIE', t: '% Mié', num: 1, v: r => pctT(r.p, 'MIE'), h: r => pctT(r.p, 'MIE') == null ? '—' : pctT(r.p, 'MIE') + '%' },
+      { k: 'SAB', t: '% Sáb', num: 1, v: r => pctT(r.p, 'SAB'), h: r => pctT(r.p, 'SAB') == null ? '—' : pctT(r.p, 'SAB') + '%' },
+      { k: 'up', t: '▲', num: 1, v: r => r.p.up, h: r => `<span class="up">${r.p.up || ''}</span>` },
+      { k: 'dn', t: '▼', num: 1, v: r => r.p.dn, h: r => `<span class="dn">${r.p.dn || ''}</span>` },
+      { k: 'racha', t: 'Racha', num: 1, v: r => r.p.racha ? (r.p.racha.e === 'P' ? r.p.racha.n : -r.p.racha.n) : null, h: r => r.p.racha ? `<span class="pill" style="background:${r.p.racha.e === 'P' ? 'rgba(34,197,94,.18);color:var(--gr2)' : 'rgba(239,68,68,.18);color:var(--rd2)'}">${r.p.racha.n} ${r.p.racha.e === 'P' ? 'pres.' : 'aus.'}</span>` : '' },
+      { t: 'Últimos 10', h: r => `<span class="dots">${r.p.hist.slice(-10).map(a => `<i class="d${a.estado}" title="${fmtF(a.fecha)}"></i>`).join('')}</span>` }
+    ], filas, { k: 'pct', desc: true }, r => `class="clk" onclick="${ST.vista === 'J' ? 'fichaJugador' : 'fichaEntrenador'}('${r.x.id}')"`)}
   </div>
-  <div class="grid g2">
+  <div class="grid g3">
     <div class="card"><h3>⭐ Destacados y comentarios <span class="sp"></span><select style="width:auto" onchange="ST.dest=this.value;renderStats()">${[['todos', 'Todos'], ['up', '▲ Positivos'], ['dn', '▼ A mejorar'], ['cm', '💬 Con comentario']].map(([k, t]) => `<option value="${k}" ${ST.dest === k ? 'selected' : ''}>${t}</option>`).join('')}</select></h3>
-      <div style="max-height:420px;overflow-y:auto">${dest.length ? dest.map(a => `<div class="cmt-i clk" onclick="${a.persona_tipo === 'J' ? `fichaJugador('${a.persona_id}')` : `fichaEntrenador('${a.persona_id}')`}"><div class="h">${fmtFC(a.fecha)} · ${TIPOS[a.tipo] || a.tipo}</div>${a.calif > 0 ? '<b class="up">▲</b> ' : a.calif < 0 ? '<b class="dn">▼</b> ' : '💬 '}<b>${esc(a.nombre)}</b>${a.comentario ? ' — ' + esc(a.comentario) : ''}</div>`).join('') : '<div class="empty">Sin marcas en el período.</div>'}</div>
+      <div style="max-height:420px;overflow-y:auto">${dest.length ? dest.map(a => `<div class="cmt-i clk" onclick="${a.persona_tipo === 'J' ? 'fichaJugador' : 'fichaEntrenador'}('${a.persona_id}')"><div class="h">${fmtFC(a.fecha)} · ${TIPOS_C[a.tipo] || a.tipo}</div>${a.calif > 0 ? '<b class="up">▲</b> ' : a.calif < 0 ? '<b class="dn">▼</b> ' : '💬 '}<b>${esc(a.nombre)}</b>${a.comentario ? ' — ' + esc(a.comentario) : ''}</div>`).join('') : '<div class="empty">Sin marcas en el período.</div>'}</div>
+    </div>
+    <div class="card"><h3>🚫 Motivos de ausencia</h3>
+      ${totAus ? Object.entries(mot).sort((a, b) => b[1] - a[1]).map(([m, n]) => `<div class="list-i"><span class="grow">${esc(m)}</span><div class="bar" style="width:110px"><i style="width:${pct(n, totAus)}%;background:${m === 'Sin aviso' ? 'var(--rd)' : 'var(--am)'}"></i></div><b style="width:60px;text-align:right">${n} <span class="muted small">${pct(n, totAus)}%</span></b></div>`).join('') : '<div class="empty">Sin ausencias en el período.</div>'}
     </div>
     <div class="card"><h3>🏫 Asistencia por colegio</h3>
-      ${cols.length ? cols.map(c => `<div class="list-i"><span class="grow">${esc(c.c)} <span class="muted small">(${c.n})</span></span><div class="bar" style="width:120px"><i style="width:${c.pc}%;background:${colorPct(c.pc)}"></i></div><b style="width:44px;text-align:right">${c.pc}%</b></div>`).join('') : '<div class="empty">Sin datos.</div>'}
+      ${cols.length ? cols.map(c => `<div class="list-i"><span class="grow">${esc(c.c)} <span class="muted small">(${c.n})</span></span><div class="bar" style="width:110px"><i style="width:${c.pc}%;background:${colorPct(c.pc)}"></i></div><b style="width:44px;text-align:right">${c.pc}%</b></div>`).join('') : '<div class="empty">Sin datos.</div>'}
     </div>
   </div>`;
 }
-function ordenST(k) { if (ST.orden === k) ST.desc = !ST.desc; else { ST.orden = k; ST.desc = k !== 'nombre'; } renderStats(); }
 function chartSesiones(pj) {
-  if (!pj.length) return '<div class="empty">Sin sesiones en el período.</div>';
-  const W = 600, H = 200, pl = 28, pb = 22, max = Math.max(...pj.map(x => x.jt), 1);
-  const bw = (W - pl) / pj.length; const col = { MIE: '#06b6d4', SAB: '#8b5cf6', PAR: '#f59e0b', OTR: '#94a3b8' };
+  if (!pj.length) return '<div class="empty">Sin entrenamientos en el período.</div>';
+  const W = 600, H = 200, pl = 28, pb = 22, max = Math.max(...pj.map(x => x.jt), 1), bw = (W - pl) / pj.length, col = { MIE: '#06b6d4', SAB: '#8b5cf6', PAR: '#f59e0b', OTR: '#94a3b8' };
   const y = v => H - pb - (v / max) * (H - pb - 10);
   let g = '';
   [0, .5, 1].forEach(t => { const v = Math.round(max * t); g += `<line x1="${pl}" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="rgba(255,255,255,.08)"/><text x="${pl - 4}" y="${y(v) + 3}" text-anchor="end">${v}</text>`; });
   pj.forEach((x, i) => {
     const bx = pl + i * bw + bw * .15, w = Math.max(bw * .7, 2);
-    g += `<rect x="${bx}" y="${y(x.jt)}" width="${w}" height="${H - pb - y(x.jt)}" rx="2" fill="rgba(255,255,255,.06)"/><rect x="${bx}" y="${y(x.jp)}" width="${w}" height="${H - pb - y(x.jp)}" rx="2" fill="${col[x.s.tipo] || '#94a3b8'}"><title>${fmtFC(x.s.fecha)}: ${x.jp}/${x.jt} (${pct(x.jp, x.jt)}%)</title></rect>`;
+    g += `<rect x="${bx}" y="${y(x.jt)}" width="${w}" height="${H - pb - y(x.jt)}" rx="2" fill="rgba(255,255,255,.06)"/><rect class="clk" onclick="irAsistencia('${x.s.fecha}','${x.s.tipo}')" x="${bx}" y="${y(x.jp)}" width="${w}" height="${H - pb - y(x.jp)}" rx="2" fill="${col[x.s.tipo] || '#94a3b8'}"><title>${fmtFC(x.s.fecha)}: ${x.jp}/${x.jt} (${pct(x.jp, x.jt)}%)</title></rect>`;
     if (pj.length <= 16 || i % Math.ceil(pj.length / 12) === 0) g += `<text x="${bx + w / 2}" y="${H - 6}" text-anchor="middle">${x.s.fecha.slice(8, 10)}/${x.s.fecha.slice(5, 7)}</text>`;
   });
-  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Presentes por sesión">${g}</svg>`;
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Presentes por entrenamiento">${g}</svg>`;
 }
 function chartMeses(meses, mes) {
   if (!meses.length) return '<div class="empty">Sin datos.</div>';
-  const W = 600, H = 200, pb = 22; const bw = W / meses.length;
-  let g = `<line x1="0" x2="${W}" y1="${H - pb - (H - pb - 14) * .8}" y2="${H - pb - (H - pb - 14) * .8}" stroke="rgba(34,197,94,.35)" stroke-dasharray="4 4"/><text x="${W - 2}" y="${H - pb - (H - pb - 14) * .8 - 4}" text-anchor="end">80%</text>`;
-  meses.forEach((m, i) => {
-    const p = pct(...mes[m]); const h = (H - pb - 14) * p / 100; const bx = i * bw + bw * .2, w = bw * .6;
-    g += `<rect x="${bx}" y="${H - pb - h}" width="${w}" height="${h}" rx="4" fill="${p >= 80 ? '#22c55e' : p >= 60 ? '#f59e0b' : '#ef4444'}"/><text x="${bx + w / 2}" y="${H - pb - h - 4}" text-anchor="middle" style="fill:#f1f5f9;font-weight:700">${p}%</text><text x="${bx + w / 2}" y="${H - 6}" text-anchor="middle">${MESES[Number(m.slice(5, 7)) - 1]}</text>`;
-  });
+  const W = 600, H = 200, pb = 22, bw = W / meses.length, y80 = H - pb - (H - pb - 14) * .8;
+  let g = `<line x1="0" x2="${W}" y1="${y80}" y2="${y80}" stroke="rgba(34,197,94,.35)" stroke-dasharray="4 4"/><text x="${W - 2}" y="${y80 - 4}" text-anchor="end">80%</text>`;
+  meses.forEach((m, i) => { const p = pct(...mes[m]), h = (H - pb - 14) * p / 100, bx = i * bw + bw * .2, w = bw * .6; g += `<rect x="${bx}" y="${H - pb - h}" width="${w}" height="${h}" rx="4" fill="${p >= 80 ? '#22c55e' : p >= 60 ? '#f59e0b' : '#ef4444'}"/><text x="${bx + w / 2}" y="${H - pb - h - 4}" text-anchor="middle" style="fill:#f1f5f9;font-weight:700">${p}%</text><text x="${bx + w / 2}" y="${H - 6}" text-anchor="middle">${MESES[Number(m.slice(5, 7)) - 1]}</text>`; });
   return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Asistencia por mes">${g}</svg>`;
 }
 function fichaPersona(t, id) {
   const x = t === 'J' ? jugById(id) : entById(id); if (!x) return;
-  const anio = new Date().getFullYear();
-  const S = calcStats({ anio }); const p = S.per[t + '-' + id] || { P: 0, A: 0, tot: 0, pct: 0, MIE: [0, 0], SAB: [0, 0], PAR: [0, 0], up: 0, dn: 0, hist: [], racha: null };
+  const anio = new Date().getFullYear(), p = calcStats({ anio }).per[t + '-' + id] || vacioStat();
   const coms = p.hist.filter(a => a.calif !== 0 || a.comentario).reverse();
-  const hijo = t === 'E' && jugById(x.hijo_id);
-  const padres = t === 'J' ? DB.ENTRENADORES.filter(e => e.hijo_id === id) : [];
+  const hijo = t === 'E' && jugById(x.hijo_id), padres = t === 'J' ? DB.ENTRENADORES.filter(e => e.hijo_id === id) : [];
   abrirModal(`<h3>${t === 'J' ? '👦' : '🧢'} ${esc(t === 'J' ? x.nombre : entNom(x))}<span class="sp"></span><button class="x" onclick="cerrarModal()">×</button></h3>
   <div class="row small muted" style="margin:-6px 0 12px">${t === 'J' ? `${nivelBadge(x)} ${esc(x.colegio)} · ${esc(x.grado)}${padres.length ? ' · 🧢 ' + padres.map(entNom).map(esc).join(', ') : ''}` : `${esc(x.rol || '')}${hijo ? ' · hijo: ' + esc(hijo.nombre) : ''}`} ${viaja(t, id) ? '· ✈️ viaja a la gira' : ''} ${x.activo === 'NO' ? '· <b>baja ' + fmtF(x.fecha_baja) + '</b>' : ''}</div>
   <div class="kpis">
-    <div class="kpi"><div class="l">Asistencia ${anio}</div><div class="v" style="color:${colorPct(p.pct)}">${p.tot ? p.pct + '%' : '—'}</div><div class="s">${p.P} de ${p.tot}</div></div>
+    <div class="kpi"><div class="l">Asistencia ${anio}</div><div class="v" style="color:${colorPct(p.pct)}">${p.tot ? p.pct + '%' : '—'}</div><div class="s">${p.P} de ${p.tot}${p.aviso ? ' · avisó ' + p.aviso : ''}</div></div>
     <div class="kpi"><div class="l">Mié / Sáb</div><div class="v" style="font-size:1.2rem">${p.MIE[1] ? pct(...p.MIE) + '%' : '—'} / ${p.SAB[1] ? pct(...p.SAB) + '%' : '—'}</div></div>
     <div class="kpi"><div class="l">Marcas</div><div class="v" style="font-size:1.3rem"><span class="up">▲${p.up}</span> <span class="dn">▼${p.dn}</span></div></div>
   </div>
-  <div class="card"><h3>🗓️ Sesión por sesión</h3><div class="timeline">${p.hist.map(a => `<span style="background:${a.estado === 'P' ? 'var(--gr)' : 'var(--rd)'}" title="${fmtFC(a.fecha)} ${TIPOS[a.tipo] || ''}${a.comentario ? ': ' + esc(a.comentario) : ''}">${a.calif > 0 ? '▲' : a.calif < 0 ? '▼' : a.fecha.slice(8, 10)}</span>`).join('') || '<span class="muted small" style="width:auto;color:var(--tx3)">Sin registros</span>'}</div></div>
-  <div class="card"><h3>⭐ Destacados y comentarios</h3>${coms.length ? coms.map(a => `<div class="cmt-i"><div class="h">${fmtFC(a.fecha)} · ${TIPOS[a.tipo] || ''}</div>${a.calif > 0 ? '<b class="up">▲</b> ' : a.calif < 0 ? '<b class="dn">▼</b> ' : '💬 '}${esc(a.comentario || '(sin comentario)')}</div>`).join('') : '<div class="empty">Nada marcado todavía.</div>'}</div>
+  <div class="card"><h3>🗓️ Entrenamiento por entrenamiento</h3><div class="timeline">${p.hist.map(a => `<span style="background:${a.estado === 'P' ? 'var(--gr)' : a.motivo && a.motivo !== 'Sin aviso' ? 'var(--am)' : 'var(--rd)'}" title="${fmtFC(a.fecha)} ${TIPOS_C[a.tipo] || ''}${a.motivo ? ' · ' + esc(a.motivo) : ''}${a.comentario ? ': ' + esc(a.comentario) : ''}">${a.calif > 0 ? '▲' : a.calif < 0 ? '▼' : a.fecha.slice(8, 10)}</span>`).join('') || '<span class="muted small" style="width:auto;color:var(--tx3)">Sin registros</span>'}</div><div class="legend"><span><i style="background:var(--gr)"></i>Presente</span><span><i style="background:var(--am)"></i>Ausente con aviso</span><span><i style="background:var(--rd)"></i>Ausente sin aviso</span></div></div>
+  <div class="card"><h3>⭐ Destacados y comentarios</h3>${coms.length ? coms.map(a => `<div class="cmt-i"><div class="h">${fmtFC(a.fecha)} · ${TIPOS_C[a.tipo] || ''}</div>${a.calif > 0 ? '<b class="up">▲</b> ' : a.calif < 0 ? '<b class="dn">▼</b> ' : '💬 '}${esc(a.comentario || '(sin comentario)')}</div>`).join('') : '<div class="empty">Nada marcado todavía.</div>'}</div>
   ${x.observaciones ? `<div class="info">📝 ${esc(x.observaciones)}</div>` : ''}
   <div class="mact"><button class="btn" onclick="cerrarModal();${t === 'J' ? `editarJugador('${id}')` : `editarEntrenador('${id}')`}">✏️ Editar datos</button></div>`);
 }
 const fichaJugador = id => fichaPersona('J', id), fichaEntrenador = id => fichaPersona('E', id);
 function exportarCSV() {
-  const S = calcStats({ anio: ST.anio, mes: ST.mes, tipo: ST.tipo });
-  const rows = [['tipo', 'id', 'nombre', 'nivel', 'colegio', 'presentes', 'ausentes', 'pct', 'pct_mie', 'pct_sab', 'positivos', 'a_mejorar', 'activo', 'viaja_gira']];
-  DB.JUGADORES.forEach(j => { const p = S.per['J-' + j.id] || { P: 0, A: 0, pct: 0, MIE: [0, 0], SAB: [0, 0], up: 0, dn: 0 }; rows.push(['Jugador', j.id, j.nombre, nivelTxt(j), j.colegio, p.P, p.A, p.pct, p.MIE[1] ? pct(...p.MIE) : '', p.SAB[1] ? pct(...p.SAB) : '', p.up, p.dn, j.activo, viaja('J', j.id) ? 'SI' : 'NO']); });
-  DB.ENTRENADORES.forEach(e => { const p = S.per['E-' + e.id] || { P: 0, A: 0, pct: 0, MIE: [0, 0], SAB: [0, 0], up: 0, dn: 0 }; rows.push(['Entrenador', e.id, entNom(e), e.rol, '', p.P, p.A, p.pct, p.MIE[1] ? pct(...p.MIE) : '', p.SAB[1] ? pct(...p.SAB) : '', p.up, p.dn, e.activo, viaja('E', e.id) ? 'SI' : 'NO']); });
+  const adm = isAdmin(), S = calcStats({ anio: ST.anio, mes: ST.mes, tipo: ST.tipo });
+  const rows = [['tipo', 'id', 'nombre', ...(adm ? ['nivel'] : []), 'colegio_o_rol', 'presentes', 'ausentes', 'ausencias_con_aviso', 'pct', 'pct_mie', 'pct_sab', 'positivos', 'a_mejorar', 'activo', 'viaja_gira']];
+  const fila = (tipo, x, nom, extra, k) => { const p = S.per[k] || vacioStat(); return [tipo, x.id, nom, ...(adm ? [tipo === 'Jugador' ? nivelTxt(x) : ''] : []), extra, p.P, p.A, p.aviso, p.pct, p.MIE[1] ? pct(...p.MIE) : '', p.SAB[1] ? pct(...p.SAB) : '', p.up, p.dn, x.activo, viaja(k[0], x.id) ? 'SI' : 'NO']; };
+  DB.JUGADORES.forEach(j => rows.push(fila('Jugador', j, j.nombre, j.colegio, 'J-' + j.id)));
+  DB.ENTRENADORES.forEach(e => rows.push(fila('Entrenador', e, entNom(e), e.rol, 'E-' + e.id)));
   const csv = '﻿' + rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(';')).join('\n');
   const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' })); a.download = `M9_estadisticas_${ST.anio}${ST.mes ? '_' + pad(ST.mes) : ''}.csv`; a.click();
 }
 
 /* =====================================================================
-   AJUSTES / CONEXIÓN / PIN
+   AJUSTES
    ===================================================================== */
-function abrirAjustes(primeraVez, error) {
-  abrirModal(`<h3>${primeraVez ? '🏉 Bienvenido' : '⚙️ Ajustes y conexión'}<span class="sp"></span>${primeraVez ? '' : '<button class="x" onclick="cerrarModal()">×</button>'}</h3>
-  ${error ? `<div class="warn" style="margin:0 0 12px">⚠️ ${esc(error)}</div>` : ''}
-  <div class="fg"><label>URL de la planilla (Apps Script, termina en /exec)</label><input id="cfUrl" value="${esc(apiUrl())}" placeholder="https://script.google.com/macros/s/…/exec"></div>
-  <div class="fg"><label>PIN de acceso</label><input id="cfPin" type="password" inputmode="numeric" value="${esc(lsGet(LS.pin) || '')}" placeholder="PIN"></div>
-  <div class="mact"><button class="btn pri" onclick="conectar()">🔗 Conectar con Google Sheet</button></div>
-  <div class="mact"><button class="btn" onclick="entrarDemo()">🧪 ${MODE === 'demo' ? 'Seguir en' : 'Probar en'} modo demo (datos ficticios)</button></div>
-  ${MODE === 'demo' ? `<div class="mact"><button class="btn sm red" onclick="if(confirm('¿Reiniciar los datos demo?')){lsDel(LS.demo);location.reload()}">↺ Reiniciar datos demo</button></div>` : ''}
-  ${MODE === 'api' && !primeraVez ? `<div class="mact"><button class="btn sm" onclick="cerrarModal();recargar()">🔄 Recargar datos de la planilla</button><button class="btn sm red" onclick="lsDel(LS.pin);location.reload()">🔒 Cerrar sesión</button></div>` : ''}
-  <p class="small muted" style="margin-top:12px">Modo actual: <b>${MODE === 'demo' ? 'Demo (local, este navegador)' : MODE === 'api' ? 'Google Sheet' : 'sin configurar'}</b></p>`);
+function abrirAjustes() {
+  abrirModal(`<h3>⚙️ Ajustes<span class="sp"></span><button class="x" onclick="cerrarModal()">×</button></h3>
+  <div class="list-i"><span class="grow">Perfil</span><span class="role ${ROLE}">${isAdmin() ? 'Administrador' : 'Staff'}</span></div>
+  <div class="list-i"><span class="grow">Última sincronización</span><b>${ULTIMA_SYNC || '—'}</b></div>
+  <div class="list-i"><span class="grow">Cambios pendientes de subir</span><b style="color:${PEND.length ? 'var(--am2)' : 'var(--gr2)'}">${PEND.length}</b></div>
+  <div class="mact"><button class="btn pri" onclick="cerrarModal();refrescar(true).then(ok=>toast(ok?'🔄 Datos actualizados':'📶 Sin conexión',!ok))">🔄 Actualizar datos</button>${PEND.length ? `<button class="btn" onclick="cerrarModal();subirPendientes().then(ok=>toast(ok?'✅ Cambios subidos':'📶 Todavía sin conexión',!ok))">⬆️ Subir pendientes</button>` : ''}</div>
+  <div class="mact"><button class="btn red" onclick="salir()">🔒 Cerrar sesión</button></div>
+  <p class="small muted" style="margin-top:12px">${isAdmin() ? 'Como administrador ves y editás las calificaciones (niveles) de los jugadores.' : 'Con el PIN de staff no se ven las calificaciones de los jugadores.'}</p>`);
 }
-async function conectar() {
-  const u = $('cfUrl').value.trim(), p = $('cfPin').value.trim();
-  if (!/^https:\/\/script\.google(usercontent)?\.com\//.test(u)) return toast('La URL tiene que ser la del Apps Script (/exec)', true);
-  lsSet(LS.url, u); lsSet(LS.pin, p); lsSet(LS.mode, 'api'); cerrarModal(); iniciar();
-}
-function entrarDemo() { lsSet(LS.mode, 'demo'); cerrarModal(); iniciar(); }
-async function recargar() { try { await cargarBase(); renderTab(); toast('🔄 Datos actualizados'); } catch (e) { toast(e.message, true); } }
-
-async function iniciar() {
-  $('loading').classList.remove('hidden'); $('loadingMsg').textContent = 'Cargando base…';
-  try {
-    const ok = await cargarBase();
-    $('loading').classList.add('hidden');
-    if (!ok) { abrirAjustes(true); return; }
-    document.querySelectorAll('img.escudo').forEach(i => { if (DB.CONFIG.ESCUDO_URL) i.src = DB.CONFIG.ESCUDO_URL; });
-    renderNav(); ir(lsGet(LS.tab) || 'inicio');
-  } catch (e) {
-    $('loading').classList.add('hidden');
-    abrirAjustes(true, /PIN/i.test(e.message) ? 'PIN incorrecto. Probá de nuevo.' : 'No se pudo leer la planilla: ' + e.message);
-  }
-}
-window.addEventListener('beforeunload', e => { if ((AS && AS.sucio) || colaOps.length) { e.preventDefault(); e.returnValue = ''; } });
+window.addEventListener('beforeunload', e => { if ((AS && AS.sucio) || PEND.length) { e.preventDefault(); e.returnValue = ''; } });
+$('pinIn').addEventListener('keydown', e => { if (e.key === 'Enter') entrar(); });
 iniciar();
+
 </script>
 </body>
 </html>
