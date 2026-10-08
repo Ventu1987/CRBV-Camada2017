@@ -643,6 +643,17 @@ const hIni = h => String(h || '').split('-')[0] || '';
 const hFin = h => String(h || '').split('-')[1] || '';
 const fmtHora = h => { const a = hIni(h), b = hFin(h); return a ? (b ? `${a} a ${b} h` : `${a} h`) : ''; };
 const horaSes = s => s.hora || horarioDef(s.fecha);
+// título del entrenamiento/partido (campo "Título", editable en Inicio y en Entrenamiento)
+const tituloSes = s => (s && s.detalle) ? s.detalle : (s && s.tipo === 'PAR' ? 'Partido' : 'Entrenamiento ' + (TIPOS_C[s && s.tipo] || '').toLowerCase());
+// próximo entrenamiento: el más cercano (desde hoy) entre los ya planificados y el próximo miércoles/sábado
+function proximaSesion() {
+  const hoy = hoyISO(), cA = conAsistencia();
+  const plan = DB.SESIONES.filter(s => s.fecha >= hoy && !cA.has(s.id)).sort((a, b) => a.fecha.localeCompare(b.fecha))[0];
+  const def = proximoEntreno();
+  if (plan && plan.fecha <= def) return { fecha: plan.fecha, tipo: plan.tipo, s: plan };
+  const s = DB.SESIONES.find(x => x.fecha === def && !cA.has(x.id)) || null;
+  return { fecha: def, tipo: s ? s.tipo : tipoDeFecha(def), s };
+}
 const nombreEntreno = s => `${fmtFC(s.fecha)} · ${TIPOS_C[s.tipo] || s.tipo}${horaSes(s) ? ' · ' + hIni(horaSes(s)) : ''}`;
 function proximoEntreno() { const d = new Date(); d.setHours(0, 0, 0, 0); for (let i = 0; i < 8; i++) { const w = d.getDay(); if (w === 3 || w === 6) return isoDate(d); d.setDate(d.getDate() + 1); } return hoyISO(); }
 
@@ -743,8 +754,7 @@ function renderInicio() {
   const prom = st.porSesion.length ? Math.round(st.porSesion.reduce((s, x) => s + pct(x.jp, x.jt), 0) / st.porSesion.length) : null;
   const vj = DB.GIRA.filter(g => g.persona_tipo === 'J' && String(g.va).toUpperCase() === 'SI').length;
   const vs = DB.GIRA.filter(g => g.persona_tipo === 'E' && String(g.va).toUpperCase() === 'SI').length;
-  const prox = proximoEntreno(), proxT = tipoDeFecha(prox);
-  const proxS = DB.SESIONES.find(s => s.id === prox + '_' + proxT);
+  const PX = proximaSesion(), prox = PX.fecha, proxT = PX.tipo, proxS = PX.s;
   const al = alertas(), cu = cumpleanos(), hoyMD = hoyISO().slice(5);
   const cA = conAsistencia();
   const ult = sesionesOrd().filter(s => cA.has(s.id)).slice(0, 6);
@@ -766,12 +776,13 @@ function renderInicio() {
   </div>
   <div class="grid g2">
     <div class="card"><h3>📅 Próximo entrenamiento<span class="sp"></span><span class="pill t-${proxT}">${TIPOS_C[proxT]}</span></h3>
-      <div style="font-size:1.2rem;font-weight:900">${prox === hoyISO() ? 'HOY · ' : ''}${fmtFC(prox)} · ${fmtHora(proxS ? horaSes(proxS) : horarioDef(prox))}</div>
-      ${proxS && (proxS.notas || proxS.archivos.length) ? `<div class="sub-h">📋 Planificación ${proxS.archivos.length ? `<span class="pill" style="background:rgba(6,182,212,.15);color:#67e8f9">📎 ${proxS.archivos.length}</span>` : ''}</div>${proxS.notas ? `<div class="plan-prev">${esc(proxS.notas)}</div>` : ''}` : '<div class="muted small" style="margin-top:6px">Todavía sin planificación cargada.</div>'}
-      <div class="row" style="margin-top:10px"><button class="btn pri" onclick="irAsistencia('${prox}')">✅ Tomar asistencia</button><button class="btn" onclick="irAsistencia('${prox}',null,true)">📋 Planificación</button></div>
+      <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><div class="grow"><div style="font-size:1.2rem;font-weight:900;line-height:1.25">${esc(tituloSes(proxS || { tipo: proxT }))}</div>
+      <div class="small muted" style="margin-top:4px">${prox === hoyISO() ? '<b style="color:var(--am2)">HOY</b> · ' : ''}${fmtFC(prox)} · ${fmtHora(proxS ? horaSes(proxS) : horarioDef(prox))}</div></div>
+      <button class="btn sm" onclick="editarProximo('${prox}','${proxT}')" title="Editar título" aria-label="Editar título">✏️</button></div>
+      <button class="btn pri" style="width:100%;margin-top:12px" onclick="irAsistencia('${prox}','${proxT}',true)">📋 Planificación${proxS && (proxS.notas || proxS.archivos.length) ? ` <span class="pill" style="background:rgba(4,19,26,.25);color:#04131a">${proxS.notas ? '📝' : ''}${proxS.archivos.length ? ' 📎' + proxS.archivos.length : ''}</span>` : ' <span class="small" style="opacity:.75">(sin cargar)</span>'}</button>
     </div>
     <div class="qa" style="margin:0;grid-template-columns:1fr 1fr">
-      <button onclick="irAsistencia(hoyISO())">🏉 Entrenamiento de hoy<small>asistencia y equipos</small></button>
+      <button onclick="irAsistencia(hoyISO())" style="border-color:rgba(6,182,212,.45)">🏉 Entrenamiento nuevo<small>asistencia, plan y equipos</small><span class="btn pri sm" style="margin-top:8px;width:100%;pointer-events:none">▶ Empezar</span></button>
       <button onclick="ir('gira')">🚌 ${esc(C.GIRA_NOMBRE || 'Gira')}<small>${cuenta || 'quiénes viajan'}</small></button>
       <button onclick="ir('stats')">📊 Estadísticas<small>asistencia y destacados</small></button>
       <button onclick="ir('plantel')">👥 Plantel<small>altas, bajas y datos</small></button>
@@ -785,7 +796,7 @@ function renderInicio() {
       <div style="max-height:330px;overflow-y:auto">${cu.length ? cu.map(c => `<div class="bday ${c.f.slice(5) === hoyMD ? 'hoy' : ''}"><div class="d">${c.f.slice(8)}<small>${MESES[Number(c.f.slice(5, 7)) - 1]}</small></div><div class="grow"><b>${esc(c.n)}</b><div class="small muted">${c.t} cumple ${new Date().getFullYear() - Number(c.f.slice(0, 4))}${c.f.slice(5) === hoyMD ? ' · ¡HOY! 🎉' : ''}</div></div></div>`).join('') : '<div class="empty">Nadie cumple este mes</div>'}</div>
     </div>
     <div class="card"><h3>🗓️ Últimos entrenamientos</h3>
-      ${ult.length ? ult.map(s => { const x = st.porSesion.find(p => p.s.id === s.id) || calcStats({}).porSesion.find(p => p.s.id === s.id) || { jp: 0, jt: 0, ep: 0 }; return `<div class="list-i clk" onclick="irAsistencia('${s.fecha}','${s.tipo}')"><span class="pill t-${s.tipo}">${TIPOS_C[s.tipo] || s.tipo}</span><span class="grow"><b>${fmtFC(s.fecha)}</b>${s.archivos.length ? ' 📎' : ''}</span><span class="small"><b style="color:var(--gr2)">${x.jp}</b>/${x.jt} · ${x.ep} ent.</span></div>`; }).join('') : `<div class="empty">Todavía no hay entrenamientos cargados.<br><br><button class="btn pri" onclick="irAsistencia()">Cargar entrenamiento</button></div>`}
+      ${ult.length ? ult.map(s => { const x = st.porSesion.find(p => p.s.id === s.id) || calcStats({}).porSesion.find(p => p.s.id === s.id) || { jp: 0, jt: 0, ep: 0 }; return `<div class="list-i clk" onclick="irAsistencia('${s.fecha}','${s.tipo}')"><span class="pill t-${s.tipo}">${TIPOS_C[s.tipo] || s.tipo}</span><span class="grow"><b>${fmtFC(s.fecha)}</b>${s.detalle ? ` <span class="small muted">${esc(s.detalle)}</span>` : ''}${s.archivos.length ? ' 📎' : ''}</span><span class="small"><b style="color:var(--gr2)">${x.jp}</b>/${x.jt} · ${x.ep} ent.</span></div>`; }).join('') : `<div class="empty">Todavía no hay entrenamientos cargados.<br><br><button class="btn pri" onclick="irAsistencia()">Cargar entrenamiento</button></div>`}
     </div>
   </div>`;
 }
@@ -796,7 +807,8 @@ function renderInicio() {
 let AS = null;
 function irAsistencia(fecha, tipo, plan) { AS = null; cargarSesionAS(fecha || hoyISO(), tipo); if (plan) AS.planOpen = true; ir('asistencia'); if (plan) setTimeout(() => { const e = $('asPlanCard'); if (e) e.scrollIntoView({ behavior: 'smooth' }); }, 80); }
 function cargarSesionAS(fecha, tipo) {
-  tipo = tipo || tipoDeFecha(fecha);
+  // si ese día ya hay un entrenamiento/partido cargado, se abre ese (aunque el tipo sea distinto al del día)
+  tipo = tipo || (sesionesOrd().find(x => x.fecha === fecha) || {}).tipo || tipoDeFecha(fecha);
   const id = fecha + '_' + tipo;
   const s = DB.SESIONES.find(x => x.id === id);
   const regs = DB.ASISTENCIA.filter(a => a.sesion_id === id);
@@ -828,7 +840,7 @@ function renderAsistencia() {
       <div><label class="tiny muted">Tipo</label><select id="asTipo" onchange="cambiarSesionAS()">${Object.entries(TIPOS).map(([k, v]) => `<option value="${k}" ${AS.tipo === k ? 'selected' : ''}>${v}</option>`).join('')}</select></div>
       <div><label class="tiny muted">Desde</label><input type="time" id="asHora" value="${esc(hIni(AS.hora))}" onchange="setHoraAS(0,this.value)"></div>
       <div><label class="tiny muted">Hasta</label><input type="time" id="asHoraFin" value="${esc(hFin(AS.hora))}" onchange="setHoraAS(1,this.value)"></div>
-      <div style="grid-column:1/-1"><label class="tiny muted">${AS.tipo === 'PAR' ? 'Rival / lugar' : 'Detalle'}</label><input id="asDet" value="${esc(AS.detalle)}" placeholder="${AS.tipo === 'PAR' ? 'vs. …' : 'Opcional'}" oninput="AS.detalle=this.value;AS.sucio=true"></div>
+      <div style="grid-column:1/-1"><label class="tiny muted">Título</label><input id="asDet" value="${esc(AS.detalle)}" placeholder="${AS.tipo === 'PAR' ? 'Ej: Partido vs CASI (local)' : 'Opcional · ej: Técnica de tackle'}" oninput="AS.detalle=this.value;AS.sucio=true"></div>
     </div>
   </div>
   <div class="step"><span>2</span>Planificación</div>
@@ -854,7 +866,7 @@ function renderAsistencia() {
   </div>
   </div>`}
   <div class="step"><span>4</span>Equipos</div>
-  <div id="eqBox">${AS.tomada ? '' : '<div class="card"><div class="empty">🔒 Guardá la asistencia y los equipos se arman solos con los presentes.</div></div>'}</div>
+  <div id="eqBox">${AS.tomada && !AS.idViejo ? '' : '<div class="card"><div class="empty">🔒 Guardá la asistencia y los equipos se arman solos con los presentes.</div></div>'}</div>
   <div class="acts" style="grid-template-columns:1fr">
     <button class="btn pri" onclick="fichaEntrenamiento('${AS.id}')" ${AS.existe ? '' : 'disabled'}>📄 Ficha del entrenamiento (PDF / imagen)</button>
   </div>
@@ -864,14 +876,14 @@ function renderAsistencia() {
       { k: 'fecha', t: 'Fecha', v: r => r.s.fecha, h: r => `<b>${fmtFC(r.s.fecha)}</b> <span class="muted small">${r.s.fecha.slice(0, 4)}</span>` },
       { k: 'tipo', t: 'Tipo', v: r => TIPOS_C[r.s.tipo], h: r => `<span class="pill t-${r.s.tipo}">${TIPOS_C[r.s.tipo] || r.s.tipo}</span>` },
       { k: 'hora', t: 'Horario', v: r => horaSes(r.s), h: r => esc(horaSes(r.s).replace('-', '–')) },
-      { k: 'det', t: 'Detalle', v: r => r.s.detalle, h: r => `<span class="muted">${esc(r.s.detalle || '')}</span>` },
+      { k: 'det', t: 'Título', v: r => r.s.detalle, h: r => `<span class="muted">${esc(r.s.detalle || '')}</span>` },
       { k: 'jp', t: 'Jug.', num: 1, v: r => r.tomada ? r.jp : null, h: r => r.tomada ? `<b>${r.jp}</b>/${r.jt}` : '<span class="muted small">planificado</span>' },
       { k: 'ep', t: 'Ent.', num: 1, v: r => r.tomada ? r.ep : null, h: r => r.tomada ? r.ep : '' },
       { k: 'plan', t: 'Plan', num: 1, v: r => (r.s.notas ? 1 : 0) + r.s.archivos.length, h: r => (r.s.notas ? '📝' : '') + (r.s.archivos.length ? ' 📎' + r.s.archivos.length : '') }
     ], hist, { k: 'fecha', desc: true }, r => `class="clk" onclick="cargarSesionAS('${r.s.fecha}','${r.s.tipo}');renderAsistencia();window.scrollTo(0,0)"`)}
   </div>`;
   if ($('asLista')) renderListaAS();
-  if (AS.tomada) { if (EQ.fuente !== 'S:' + AS.id) setFuenteEQ('S:' + AS.id); renderEquipos(); }
+  if (AS.tomada && !AS.idViejo) { if (EQ.fuente !== 'S:' + AS.id) setFuenteEQ('S:' + AS.id); renderEquipos(); }
   cargarThumbs();
 }
 // apellido corto; si hay dos con el mismo apellido, agrega la inicial del nombre
@@ -886,6 +898,28 @@ function ausentesHTML(J, E) {
   if (!aj.length && !ae.length) return '<div class="aus-box"><span class="small" style="color:var(--gr2)">🎉 Vinieron todos</span></div>';
   const chip = (p, nom) => { const mo = (AS.marcas[p.k] || {}).motivo; return `<span class="aus-chip">${esc(nom)}${mo && mo !== 'Sin aviso' ? `<small>${esc(mo.toLowerCase())}</small>` : ''}</span>`; };
   return `<div class="aus-box"><div class="lbl t0" style="color:var(--rd2)">🚫 Ausentes</div>${aj.map(p => chip(p, apellido(p.nombre, nombres))).join('')}${ae.map(p => chip(p, '🧢 ' + p.nombre)).join('')}</div>`;
+}
+function editarProximo(fecha, tipo) {
+  const id = fecha + '_' + tipo, s = DB.SESIONES.find(x => x.id === id);
+  abrirModal(`<h3>✏️ Próximo entrenamiento<span class="sp"></span><button class="x" onclick="cerrarModal()">×</button></h3>
+  <div class="muted small" style="margin:-6px 0 12px">${fmtFC(fecha)} · ${fmtHora(s ? horaSes(s) : horarioDef(fecha))}</div>
+  <div class="fg"><label>Título</label><input id="pxTit" value="${esc(s ? s.detalle : '')}" placeholder="Ej: Partido vs CASI (local)"></div>
+  <div class="fg"><label>Tipo</label><select id="pxTipo">${Object.entries(TIPOS).map(([k, v]) => `<option value="${k}" ${k === tipo ? 'selected' : ''}>${v}</option>`).join('')}</select></div>
+  <div class="small muted">Si es un partido, poné el rival y si es de local o visitante. El título se ve en Inicio, en la ficha y en el mensaje de WhatsApp.</div>
+  <div class="mact"><button class="btn" onclick="cerrarModal()">Cancelar</button><button class="btn vio" onclick="guardarProximo('${fecha}','${tipo}')">💾 Guardar</button></div>`);
+  setTimeout(() => $('pxTit').focus(), 60);
+}
+async function guardarProximo(fecha, tipoViejo) {
+  const tit = $('pxTit').value.trim(), tipo = $('pxTipo').value, idViejo = fecha + '_' + tipoViejo, id = fecha + '_' + tipo;
+  const s = DB.SESIONES.find(x => x.id === idViejo);
+  const row = Object.assign({ fecha, hora: horarioDef(fecha), notas: '', archivos: [] }, s || {}, { id, tipo, detalle: tit, actualizado: hoyISO() + ' ' + horaAhora() });
+  const ops = [];
+  if (s && idViejo !== id) {
+    if (DB.ASISTENCIA.some(a => a.sesion_id === idViejo)) { toast('Ese entrenamiento ya tiene asistencia: cambiá el tipo desde Entrenamiento', true); return; }
+    ops.push({ op: 'remove', sheet: 'SESIONES', field: 'id', value: idViejo });
+  }
+  ops.push({ op: 'upsert', sheet: 'SESIONES', key: 'id', rows: [row] });
+  cerrarModal(); await guardar(ops, '💾 Título guardado'); renderTab();
 }
 function renderContAS() {
   const { J, E } = personasAS(); const cj = contarAS(J), ce = contarAS(E);
@@ -921,20 +955,34 @@ function todosPresentesAS() { const { J, E } = personasAS(); (AS.vista === 'J' ?
 function setHoraAS(i, v) { const p = [hIni(AS.hora), hFin(AS.hora)]; p[i] = v; AS.hora = p[1] ? p[0] + '-' + p[1] : p[0]; AS.sucio = true; }
 function cambiarSesionAS() {
   const f = $('asFecha').value, t = $('asTipo').value;
-  if (AS.sucio && !confirm('Hay cambios sin guardar. ¿Descartarlos?')) { $('asFecha').value = AS.fecha; $('asTipo').value = AS.tipo; return; }
-  cargarSesionAS(f, f !== AS.fecha && t === AS.tipo ? tipoDeFecha(f) : t); renderAsistencia();
+  if (f === AS.fecha && t === AS.tipo) return;
+  if (AS.sucio && !(f === AS.fecha && AS.existe) && !confirm('Hay cambios sin guardar. ¿Descartarlos?')) { $('asFecha').value = AS.fecha; $('asTipo').value = AS.tipo; return; }
+  if (f === AS.fecha && t !== AS.tipo && AS.existe) {
+    // mismo día, cambia el tipo (ej. sábado → partido): se conserva todo y se renombra al guardar
+    if (DB.SESIONES.some(x => x.id === f + '_' + t)) { toast('Ya hay un ' + TIPOS_C[t].toLowerCase() + ' cargado ese día', true); $('asTipo').value = AS.tipo; return; }
+    AS.idViejo = AS.idViejo || AS.id; AS.tipo = t; AS.id = f + '_' + t; AS.sucio = true; AS.listaOpen = true;
+    renderAsistencia(); toast('Tipo cambiado: tocá Guardar para aplicarlo'); return;
+  }
+  cargarSesionAS(f, f !== AS.fecha && t === AS.tipo ? null : t); renderAsistencia();
+}
+function opsRenombre() {
+  if (!AS.idViejo || AS.idViejo === AS.id) return [];
+  const v = AS.idViejo;
+  const eq = DB.EQUIPOS.filter(x => x.grupo_id === v).map(x => Object.assign({}, x, { grupo_id: AS.id }));
+  return [{ op: 'remove', sheet: 'SESIONES', field: 'id', value: v }, { op: 'remove', sheet: 'ASISTENCIA', field: 'sesion_id', value: v }, { op: 'remove', sheet: 'EQUIPOS', field: 'grupo_id', value: v }, ...(eq.length ? [{ op: 'replace', sheet: 'EQUIPOS', field: 'grupo_id', value: AS.id, rows: eq }] : [])];
 }
 function filaSesionAS() { return { id: AS.id, fecha: AS.fecha, tipo: AS.tipo, hora: AS.hora || '', detalle: AS.detalle, notas: AS.notas, archivos: AS.archivos, actualizado: hoyISO() + ' ' + horaAhora() }; }
 async function guardarAS() {
   const { J, E } = personasAS(); const todos = J.concat(E);
   const rows = todos.map(p => { const m = AS.marcas[p.k] || {}; const est = m.estado === 'A' ? 'A' : 'P'; return { sesion_id: AS.id, fecha: AS.fecha, tipo: AS.tipo, persona_tipo: p.t, persona_id: p.id, nombre: p.nombre, estado: est, calif: m.calif || 0, comentario: m.comentario || '', motivo: est === 'A' ? (m.motivo || 'Sin aviso') : '' }; });
-  await guardar([{ op: 'upsert', sheet: 'SESIONES', key: 'id', rows: [filaSesionAS()] }, { op: 'replace', sheet: 'ASISTENCIA', field: 'sesion_id', value: AS.id, rows }], '✅ Asistencia guardada');
+  await guardar([...opsRenombre(), { op: 'upsert', sheet: 'SESIONES', key: 'id', rows: [filaSesionAS()] }, { op: 'replace', sheet: 'ASISTENCIA', field: 'sesion_id', value: AS.id, rows }], '✅ Asistencia guardada');
   const f = AS.fecha, t = AS.tipo, nuevo = !AS.tomada; cargarSesionAS(f, t); renderAsistencia();
   setTimeout(() => { const e = $('eqBox'); if (e) e.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150);
   if (nuevo) toast('✅ Asistencia guardada · equipos armados');
 }
 async function guardarPlanAS() {
-  await guardar([{ op: 'upsert', sheet: 'SESIONES', key: 'id', rows: [filaSesionAS()] }], '📋 Planificación guardada');
+  if (AS.idViejo && AS.tomada) return guardarAS();
+  await guardar([...opsRenombre(), { op: 'upsert', sheet: 'SESIONES', key: 'id', rows: [filaSesionAS()] }], '📋 Planificación guardada'); AS.idViejo = null;
   const marcas = AS.marcas, tomada = AS.tomada; AS.existe = true; AS.sucio = tomada ? AS.sucio : false; AS.marcas = marcas; renderAsistencia();
 }
 async function borrarSesionAS() {
@@ -981,6 +1029,7 @@ function comprimirImagen(file) {
 }
 const leerB64 = file => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result).split(',')[1]); r.onerror = rej; r.readAsDataURL(file); });
 async function subirArchivosAS(files) {
+  if (AS.idViejo && AS.tomada) return toast('Primero tocá Guardar para aplicar el cambio de tipo', true);
   for (const file of files) {
     const esImg = /^image\//.test(file.type), esPdf = file.type === 'application/pdf';
     if (!esImg && !esPdf) { toast('Solo fotos o PDF', true); continue; }
@@ -993,8 +1042,8 @@ async function subirArchivosAS(files) {
       const j = await llamar(null, { action: 'upload', nombre, mime, b64 }, 2);
       FILECACHE[j.file.id] = { mime, nombre, url: `data:${mime};base64,${b64}`, b64 };
       AS.archivos.push({ id: j.file.id, nombre, mime });
-      await guardar([{ op: 'upsert', sheet: 'SESIONES', key: 'id', rows: [filaSesionAS()] }]);
-      AS.existe = true; toast('📎 Archivo subido');
+      await guardar([...(AS.tomada ? [] : opsRenombre()), { op: 'upsert', sheet: 'SESIONES', key: 'id', rows: [filaSesionAS()] }]);
+      if (!AS.tomada) AS.idViejo = null; AS.existe = true; toast('📎 Archivo subido');
     } catch (e) { toast('⚠️ No se pudo subir: ' + (e.red ? 'sin conexión' : e.message), true); }
   }
   renderAsistencia();
@@ -1027,9 +1076,9 @@ function fichaHTML(s, imgs) {
   let eqRows = DB.EQUIPOS.filter(x => x.grupo_id === s.id), borrador = false, eqs;
   if (eqRows.length) { const nombres = [...new Set(eqRows.map(x => x.equipo))]; eqs = nombres.map(n => ({ nombre: n, E: eqRows.filter(x => x.equipo === n && x.persona_tipo === 'E').map(x => x.nombre), J: eqRows.filter(x => x.equipo === n && x.persona_tipo === 'J').map(x => x.nombre) })); }
   else if (EQ.fuente === 'S:' + s.id && EQ.equipos.length) { borrador = true; eqs = EQ.equipos.map(e => ({ nombre: e.nombre, E: e.entrenadores.map(id => entNom(entById(id))), J: e.jugadores.map(id => (jugById(id) || {}).nombre || '') })); }
-  const titulo = s.tipo === 'PAR' ? 'PARTIDO' + (s.detalle ? ' vs ' + esc(s.detalle) : '') : 'ENTRENAMIENTO ' + (TIPOS_C[s.tipo] || '').toUpperCase();
+  const titulo = esc(tituloSes(s)).toUpperCase();
   return `<div class="ficha">
-    <div class="fh"><img src="${esc(C.ESCUDO_URL || 'escudo.png')}" onerror="this.src=ESCUDO_FALLBACK"><div><div class="a">${esc(C.CLUB || 'Regatas Bella Vista')}</div><div class="b">${esc(C.DIVISION || 'M9')} · Camada ${esc(C.CAMADA || '2017')}</div></div><div class="c">${titulo}<br>📅 ${fmtF(s.fecha)}${horaSes(s) ? ' · ' + fmtHora(horaSes(s)) : ''}${s.tipo !== 'PAR' && s.detalle ? '<br>' + esc(s.detalle) : ''}</div></div>
+    <div class="fh"><img src="${esc(C.ESCUDO_URL || 'escudo.png')}" onerror="this.src=ESCUDO_FALLBACK"><div><div class="a">${esc(C.CLUB || 'Regatas Bella Vista')}</div><div class="b">${esc(C.DIVISION || 'M9')} · Camada ${esc(C.CAMADA || '2017')}</div></div><div class="c">${titulo}<br>📅 ${fmtF(s.fecha)}${horaSes(s) ? ' · ' + fmtHora(horaSes(s)) : ''}</div></div>
     ${jt ? `<div class="kp"><div>Jugadores presentes<b>${jp} / ${jt}</b></div><div>Entrenadores<b>${ep} / ${et}</b></div><div>Asistencia<b>${pct(jp, jt)}%</b></div>${eqs ? `<div>Equipos<b>${eqs.length}</b></div>` : ''}</div>` : ''}
     ${s.notas || imgs.length ? `<h4>📋 Planificación</h4>${s.notas ? `<div class="plan">${esc(s.notas)}</div>` : ''}${imgs.length ? `<div class="pimgs" style="margin-top:8px">${imgs.map(u => `<img src="${u}">`).join('')}</div>` : ''}${s.archivos.some(a => a.mime === 'application/pdf') ? `<div class="aus" style="margin-top:6px">📎 PDF adjunto: ${s.archivos.filter(a => a.mime === 'application/pdf').map(a => esc(a.nombre)).join(', ')}</div>` : ''}` : ''}
     ${eqs ? `<h4>🧩 Equipos ${borrador ? '(borrador, sin guardar)' : 'confirmados'}</h4><div class="pg">${eqs.map(e => `<div class="pt"><h5>${esc(e.nombre)} · ${e.J.length}</h5><div class="pc">Entrenadores: ${esc(e.E.join(', ') || 'Sin asignar')}</div><ol>${e.J.map(n => `<li>${esc(n)}</li>`).join('')}</ol></div>`).join('')}</div>` : (jt ? '<h4>🧩 Equipos</h4><div class="aus">Todavía no hay equipos guardados para este entrenamiento.</div>' : '')}
@@ -1192,7 +1241,7 @@ function moverEQ(to) {
 function renombrarEQ(id, txt) { const e = EQ.equipos.find(x => x.id === id); if (e && txt.trim() && e.nombre !== txt.trim()) { e.nombre = txt.trim(); EQ.confirmados = false; guardarBorradorEQ(); renderEquipos(); } }
 function textoEQ() {
   const s = EQ.fuente.startsWith('S:') && DB.SESIONES.find(x => x.id === EQ.fuente.slice(2));
-  const cab = s ? `${s.tipo === 'PAR' ? 'PARTIDO' + (s.detalle ? ' vs ' + s.detalle : '') : 'ENTRENAMIENTO'} · ${fmtF(s.fecha)}${horaSes(s) ? ' · ' + fmtHora(horaSes(s)) : ''}` : `🚌 ${DB.CONFIG.GIRA_NOMBRE || 'GIRA'}`;
+  const cab = s ? `${tituloSes(s).toUpperCase()} · ${fmtF(s.fecha)}${horaSes(s) ? ' · ' + fmtHora(horaSes(s)) : ''}` : `🚌 ${DB.CONFIG.GIRA_NOMBRE || 'GIRA'}`;
   return `🏉 *REGATAS M9 · Camada 2017*\n${cab}\n\n` + EQ.equipos.map(eq => `*${eq.nombre}* (${eq.jugadores.length})\n🧢 ${eq.entrenadores.map(id => entNom(entById(id))).join(', ') || 'Sin asignar'}\n` + eq.jugadores.map((id, i) => `${i + 1}. ${(jugById(id) || {}).nombre || ''}`).join('\n')).join('\n\n');
 }
 function copiarTexto(t, ok) { (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast(ok)).catch(() => prompt('Copiá el texto:', t)); }
