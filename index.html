@@ -172,7 +172,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 
 /* charts */
 .chart svg{width:100%;height:auto;display:block}
-.chart text{fill:var(--tx3);font-size:10px;font-family:Figtree,sans-serif}
+.chart text{fill:var(--tx3);font-size:11px;font-family:Figtree,sans-serif}
 .legend{display:flex;gap:.8rem;flex-wrap:wrap;font-size:.75rem;color:var(--tx3);margin-top:.4rem}
 .legend i{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:4px;vertical-align:-1px}
 
@@ -247,7 +247,7 @@ th .ar{color:var(--cy);font-size:.8em}
 .files{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .fthumb{position:relative;width:96px;height:96px;border-radius:10px;overflow:hidden;border:1px solid var(--line2);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-direction:column;gap:2px;font-size:.66rem;color:var(--tx3);text-align:center;padding:4px}
 .fthumb img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
-.fthumb .del{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;border:none;background:rgba(0,0,0,.7);color:#fff;font-size:.8rem;z-index:2}
+.fthumb .del{position:absolute;top:3px;right:3px;width:32px;height:32px;border-radius:50%;border:none;background:rgba(0,0,0,.7);color:#fff;font-size:.8rem;z-index:2}
 .fthumb .ic{font-size:1.8rem}
 .upl{width:96px;height:96px;border-radius:10px;border:1.5px dashed var(--cy);background:rgba(6,182,212,.06);color:#67e8f9;font-weight:800;font-size:.75rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer}
 .upl span{font-size:1.5rem}
@@ -279,6 +279,102 @@ th .ar{color:var(--cy);font-size:.8em}
 .ficha .ft{margin-top:12px;font-size:10px;color:#94a3b8;text-align:center}
 @media(max-width:520px){.ficha .pg{grid-template-columns:1fr}}
 @media print{.ficha{border-radius:0;padding:0}.ficha .pg{grid-template-columns:repeat(2,1fr)!important}}
+
+/* ===== v3 · sistema móvil unificado ===== */
+.plan-h{width:100%;display:flex;align-items:center;gap:.5rem;background:none;border:none;text-align:left;font-weight:800;font-size:.95rem;min-height:var(--tap-sm);padding:0}
+.plan-h .chev{color:var(--tx3);font-size:.8rem;width:20px;text-align:center}
+.lbl.t0{margin-top:0}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))}
+input[type=date],input[type=time]{min-width:0;max-width:100%;-webkit-appearance:none;appearance:none}
+.att-head>div,.fgrid>div{min-width:0}
+:root{--tap:44px;--tap-sm:36px}
+input,select,textarea{font-size:16px;min-height:var(--tap)}
+textarea{min-height:auto}
+.btn{min-height:40px;padding:.5rem .85rem;line-height:1.15}
+.btn.sm{min-height:var(--tap-sm);padding:.4rem .7rem;font-size:.82rem}
+.x{width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;font-size:1.6rem}
+.x:hover{background:var(--card2)}
+.top .btn.sm{width:40px;height:40px;padding:0}
+.role{font-size:11px}
+th .ar{font-size:11px}
+th{white-space:nowrap}
+.lbl{display:block;font-size:.75rem;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin:12px 0 6px}
+/* navegación inferior: ancho según contenido, nunca se corta */
+.nav{display:flex;justify-content:space-around}
+.nav button{flex:1 1 auto;min-width:0;padding:.45rem 2px .5rem;font-size:11px;letter-spacing:-.01em;white-space:nowrap}
+.nav button span{font-size:1.3rem}
+/* segmentos a ancho completo y parejos */
+.seg.full{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;width:100%}
+.seg.full button{padding:.5rem .3rem;min-height:var(--tap-sm);white-space:normal;line-height:1.15;font-size:.82rem}
+.seg button{min-height:var(--tap-sm)}
+.seg .c{display:block;font-size:.72rem;font-weight:600;opacity:.8}
+/* filas de acciones: grilla pareja en celu */
+.acts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin:10px 0}
+.acts .btn{width:100%;white-space:normal}
+.head-acts{display:flex;gap:8px;flex-wrap:wrap;margin:-4px 0 12px}
+.head-acts .btn{flex:1 1 140px}
+/* tablas: primera columna fija y con salto de línea */
+td.stk,th.stk{position:sticky;left:0;z-index:2;background:#16213a;box-shadow:1px 0 0 var(--line)}
+th.stk{z-index:3}
+td.stk{white-space:normal;min-width:130px;max-width:190px;line-height:1.25}
+.rk{display:inline-block;min-width:1.4em;color:var(--tx4);font-size:.75rem;font-weight:700}
+table{font-size:.85rem}
+th,td{padding:.55rem .5rem}
+/* asistencia v3 */
+.att{padding:.5rem .55rem .5rem .7rem}
+.att .main{display:flex;align-items:center;gap:.45rem}
+.att .nm b{white-space:normal;overflow:visible;font-size:.95rem;line-height:1.2;font-weight:700}
+.att .nm small{display:block;font-size:.75rem;line-height:1.3;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.att .mk{font-size:.75rem;margin-left:.25rem}
+.more{width:var(--tap-sm);height:var(--tap);border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--tx3);font-size:1.1rem;flex-shrink:0}
+.more.on{border-color:var(--am);color:var(--am2);background:rgba(245,158,11,.12)}
+.tog{min-width:0;width:var(--tap);height:var(--tap);border-radius:12px;font-size:1.25rem;font-weight:900;padding:0}
+.att-x{margin-top:.5rem;display:flex;flex-direction:column;gap:.45rem}
+.att-x .r{display:flex;gap:6px}
+.att-x .r .btn{flex:1;min-height:var(--tap-sm);font-size:.82rem}
+.att-x .btn.up.on{background:rgba(34,197,94,.25);border-color:var(--gr);color:var(--gr2)}
+.att-x .btn.dn.on{background:rgba(239,68,68,.25);border-color:var(--rd);color:var(--rd2)}
+.motivos button{min-height:32px;padding:.3rem .7rem;font-size:.8rem}
+.att-legend{display:flex;gap:.8rem;flex-wrap:wrap;font-size:.78rem;color:var(--tx3);margin:0 0 8px}
+.att-tools{display:grid;grid-template-columns:1fr auto;gap:8px;margin:10px 0}
+.att-tools .seg{grid-column:1/-1}
+/* equipos v3 */
+.stepper{display:flex;align-items:center;gap:8px}
+.stepper button{width:var(--tap);height:var(--tap);border-radius:12px;border:1px solid var(--line2);background:transparent;font-size:1.4rem;font-weight:800}
+.stepper .v{flex:1;text-align:center;font-size:.9rem;color:var(--tx2)}
+.stepper .v b{font-size:1.5rem;color:var(--tx);display:block;line-height:1}
+.pl{padding:.5rem .45rem;min-height:40px}
+.pl .nm{font-size:.92rem}
+.chip{min-height:32px;padding:.35rem .65rem}
+.team .th{flex-wrap:wrap}
+.team .th .moveto{width:auto;margin:0;padding:.4rem .7rem;min-height:var(--tap-sm)}
+.selbar{position:sticky;bottom:72px;z-index:40;margin:10px 0;background:#3b2a07;border:1px solid var(--am);border-radius:14px;padding:.6rem .7rem;display:flex;align-items:center;gap:.6rem;font-size:.88rem}
+@media(min-width:900px){.selbar{bottom:12px}}
+/* gira y varios */
+.tg{min-height:34px;padding:.3rem .55rem;font-size:.78rem}
+.bday .d small{font-size:11px}
+.timeline span{width:26px;height:26px;font-size:11px}
+.legend{font-size:.78rem}
+.kpi .l{font-size:.72rem}
+.empty{font-size:.9rem}
+@media(max-width:480px){
+  .wrap{padding:0 12px}
+  .hero{padding:16px 0 12px}.hero img{width:86px;height:86px}.hero h1{font-size:1.65rem;margin-top:6px}.hero .sub{font-size:1rem}
+  h2.sec{font-size:1.2rem;margin:14px 0 10px}
+  .card{padding:.85rem}
+  .card h3{font-size:.95rem}
+  .kpis{grid-template-columns:1fr 1fr;gap:8px}
+  .kpi{padding:.7rem .75rem}.kpi .v{font-size:1.45rem}
+  .fgrid{grid-template-columns:1fr}
+  .mbox{padding:1rem .9rem calc(1rem + env(safe-area-inset-bottom))}
+  .mbox h3{font-size:1.05rem}
+  .top .wrap{gap:.5rem}
+  .top .t1{font-size:.95rem}
+  .gira-hero{padding:.9rem}.gira-hero .big{font-size:2rem}.gira-hero{flex-direction:column;align-items:stretch}.gira-hero .btn.vio{width:100%}
+  .teams{grid-template-columns:1fr}
+  .stick{padding:.55rem .6rem}
+}
 </style>
 <script>var ESCUDO_FALLBACK = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 116"><path d="M50 3 L94 16 V56 C94 84 74 103 50 113 C26 103 6 84 6 56 V16 Z" fill="#0e7490" stroke="#a5f3fc" stroke-width="4"/><text x="50" y="66" text-anchor="middle" font-family="Arial" font-weight="900" font-size="28" fill="#fff">RBV</text></svg>');</script>
 </head>
@@ -400,7 +496,7 @@ function normalizar() {
     e.dni = e.dni == null ? '' : String(e.dni); e.fecha_nac = String(e.fecha_nac || '').slice(0, 10);
   });
   DB.SESIONES.forEach(s => {
-    s.id = String(s.id); s.fecha = String(s.fecha).slice(0, 10); s.hora = String(s.hora || '').slice(0, 5);
+    s.id = String(s.id); s.fecha = String(s.fecha).slice(0, 10); s.hora = String(s.hora || '').trim();
     if (typeof s.archivos === 'string') { try { s.archivos = s.archivos ? JSON.parse(s.archivos) : []; } catch (e) { s.archivos = []; } }
     s.archivos = Array.isArray(s.archivos) ? s.archivos : [];
   });
@@ -535,13 +631,21 @@ const viaja = (t, id) => { const g = giraDe(t, id); return !!g && String(g.va).t
 const conAsistencia = () => new Set(DB.ASISTENCIA.map(a => a.sesion_id));
 const sesionesOrd = () => [...DB.SESIONES].sort((a, b) => (b.fecha + b.tipo).localeCompare(a.fecha + a.tipo));
 const tipoDeFecha = f => { const w = parseISO(f).getDay(); return w === 3 ? 'MIE' : w === 6 ? 'SAB' : 'OTR'; };
-const nombreEntreno = s => `${fmtFC(s.fecha)} · ${TIPOS_C[s.tipo] || s.tipo}${s.hora ? ' ' + s.hora + ' h' : ''}`;
+const HORARIOS_DEF = { MIE: '18:00-19:00', SAB: '10:00-11:45' };
+// horario predeterminado según el día (editable en ⚙️ Ajustes por un admin)
+function horarioDef(fecha) { const w = parseISO(fecha).getDay(); const k = w === 3 ? 'MIE' : w === 6 ? 'SAB' : ''; return k ? String(DB.CONFIG['HORARIO_' + k] || HORARIOS_DEF[k]) : ''; }
+const hIni = h => String(h || '').split('-')[0] || '';
+const hFin = h => String(h || '').split('-')[1] || '';
+const fmtHora = h => { const a = hIni(h), b = hFin(h); return a ? (b ? `${a} a ${b} h` : `${a} h`) : ''; };
+const horaSes = s => s.hora || horarioDef(s.fecha);
+const nombreEntreno = s => `${fmtFC(s.fecha)} · ${TIPOS_C[s.tipo] || s.tipo}${horaSes(s) ? ' · ' + hIni(horaSes(s)) : ''}`;
 function proximoEntreno() { const d = new Date(); d.setHours(0, 0, 0, 0); for (let i = 0; i < 8; i++) { const w = d.getDay(); if (w === 3 || w === 6) return isoDate(d); d.setDate(d.getDate() + 1); } return hoyISO(); }
 
 /* ---------- tablas ordenables (todas las columnas) ---------- */
 const SORTS = {};
 function tabla(id, cols, rows, def, rowAttr) {
   const s = SORTS[id] || (SORTS[id] = Object.assign({}, def));
+  const rank = cols.some(c => c.t === '#'); cols = cols.filter(c => c.t !== '#');
   const col = cols.find(c => c.k === s.k);
   if (col) {
     const v = col.v || (r => r[col.k]);
@@ -553,8 +657,9 @@ function tabla(id, cols, rows, def, rowAttr) {
       return s.desc ? -c : c;
     });
   }
-  return `<div class="tbl-wrap"><table><thead><tr>${cols.map(c => c.k ? `<th class="${c.num ? 'num' : ''}" onclick="ordenar('${id}','${c.k}',${c.num ? 1 : 0})">${c.t}${s.k === c.k ? `<span class="ar">${s.desc ? ' ↓' : ' ↑'}</span>` : ''}</th>` : `<th class="nos ${c.num ? 'num' : ''}">${c.t}</th>`).join('')}</tr></thead>
-  <tbody>${rows.length ? rows.map((r, i) => `<tr ${rowAttr ? rowAttr(r) : ''}>${cols.map(c => `<td class="${c.num ? 'num' : ''}">${c.h(r, i)}</td>`).join('')}</tr>`).join('') : `<tr><td colspan="${cols.length}" class="empty">Sin datos</td></tr>`}</tbody></table></div>`;
+  const cl = (c, j) => (c.num ? 'num ' : '') + (j === 0 ? 'stk' : '');
+  return `<div class="tbl-wrap"><table><thead><tr>${cols.map((c, j) => c.k ? `<th class="${cl(c, j)}" onclick="ordenar('${id}','${c.k}',${c.num ? 1 : 0})">${c.t}${s.k === c.k ? `<span class="ar">${s.desc ? ' ↓' : ' ↑'}</span>` : ''}</th>` : `<th class="nos ${cl(c, j)}">${c.t}</th>`).join('')}</tr></thead>
+  <tbody>${rows.length ? rows.map((r, i) => `<tr ${rowAttr ? rowAttr(r) : ''}>${cols.map((c, j) => `<td class="${cl(c, j)}">${j === 0 && rank ? `<span class="rk">${i + 1}</span>` : ''}${c.h(r, i)}</td>`).join('')}</tr>`).join('') : `<tr><td colspan="${cols.length}" class="empty">Sin datos</td></tr>`}</tbody></table></div>`;
 }
 function ordenar(id, k, num) { const s = SORTS[id]; if (s.k === k) s.desc = !s.desc; else { s.k = k; s.desc = !!num; } renderTab(); }
 
@@ -656,7 +761,7 @@ function renderInicio() {
   </div>
   <div class="grid g2">
     <div class="card"><h3>📅 Próximo entrenamiento<span class="sp"></span><span class="pill t-${proxT}">${TIPOS_C[proxT]}</span></h3>
-      <div style="font-size:1.2rem;font-weight:900">${prox === hoyISO() ? 'HOY · ' : ''}${fmtFC(prox)}${proxS && proxS.hora ? ' · ' + proxS.hora + ' h' : ''}</div>
+      <div style="font-size:1.2rem;font-weight:900">${prox === hoyISO() ? 'HOY · ' : ''}${fmtFC(prox)} · ${fmtHora(proxS ? horaSes(proxS) : horarioDef(prox))}</div>
       ${proxS && (proxS.notas || proxS.archivos.length) ? `<div class="sub-h">📋 Planificación ${proxS.archivos.length ? `<span class="pill" style="background:rgba(6,182,212,.15);color:#67e8f9">📎 ${proxS.archivos.length}</span>` : ''}</div>${proxS.notas ? `<div class="plan-prev">${esc(proxS.notas)}</div>` : ''}` : '<div class="muted small" style="margin-top:6px">Todavía sin planificación cargada.</div>'}
       <div class="row" style="margin-top:10px"><button class="btn pri" onclick="irAsistencia('${prox}')">✅ Tomar asistencia</button><button class="btn" onclick="irAsistencia('${prox}',null,true)">📋 Planificación</button></div>
     </div>
@@ -684,7 +789,7 @@ function renderInicio() {
    ASISTENCIA + PLANIFICACIÓN
    ===================================================================== */
 let AS = null;
-function irAsistencia(fecha, tipo, plan) { AS = null; cargarSesionAS(fecha || hoyISO(), tipo); ir('asistencia'); if (plan) setTimeout(() => { const e = $('asPlanCard'); if (e) e.scrollIntoView({ behavior: 'smooth' }); }, 80); }
+function irAsistencia(fecha, tipo, plan) { AS = null; cargarSesionAS(fecha || hoyISO(), tipo); if (plan) AS.planOpen = true; ir('asistencia'); if (plan) setTimeout(() => { const e = $('asPlanCard'); if (e) e.scrollIntoView({ behavior: 'smooth' }); }, 80); }
 function cargarSesionAS(fecha, tipo) {
   tipo = tipo || tipoDeFecha(fecha);
   const id = fecha + '_' + tipo;
@@ -692,7 +797,7 @@ function cargarSesionAS(fecha, tipo) {
   const regs = DB.ASISTENCIA.filter(a => a.sesion_id === id);
   const marcas = {};
   regs.forEach(a => marcas[a.persona_tipo + '-' + a.persona_id] = { estado: a.estado === 'A' ? 'A' : 'P', calif: Number(a.calif || 0), comentario: a.comentario || '', motivo: a.motivo || '' });
-  AS = { fecha, tipo, id, hora: s ? s.hora : '', detalle: s ? s.detalle || '' : '', notas: s ? s.notas || '' : '', archivos: s ? [...s.archivos] : [], vista: (AS && AS.vista) || 'J', filtro: '', marcas, abiertos: new Set(), existe: !!s, tomada: regs.length > 0, sucio: false };
+  AS = { fecha, tipo, id, hora: (s && s.hora) || horarioDef(fecha), detalle: s ? s.detalle || '' : '', notas: s ? s.notas || '' : '', archivos: s ? [...s.archivos] : [], vista: (AS && AS.vista) || 'J', filtro: '', marcas, abiertos: new Set(), existe: !!s, tomada: regs.length > 0, sucio: false };
   personasAS().J.concat(personasAS().E).forEach(p => { if (!AS.marcas[p.k]) AS.marcas[p.k] = { estado: 'P', calif: 0, comentario: '', motivo: '' }; });
 }
 function personasAS() {
@@ -709,41 +814,44 @@ function renderAsistencia() {
   const cA = conAsistencia();
   const hist = sesionesOrd().map(s => { const r = DB.ASISTENCIA.filter(a => a.sesion_id === s.id); return { s, jp: r.filter(a => a.persona_tipo === 'J' && a.estado === 'P').length, jt: r.filter(a => a.persona_tipo === 'J').length, ep: r.filter(a => a.persona_tipo === 'E' && a.estado === 'P').length, tomada: cA.has(s.id) }; });
   $('v-asistencia').innerHTML = `
-  <h2 class="sec">✅ Entrenamiento <span class="sp"></span>${AS.tomada ? '<span class="pill" style="background:rgba(34,197,94,.15);color:var(--gr2)">Asistencia guardada · editando</span>' : AS.existe ? '<span class="pill" style="background:rgba(6,182,212,.15);color:#67e8f9">Planificado · falta asistencia</span>' : '<span class="pill" style="background:rgba(245,158,11,.15);color:var(--am2)">Entrenamiento nuevo</span>'}</h2>
+  <h2 class="sec">✅ Entrenamiento</h2><div style="margin:-6px 0 10px">${AS.tomada ? '<span class="pill" style="background:rgba(34,197,94,.15);color:var(--gr2)">Asistencia guardada · editando</span>' : AS.existe ? '<span class="pill" style="background:rgba(6,182,212,.15);color:#67e8f9">Planificado · falta asistencia</span>' : '<span class="pill" style="background:rgba(245,158,11,.15);color:var(--am2)">Entrenamiento nuevo</span>'}</div>
   <div class="card">
-    <div class="att-head" style="grid-template-columns:1fr 1fr">
+    <div class="att-head" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
       <div><label class="tiny muted">Fecha</label><input type="date" id="asFecha" value="${AS.fecha}" onchange="cambiarSesionAS()"></div>
-      <div><label class="tiny muted">Horario</label><input type="time" id="asHora" value="${esc(AS.hora)}" onchange="AS.hora=this.value;AS.sucio=true"></div>
       <div><label class="tiny muted">Tipo</label><select id="asTipo" onchange="cambiarSesionAS()">${Object.entries(TIPOS).map(([k, v]) => `<option value="${k}" ${AS.tipo === k ? 'selected' : ''}>${v}</option>`).join('')}</select></div>
-      <div><label class="tiny muted">${AS.tipo === 'PAR' ? 'Rival / lugar' : 'Detalle (opcional)'}</label><input id="asDet" value="${esc(AS.detalle)}" placeholder="${AS.tipo === 'PAR' ? 'vs. …' : 'Ej: cancha 3, lluvia'}" oninput="AS.detalle=this.value;AS.sucio=true"></div>
+      <div><label class="tiny muted">Desde</label><input type="time" id="asHora" value="${esc(hIni(AS.hora))}" onchange="setHoraAS(0,this.value)"></div>
+      <div><label class="tiny muted">Hasta</label><input type="time" id="asHoraFin" value="${esc(hFin(AS.hora))}" onchange="setHoraAS(1,this.value)"></div>
+      <div style="grid-column:1/-1"><label class="tiny muted">${AS.tipo === 'PAR' ? 'Rival / lugar' : 'Detalle'}</label><input id="asDet" value="${esc(AS.detalle)}" placeholder="${AS.tipo === 'PAR' ? 'vs. …' : 'Opcional'}" oninput="AS.detalle=this.value;AS.sucio=true"></div>
     </div>
   </div>
-  <div class="card" id="asPlanCard"><h3>📋 Planificación del entrenamiento del día</h3>
-    <textarea id="asNotas" rows="3" placeholder="Objetivos, bloques, ejercicios, tiempos…" oninput="AS.notas=this.value;AS.sucio=true">${esc(AS.notas)}</textarea>
+  <div class="card" id="asPlanCard"><button class="plan-h" onclick="AS.planOpen=!AS.planOpen;renderAsistencia()"><span class="grow">📋 Planificación del entrenamiento del día</span>${AS.notas || AS.archivos.length ? `<span class="pill" style="background:rgba(6,182,212,.15);color:#67e8f9">${AS.notas ? '📝' : ''}${AS.archivos.length ? ' 📎' + AS.archivos.length : ''}</span>` : '<span class="pill" style="background:rgba(148,163,184,.15)">vacía</span>'}<span class="chev">${AS.planOpen ? '▲' : '▼'}</span></button>
+    ${AS.planOpen ? `<div style="margin-top:10px"><textarea id="asNotas" rows="3" placeholder="Objetivos, bloques, ejercicios, tiempos…" oninput="AS.notas=this.value;AS.sucio=true">${esc(AS.notas)}</textarea>
     <div class="files" id="asFiles">${filesHTML(AS.archivos, true)}<label class="upl" id="uplBtn"><span>📎</span>Foto o PDF<input type="file" accept="image/*,application/pdf" multiple class="hidden" onchange="subirArchivosAS(this.files);this.value=''"></label></div>
-    <div class="row" style="margin-top:10px"><button class="btn sm" onclick="guardarPlanAS()">💾 Guardar solo la planificación</button><span class="small muted">Podés cargarla antes del entrenamiento.</span></div>
+    <button class="btn sm" style="width:100%;margin-top:10px" onclick="guardarPlanAS()">💾 Guardar solo la planificación</button>
+    <div class="small muted" style="margin-top:6px">Podés cargarla antes del entrenamiento.</div></div>` : ''}
   </div>
-  <h3 class="sub-h">👥 Asistencia <span class="small muted" style="font-weight:500">— todos arrancan presentes: tocá solo a los que faltan</span></h3>
+  <h3 class="sub-h">👥 Asistencia</h3>
+  <div class="att-legend"><span>Todos arrancan <b style="color:var(--gr2)">presentes</b>: tocá ✓ solo en los que faltan.</span><span>⋯ = destacar o comentar</span></div>
   <div class="att-tools">
-    <div class="seg"><button class="${AS.vista === 'J' ? 'on' : ''}" onclick="AS.vista='J';renderAsistencia()">Jugadores (${J.length})</button><button class="${AS.vista === 'E' ? 'on' : ''}" onclick="AS.vista='E';renderAsistencia()">Entrenadores (${E.length})</button></div>
-    <input class="grow" style="max-width:260px" placeholder="🔎 Buscar…" value="${esc(AS.filtro)}" oninput="AS.filtro=this.value;renderListaAS()" id="asBuscar">
-    <button class="btn sm" onclick="todosPresentesAS()">↺ Todos presentes</button>
+    <div class="seg full"><button class="${AS.vista === 'J' ? 'on' : ''}" onclick="AS.vista='J';renderAsistencia()">Jugadores <span class="c">${J.length}</span></button><button class="${AS.vista === 'E' ? 'on' : ''}" onclick="AS.vista='E';renderAsistencia()">Entrenadores <span class="c">${E.length}</span></button></div>
+    <input placeholder="🔎 Buscar…" value="${esc(AS.filtro)}" oninput="AS.filtro=this.value;renderListaAS()" id="asBuscar">
+    <button class="btn sm" onclick="todosPresentesAS()">↺ Todos</button>
   </div>
   <div class="att-list" id="asLista"></div>
   <div class="stick">
     <div class="grow cnt small" id="asCont"></div>
     <button class="btn grn" onclick="guardarAS()">💾 Guardar</button>
   </div>
-  <div class="row" style="margin-top:12px">
-    <button class="btn vio" onclick="equiposDesdeSesion('${AS.id}')" ${AS.tomada ? '' : 'disabled'}>🧩 Armar equipos con estos presentes</button>
-    <button class="btn pri" onclick="fichaEntrenamiento('${AS.id}')" ${AS.existe ? '' : 'disabled'}>📄 Ficha del entrenamiento (PDF / imagen)</button>
-    ${AS.existe ? `<button class="btn red sm" onclick="borrarSesionAS()">🗑 Borrar entrenamiento</button>` : ''}
+  <div class="acts">
+    <button class="btn vio" onclick="equiposDesdeSesion('${AS.id}')" ${AS.tomada ? '' : 'disabled'}>🧩 Armar equipos</button>
+    <button class="btn pri" onclick="fichaEntrenamiento('${AS.id}')" ${AS.existe ? '' : 'disabled'}>📄 Ficha (PDF / imagen)</button>
   </div>
+  ${AS.existe ? `<div style="text-align:right"><button class="btn red sm" onclick="borrarSesionAS()">🗑 Borrar entrenamiento</button></div>` : ''}
   <div class="card" style="margin-top:14px"><h3>🗂️ Historial de entrenamientos</h3>
     ${tabla('hist', [
       { k: 'fecha', t: 'Fecha', v: r => r.s.fecha, h: r => `<b>${fmtFC(r.s.fecha)}</b> <span class="muted small">${r.s.fecha.slice(0, 4)}</span>` },
       { k: 'tipo', t: 'Tipo', v: r => TIPOS_C[r.s.tipo], h: r => `<span class="pill t-${r.s.tipo}">${TIPOS_C[r.s.tipo] || r.s.tipo}</span>` },
-      { k: 'hora', t: 'Hora', v: r => r.s.hora, h: r => esc(r.s.hora) },
+      { k: 'hora', t: 'Horario', v: r => horaSes(r.s), h: r => esc(horaSes(r.s).replace('-', '–')) },
       { k: 'det', t: 'Detalle', v: r => r.s.detalle, h: r => `<span class="muted">${esc(r.s.detalle || '')}</span>` },
       { k: 'jp', t: 'Jug.', num: 1, v: r => r.tomada ? r.jp : null, h: r => r.tomada ? `<b>${r.jp}</b>/${r.jt}` : '<span class="muted small">planificado</span>' },
       { k: 'ep', t: 'Ent.', num: 1, v: r => r.tomada ? r.ep : null, h: r => r.tomada ? r.ep : '' },
@@ -754,7 +862,7 @@ function renderAsistencia() {
 }
 function renderContAS() {
   const { J, E } = personasAS(); const cj = contarAS(J), ce = contarAS(E);
-  const el = $('asCont'); if (el) el.innerHTML = `<div>👦 <b style="color:var(--gr2)">${cj.P}</b> presentes · <b style="color:var(--rd2)">${cj.A}</b> ausentes</div><div>🧢 <b style="color:var(--gr2)">${ce.P}</b> presentes · <b style="color:var(--rd2)">${ce.A}</b> ausentes</div>`;
+  const el = $('asCont'); if (el) el.innerHTML = `<div>👦 <b style="color:var(--gr2)">${cj.P}</b> pres. · <b style="color:var(--rd2)">${cj.A}</b> aus.</div><div>🧢 <b style="color:var(--gr2)">${ce.P}</b> pres. · <b style="color:var(--rd2)">${ce.A}</b> aus.</div>`;
 }
 function renderListaAS() {
   const { J, E } = personasAS();
@@ -764,26 +872,26 @@ function renderListaAS() {
 }
 function attHTML(p) {
   const m = AS.marcas[p.k] || { estado: 'P' }; const ab = AS.abiertos.has(p.k);
+  const marcas = (m.calif > 0 ? '<span class="up">▲</span>' : m.calif < 0 ? '<span class="dn">▼</span>' : '') + (m.comentario ? '💬' : '');
   return `<div class="att ${m.estado}" id="att-${p.k}">
     <div class="main">
-      <div class="nm"><b>${esc(p.nombre)}${p.inactivo ? ' <span class="pill" style="background:rgba(148,163,184,.2)">baja</span>' : ''}</b><small>${esc(p.sub)}</small></div>
-      <button class="cb up ${m.calif > 0 ? 'on' : ''}" onclick="califAS('${p.k}',1)" title="Destacar positivo">▲</button>
-      <button class="cb dn ${m.calif < 0 ? 'on' : ''}" onclick="califAS('${p.k}',-1)" title="A mejorar">▼</button>
-      <button class="cb cm ${m.comentario ? 'on' : ''}" onclick="toggleCmtAS('${p.k}')" title="Comentario">💬</button>
-      <button class="tog ${m.estado}" onclick="estadoAS('${p.k}')">${m.estado === 'A' ? '✗ Ausente' : '✓ Presente'}</button>
+      <div class="nm grow"><b>${esc(p.nombre)}${p.inactivo ? ' <span class="pill" style="background:rgba(148,163,184,.2)">baja</span>' : ''}${marcas ? `<span class="mk">${marcas}</span>` : ''}</b><small>${m.estado === 'A' ? `<span style="color:var(--rd2);font-weight:700">Ausente · ${esc(m.motivo || 'Sin aviso')}</span>` : esc(p.sub)}</small></div>
+      <button class="more ${ab || m.calif || m.comentario ? 'on' : ''}" onclick="toggleCmtAS('${p.k}')" title="Destacar o comentar" aria-label="Destacar o comentar">⋯</button>
+      <button class="tog ${m.estado}" onclick="estadoAS('${p.k}')" aria-label="${m.estado === 'A' ? 'Ausente' : 'Presente'}">${m.estado === 'A' ? '✗' : '✓'}</button>
     </div>
     ${m.estado === 'A' ? `<div class="motivos">${MOTIVOS.map(mo => `<button class="${(m.motivo || 'Sin aviso') === mo ? 'on' : ''}" onclick="motivoAS('${p.k}','${mo}')">${mo}</button>`).join('')}</div>` : ''}
-    ${ab || m.comentario ? `<div class="cmt" style="margin-top:.45rem"><input placeholder="Comentario del día…" value="${esc(m.comentario || '')}" oninput="cmtAS('${p.k}',this.value)"></div>` : ''}
+    ${ab ? `<div class="att-x"><div class="r"><button class="btn sm up ${m.calif > 0 ? 'on' : ''}" onclick="califAS('${p.k}',1)">▲ Destacar</button><button class="btn sm dn ${m.calif < 0 ? 'on' : ''}" onclick="califAS('${p.k}',-1)">▼ A mejorar</button></div><input placeholder="Comentario del día (opcional)…" value="${esc(m.comentario || '')}" oninput="cmtAS('${p.k}',this.value)"></div>` : ''}
   </div>`;
 }
 function reRow(k) { const el = document.getElementById('att-' + k); const p = personasAS()[k[0]].find(x => x.k === k); if (el && p) el.outerHTML = attHTML(p); renderContAS(); }
 const mk = k => AS.marcas[k] || (AS.marcas[k] = { estado: 'P', calif: 0, comentario: '', motivo: '' });
 function estadoAS(k) { const m = mk(k); m.estado = m.estado === 'A' ? 'P' : 'A'; if (m.estado === 'A' && !m.motivo) m.motivo = 'Sin aviso'; if (m.estado === 'P') m.motivo = ''; AS.sucio = true; reRow(k); }
 function motivoAS(k, mo) { mk(k).motivo = mo; AS.sucio = true; reRow(k); }
-function califAS(k, v) { const m = mk(k); m.calif = m.calif === v ? 0 : v; AS.sucio = true; if (m.calif !== 0) AS.abiertos.add(k); reRow(k); const i = document.querySelector(`#att-${CSS.escape(k)} .cmt input`); if (i && m.calif !== 0 && !m.comentario) i.focus(); }
-function toggleCmtAS(k) { AS.abiertos.has(k) ? AS.abiertos.delete(k) : AS.abiertos.add(k); reRow(k); const i = document.querySelector(`#att-${CSS.escape(k)} .cmt input`); if (i) i.focus(); }
-function cmtAS(k, v) { mk(k).comentario = v; AS.sucio = true; const b = document.querySelector(`#att-${CSS.escape(k)} .cb.cm`); if (b) b.classList.toggle('on', !!v); }
+function califAS(k, v) { const m = mk(k); m.calif = m.calif === v ? 0 : v; AS.sucio = true; AS.abiertos.add(k); reRow(k); }
+function toggleCmtAS(k) { AS.abiertos.has(k) ? AS.abiertos.delete(k) : AS.abiertos.add(k); reRow(k); }
+function cmtAS(k, v) { mk(k).comentario = v; AS.sucio = true; }
 function todosPresentesAS() { const { J, E } = personasAS(); (AS.vista === 'J' ? J : E).forEach(p => { const m = mk(p.k); m.estado = 'P'; m.motivo = ''; }); AS.sucio = true; renderListaAS(); }
+function setHoraAS(i, v) { const p = [hIni(AS.hora), hFin(AS.hora)]; p[i] = v; AS.hora = p[1] ? p[0] + '-' + p[1] : p[0]; AS.sucio = true; }
 function cambiarSesionAS() {
   const f = $('asFecha').value, t = $('asTipo').value;
   if (AS.sucio && !confirm('Hay cambios sin guardar. ¿Descartarlos?')) { $('asFecha').value = AS.fecha; $('asTipo').value = AS.tipo; return; }
@@ -892,7 +1000,7 @@ function fichaHTML(s, imgs) {
   else if (EQ.fuente === 'S:' + s.id && EQ.equipos.length) { borrador = true; eqs = EQ.equipos.map(e => ({ nombre: e.nombre, E: e.entrenadores.map(id => entNom(entById(id))), J: e.jugadores.map(id => (jugById(id) || {}).nombre || '') })); }
   const titulo = s.tipo === 'PAR' ? 'PARTIDO' + (s.detalle ? ' vs ' + esc(s.detalle) : '') : 'ENTRENAMIENTO ' + (TIPOS_C[s.tipo] || '').toUpperCase();
   return `<div class="ficha">
-    <div class="fh"><img src="${esc(C.ESCUDO_URL || 'escudo.png')}" onerror="this.src=ESCUDO_FALLBACK"><div><div class="a">${esc(C.CLUB || 'Regatas Bella Vista')}</div><div class="b">${esc(C.DIVISION || 'M9')} · Camada ${esc(C.CAMADA || '2017')}</div></div><div class="c">${titulo}<br>📅 ${fmtF(s.fecha)}${s.hora ? ' · ' + s.hora + ' h' : ''}${s.tipo !== 'PAR' && s.detalle ? '<br>' + esc(s.detalle) : ''}</div></div>
+    <div class="fh"><img src="${esc(C.ESCUDO_URL || 'escudo.png')}" onerror="this.src=ESCUDO_FALLBACK"><div><div class="a">${esc(C.CLUB || 'Regatas Bella Vista')}</div><div class="b">${esc(C.DIVISION || 'M9')} · Camada ${esc(C.CAMADA || '2017')}</div></div><div class="c">${titulo}<br>📅 ${fmtF(s.fecha)}${horaSes(s) ? ' · ' + fmtHora(horaSes(s)) : ''}${s.tipo !== 'PAR' && s.detalle ? '<br>' + esc(s.detalle) : ''}</div></div>
     ${jt ? `<div class="kp"><div>Jugadores presentes<b>${jp} / ${jt}</b></div><div>Entrenadores<b>${ep} / ${et}</b></div><div>Asistencia<b>${pct(jp, jt)}%</b></div>${eqs ? `<div>Equipos<b>${eqs.length}</b></div>` : ''}</div>` : ''}
     ${s.notas || imgs.length ? `<h4>📋 Planificación</h4>${s.notas ? `<div class="plan">${esc(s.notas)}</div>` : ''}${imgs.length ? `<div class="pimgs" style="margin-top:8px">${imgs.map(u => `<img src="${u}">`).join('')}</div>` : ''}${s.archivos.some(a => a.mime === 'application/pdf') ? `<div class="aus" style="margin-top:6px">📎 PDF adjunto: ${s.archivos.filter(a => a.mime === 'application/pdf').map(a => esc(a.nombre)).join(', ')}</div>` : ''}` : ''}
     ${eqs ? `<h4>🧩 Equipos ${borrador ? '(borrador, sin guardar)' : 'confirmados'}</h4><div class="pg">${eqs.map(e => `<div class="pt"><h5>${esc(e.nombre)} · ${e.J.length}</h5><div class="pc">Entrenadores: ${esc(e.E.join(', ') || 'Sin asignar')}</div><ol>${e.J.map(n => `<li>${esc(n)}</li>`).join('')}</ol></div>`).join('')}</div>` : (jt ? '<h4>🧩 Equipos</h4><div class="aus">Todavía no hay equipos guardados para este entrenamiento.</div>' : '')}
@@ -1009,50 +1117,46 @@ function renderEquipos() {
   const sid = EQ.fuente.startsWith('S:') ? EQ.fuente.slice(2) : '';
   $('v-equipos').innerHTML = `
   <h2 class="sec">🧩 Armado de equipos ${EQ.cargando ? '<span class="spin"></span>' : ''}</h2>
-  <div class="grid g3">
-    <div class="card"><h3>📥 ¿Con quiénes?</h3>
-      <select onchange="setFuenteEQ(this.value);renderEquipos()">
-        <option value="TODOS" ${EQ.fuente === 'TODOS' ? 'selected' : ''}>Todo el plantel activo</option>
-        <option value="GIRA" ${EQ.fuente === 'GIRA' ? 'selected' : ''}>🚌 Los que viajan a la gira</option>
-        <optgroup label="Presentes de un entrenamiento">${ses.map(s => `<option value="S:${s.id}" ${EQ.fuente === 'S:' + s.id ? 'selected' : ''}>${nombreEntreno(s)}${s.detalle ? ' · ' + esc(s.detalle) : ''}</option>`).join('')}</optgroup>
-      </select>
-      <div class="info" style="margin-top:8px">👦 ${nPres} jugadores · 🧢 ${E.filter(e => EQ.presentesE.has(e.id)).length} entrenadores</div>
-      <button class="btn sm" style="width:100%;margin-top:8px" onclick="EQ.ajustar=!EQ.ajustar;renderEquipos()">${EQ.ajustar ? '↑ Ocultar' : '↓ Ajustar'} presentes / ausentes</button>
+  <div class="card">
+    <label class="lbl t0">¿Con quiénes?</label>
+    <select onchange="setFuenteEQ(this.value);renderEquipos()">
+      <option value="TODOS" ${EQ.fuente === 'TODOS' ? 'selected' : ''}>Todo el plantel activo</option>
+      <option value="GIRA" ${EQ.fuente === 'GIRA' ? 'selected' : ''}>🚌 Los que viajan a la gira</option>
+      <optgroup label="Presentes de un entrenamiento">${ses.map(s => `<option value="S:${s.id}" ${EQ.fuente === 'S:' + s.id ? 'selected' : ''}>${nombreEntreno(s)}</option>`).join('')}</optgroup>
+    </select>
+    <div class="row" style="margin-top:8px"><span class="grow">👦 <b>${nPres}</b> jugadores<br>🧢 <b>${E.filter(e => EQ.presentesE.has(e.id)).length}</b> entrenadores</span><button class="btn sm" onclick="EQ.ajustar=!EQ.ajustar;renderEquipos()">${EQ.ajustar ? 'Ocultar' : 'Ajustar'}</button></div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0 16px">
+      <div><label class="lbl">Tipo de equipos</label>
+      <div class="seg full"><button class="${EQ.modo === 'mixtos' ? 'on' : ''}" onclick="EQ.modo='mixtos';regenerarEQ()">🔀 Mixtos</button><button class="${EQ.modo === 'por-nivel' ? 'on' : ''}" onclick="EQ.modo='por-nivel';if(EQ.n<3)EQ.n=3;regenerarEQ()">📊 Por nivel</button></div></div>
+      <div><label class="lbl">Cantidad de equipos</label>
+      <div class="stepper"><button onclick="if(EQ.n>2){EQ.n--;regenerarEQ()}" aria-label="Menos equipos">−</button><div class="v"><b>${EQ.n}</b>~${EQ.n ? Math.ceil(nPres / EQ.n) : 0} por equipo</div><button onclick="if(EQ.n<12){EQ.n++;regenerarEQ()}" aria-label="Más equipos">+</button></div></div>
     </div>
-    <div class="card"><h3>⚙️ Tipo de equipos</h3>
-      <div class="seg" style="width:100%;display:grid;grid-template-columns:1fr 1fr"><button class="${EQ.modo === 'mixtos' ? 'on' : ''}" onclick="EQ.modo='mixtos';regenerarEQ()">🔀 Mixtos</button><button class="${EQ.modo === 'por-nivel' ? 'on' : ''}" onclick="EQ.modo='por-nivel';if(EQ.n<3)EQ.n=3;regenerarEQ()">📊 Por nivel</button></div>
-      <div class="info" style="margin-top:8px">${EQ.modo === 'mixtos' ? '✓ Equipos parejos, niveles mezclados' : '✓ 2 equipos Gloriosa + el resto por nivel'}</div>
-    </div>
-    <div class="card"><h3>🔢 Cantidad de equipos</h3>
-      <div class="nums">${[2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => `<button class="${EQ.n === n ? 'on' : ''}" onclick="EQ.n=${n};regenerarEQ()">${n}</button>`).join('')}</div>
-      <div class="info" style="margin-top:8px">~${EQ.n ? Math.ceil(nPres / EQ.n) : 0} jugadores por equipo</div>
-    </div>
+    <div class="small muted" style="margin-top:8px">${EQ.modo === 'mixtos' ? 'Equipos parejos, con niveles mezclados.' : '2 equipos Gloriosa + el resto por nivel.'}</div>
   </div>
   ${EQ.ajustar ? `<div class="card"><div class="grid g2">
-    <div><h3>👦 Jugadores <span class="sp"></span><button class="btn sm" onclick="todosEQ('J',true)">Todos</button><button class="btn sm" onclick="todosEQ('J',false)">Ninguno</button></h3><div class="ckl">${J.map(j => `<label><input type="checkbox" ${EQ.presentesJ.has(j.id) ? 'checked' : ''} onchange="togglePresEQ('J','${j.id}',this.checked)"> ${esc(j.nombre)} ${nivelBadge(j)}</label>`).join('')}</div></div>
+    <div><h3>👦 Jugadores <span class="sp"></span><button class="btn sm" onclick="todosEQ('J',true)">Todos</button> <button class="btn sm" onclick="todosEQ('J',false)">Ninguno</button></h3><div class="ckl">${J.map(j => `<label><input type="checkbox" ${EQ.presentesJ.has(j.id) ? 'checked' : ''} onchange="togglePresEQ('J','${j.id}',this.checked)"> ${esc(j.nombre)} ${nivelBadge(j)}</label>`).join('')}</div></div>
     <div><h3>🧢 Entrenadores</h3><div class="ckl">${E.map(e => `<label><input type="checkbox" ${EQ.presentesE.has(e.id) ? 'checked' : ''} onchange="togglePresEQ('E','${e.id}',this.checked)"> ${esc(entNom(e))} <span class="muted small">${esc(e.rol || '')}${e.asigna_equipos === 'NO' ? ' · no se asigna' : ''}</span></label>`).join('')}</div></div>
-  </div><button class="btn pri" style="margin-top:10px" onclick="regenerarEQ()">🔄 Rearmar con esta selección</button></div>` : ''}
-  <div class="row" style="margin:6px 0 10px">
-    <button class="btn vio" onclick="regenerarEQ()" ${EQ.cargando ? 'disabled' : ''}>🔄 Mezclar de nuevo</button>
-    <button class="btn grn" onclick="guardarEQ()">💾 Guardar / confirmar</button>
+  </div><button class="btn pri" style="margin-top:10px;width:100%" onclick="regenerarEQ()">🔄 Rearmar con esta selección</button></div>` : ''}
+  <div class="acts">
+    <button class="btn vio" onclick="regenerarEQ()" ${EQ.cargando ? 'disabled' : ''}>🔄 Mezclar</button>
+    <button class="btn grn" onclick="guardarEQ()">💾 Confirmar</button>
     <button class="btn pri" onclick="copiarEQ()">📋 WhatsApp</button>
-    ${sid ? `<button class="btn" onclick="fichaEntrenamiento('${sid}')">📄 Ficha del entrenamiento</button>` : `<button class="btn" onclick="imprimirEQ()">🖨️ PDF</button>`}
-    ${hayGuardado ? `<button class="btn sm" onclick="cargarGuardadoEQ();renderEquipos()">↩︎ Volver a los guardados</button>` : ''}
-    ${adm ? `<label class="small row" style="gap:.3rem;margin-left:auto"><input type="checkbox" style="width:auto" ${EQ.verNiveles ? 'checked' : ''} onchange="EQ.verNiveles=this.checked;renderEquipos()"> ver niveles</label>` : ''}
+    ${sid ? `<button class="btn" onclick="fichaEntrenamiento('${sid}')">📄 Ficha</button>` : `<button class="btn" onclick="imprimirEQ()">🖨️ PDF</button>`}
   </div>
-  ${!sid ? `<div class="card"><div class="row"><div class="seg"><button class="${EQ.tipoEvento === 'entrenamiento' ? 'on' : ''}" onclick="EQ.tipoEvento='entrenamiento';renderEquipos()">🏋️ Entrenamiento</button><button class="${EQ.tipoEvento === 'partido' ? 'on' : ''}" onclick="EQ.tipoEvento='partido';renderEquipos()">🏉 Partido</button></div>${EQ.tipoEvento === 'partido' ? `<input style="max-width:200px" placeholder="vs. (rival)" value="${esc(EQ.rival)}" oninput="EQ.rival=this.value">` : ''}<input type="date" style="max-width:170px" value="${EQ.fecha}" onchange="EQ.fecha=this.value"></div></div>` : ''}
+  <div class="row" style="margin-bottom:8px">${hayGuardado ? `<button class="btn sm" onclick="cargarGuardadoEQ();renderEquipos()">↩︎ Volver a los confirmados</button>` : ''}${adm ? `<label class="small row" style="gap:.4rem;margin-left:auto;min-height:36px"><input type="checkbox" style="width:20px;height:20px;min-height:0" ${EQ.verNiveles ? 'checked' : ''} onchange="EQ.verNiveles=this.checked;renderEquipos()"> ver niveles</label>` : ''}</div>
+  ${!sid ? `<div class="card"><div class="seg full"><button class="${EQ.tipoEvento === 'entrenamiento' ? 'on' : ''}" onclick="EQ.tipoEvento='entrenamiento';renderEquipos()">🏋️ Entrenamiento</button><button class="${EQ.tipoEvento === 'partido' ? 'on' : ''}" onclick="EQ.tipoEvento='partido';renderEquipos()">🏉 Partido</button></div><div class="grid" style="grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">${EQ.tipoEvento === 'partido' ? `<input placeholder="vs. (rival)" value="${esc(EQ.rival)}" oninput="EQ.rival=this.value">` : ''}<input type="date" value="${EQ.fecha}" onchange="EQ.fecha=this.value" ${EQ.tipoEvento === 'partido' ? '' : 'style="grid-column:1/-1"'}></div></div>` : ''}
   ${verN && dif >= .5 ? `<div class="warn">⚠️ Diferencia de nivel entre equipos: ${dif.toFixed(2)}. Mezclá de nuevo o mové jugadores.</div>` : ''}
   ${libresE.length ? `<div class="warn">🧢 Entrenadores presentes sin equipo: ${libresE.map(e => `<span class="chip" onclick="selEQ('E','${e.id}',0)">${esc(entNom(e))}</span>`).join('')}</div>` : ''}
-  ${EQ.sel ? `<div class="info" style="margin:8px 0">👉 Seleccionado: <b>${esc(EQ.sel.t === 'J' ? (jugById(EQ.sel.id) || {}).nombre : entNom(entById(EQ.sel.id)))}</b>. Tocá "Mover acá" en el equipo destino. <button class="btn sm" onclick="EQ.sel=null;renderEquipos()">Cancelar</button></div>` : '<div class="small muted" style="margin:8px 0">En compu: arrastrá. En el celu: tocá un jugador o entrenador y después "Mover acá". El nombre del equipo se puede editar tocándolo.</div>'}
-  <div class="teams">${EQ.equipos.map(eq => teamHTML(eq, verN)).join('') || '<div class="empty">No hay jugadores seleccionados.</div>'}</div>`;
+  <div class="small muted" style="margin:8px 0">Para mover: tocá un jugador o entrenador y después <b>⇢ Mover acá</b> en el equipo destino (en compu también podés arrastrar). Tocá el nombre del equipo para cambiarlo.</div>
+  <div class="teams">${EQ.equipos.map(eq => teamHTML(eq, verN)).join('') || '<div class="empty">No hay jugadores seleccionados.</div>'}</div>
+  ${EQ.sel ? `<div class="selbar"><span class="grow">👉 <b>${esc(EQ.sel.t === 'J' ? (jugById(EQ.sel.id) || {}).nombre : entNom(entById(EQ.sel.id)))}</b><br><span class="small">Tocá "⇢ Mover acá" en el equipo destino</span></span><button class="btn sm" onclick="EQ.sel=null;renderEquipos()">Cancelar</button></div>` : ''}`;
 }
 function teamHTML(eq, verN) {
   return `<div class="team" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="dropEQ(event,${eq.id})">
-    <div class="th"><h4 contenteditable="true" onblur="renombrarEQ(${eq.id},this.textContent)">${esc(eq.nombre)}</h4><div class="ts"><span>👥 ${eq.jugadores.length}</span>${verN ? `<span>📊 ${promEQ(eq).toFixed(1)}</span>` : ''}</div></div>
+    <div class="th"><h4 contenteditable="true" onblur="renombrarEQ(${eq.id},this.textContent)">${esc(eq.nombre)}</h4><div class="ts"><span>👥 ${eq.jugadores.length}</span>${verN ? `<span>📊 ${promEQ(eq).toFixed(1)}</span>` : ''}</div>${EQ.sel && EQ.sel.from !== eq.id ? `<button class="moveto" onclick="moverEQ(${eq.id})">⇢ Mover acá</button>` : ''}</div>
     <div class="tb">
       <div class="coaches"><strong>Entrenadores</strong>${eq.entrenadores.length ? eq.entrenadores.map(id => `<span class="chip ${EQ.sel && EQ.sel.t === 'E' && EQ.sel.id === id ? 'sel' : ''}" draggable="true" ondragstart="dragEQ(event,'E','${id}',${eq.id})" onclick="selEQ('E','${id}',${eq.id})">${esc(entNom(entById(id)))}</span>`).join('') : '<span class="small muted">Sin asignar</span>'}</div>
-      ${eq.jugadores.map((id, i) => { const j = jugById(id); if (!j) return ''; return `<div class="pl ${EQ.sel && EQ.sel.t === 'J' && EQ.sel.id === id ? 'sel' : ''}" draggable="true" ondragstart="dragEQ(event,'J','${id}',${eq.id})" onclick="selEQ('J','${id}',${eq.id})"><span class="n">${i + 1}.</span><span class="nm">${esc(j.nombre)}<small>${esc(j.colegio && j.colegio !== 'N/A' ? j.colegio : '')}${j.grado && j.grado !== 'N/A' ? ', ' + esc(j.grado) : ''}</small></span>${verN ? nivelBadge(j) : ''}${isAdmin() ? `<button class="btn sm" style="padding:.2rem .4rem" onclick="event.stopPropagation();editarJugador('${id}')">✏️</button>` : ''}</div>`; }).join('')}
-      ${EQ.sel && EQ.sel.from !== eq.id ? `<button class="moveto" onclick="moverEQ(${eq.id})">⇢ Mover acá</button>` : ''}
+      ${eq.jugadores.map((id, i) => { const j = jugById(id); if (!j) return ''; return `<div class="pl ${EQ.sel && EQ.sel.t === 'J' && EQ.sel.id === id ? 'sel' : ''}" draggable="true" ondragstart="dragEQ(event,'J','${id}',${eq.id})" onclick="selEQ('J','${id}',${eq.id})"><span class="n">${i + 1}.</span><span class="nm">${esc(j.nombre)}<small>${esc(j.colegio && j.colegio !== 'N/A' ? j.colegio : '')}${j.grado && j.grado !== 'N/A' ? ', ' + esc(j.grado) : ''}</small></span>${verN ? nivelBadge(j) : ''}</div>`; }).join('')}
     </div></div>`;
 }
 let DRAG = null;
@@ -1064,14 +1168,14 @@ function moverEQ(to) {
   const dest = EQ.equipos.find(e => e.id === to), orig = EQ.equipos.find(e => e.id === s.from), campo = s.t === 'J' ? 'jugadores' : 'entrenadores';
   if (orig) orig[campo] = orig[campo].filter(x => x !== s.id);
   if (!dest[campo].includes(s.id)) dest[campo].push(s.id);
-  EQ.sel = null; guardarBorradorEQ(); renderEquipos();
+  EQ.sel = null; guardarBorradorEQ(); renderEquipos(); toast('✓ Movido a ' + dest.nombre);
 }
 function renombrarEQ(id, txt) { const e = EQ.equipos.find(x => x.id === id); if (e && txt.trim()) { e.nombre = txt.trim(); guardarBorradorEQ(); } }
 function togglePresEQ(t, id, on) { const s = t === 'J' ? EQ.presentesJ : EQ.presentesE; on ? s.add(id) : s.delete(id); }
 function todosEQ(t, on) { const s = t === 'J' ? EQ.presentesJ : EQ.presentesE; s.clear(); if (on) (t === 'J' ? jugActivos() : entActivos()).forEach(x => s.add(x.id)); renderEquipos(); }
 function textoEQ() {
   const s = EQ.fuente.startsWith('S:') && DB.SESIONES.find(x => x.id === EQ.fuente.slice(2));
-  const cab = s ? `${s.tipo === 'PAR' ? 'PARTIDO' + (s.detalle ? ' vs ' + s.detalle : '') : 'ENTRENAMIENTO'} · ${fmtF(s.fecha)}${s.hora ? ' ' + s.hora + ' h' : ''}` : `${EQ.tipoEvento === 'partido' ? 'PARTIDO' + (EQ.rival ? ' vs ' + EQ.rival : '') : 'ENTRENAMIENTO'} · ${fmtF(EQ.fecha)}`;
+  const cab = s ? `${s.tipo === 'PAR' ? 'PARTIDO' + (s.detalle ? ' vs ' + s.detalle : '') : 'ENTRENAMIENTO'} · ${fmtF(s.fecha)}${horaSes(s) ? ' · ' + fmtHora(horaSes(s)) : ''}` : `${EQ.tipoEvento === 'partido' ? 'PARTIDO' + (EQ.rival ? ' vs ' + EQ.rival : '') : 'ENTRENAMIENTO'} · ${fmtF(EQ.fecha)}`;
   return `🏉 *REGATAS M9 · Camada 2017*\n${cab}\n\n` + EQ.equipos.map(eq => `*${eq.nombre}* (${eq.jugadores.length})\n🧢 ${eq.entrenadores.map(id => entNom(entById(id))).join(', ') || 'Sin asignar'}\n` + eq.jugadores.map((id, i) => `${i + 1}. ${(jugById(id) || {}).nombre || ''}`).join('\n')).join('\n\n');
 }
 function copiarTexto(t, ok) { (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast(ok)).catch(() => prompt('Copiá el texto:', t)); }
@@ -1113,27 +1217,27 @@ function renderPlantel() {
   const edad = f => f && f.length === 10 ? Math.floor((new Date() - parseISO(f)) / 31557600000) : null;
   let body = '';
   if (PL.vista === 'J') body = `
-    ${adm ? `<div class="row" style="margin-bottom:8px"><div class="seg">${['', 'G', '1', '2', '3'].map(n => `<button class="${PL.nivel === n ? 'on' : ''}" onclick="PL.nivel='${n}';renderPlantel()">${n ? (n === 'G' ? 'Gloriosa' : 'Nivel ' + n) + ' (' + cntN(n) + ')' : 'Todos'}</button>`).join('')}</div></div>` : ''}
+    ${adm ? `<div class="seg full" style="margin-bottom:8px">${['', 'G', '1', '2', '3'].map(n => `<button class="${PL.nivel === n ? 'on' : ''}" onclick="PL.nivel='${n}';renderPlantel()">${n ? (n === 'G' ? 'Glor.' : 'Niv. ' + n) + '<span class="c">' + cntN(n) + '</span>' : 'Todos<span class="c">' + jugActivos().length + '</span>'}</button>`).join('')}</div>` : ''}
     ${tabla('plJ', [
-      { t: '#', h: (r, i) => `<span class="muted">${i + 1}</span>` },
-      { k: 'nombre', t: 'Jugador', h: r => `<b class="clk" onclick="fichaJugador('${r.id}')">${esc(r.nombre)}</b>${r.observaciones ? ' <span title="' + esc(r.observaciones) + '">📝</span>' : ''}` },
+      { t: '#', h: () => '' },
+      { k: 'nombre', t: 'Jugador', h: r => `<b class="clk" onclick="editarJugador('${r.id}')">${esc(r.nombre)}</b>${r.observaciones ? ' <span title="' + esc(r.observaciones) + '">📝</span>' : ''}` },
       ...(adm ? [{ k: 'nivel', t: 'Nivel', v: r => r.nivel === 'G' ? (r.nivel2 || 0) / 10 : nivelNum(r), h: r => nivelBadge(r) }] : []),
       { k: 'colegio', t: 'Colegio', h: r => esc(r.colegio) },
       { k: 'grado', t: 'Grado', h: r => esc(r.grado) },
       { k: 'nac', t: 'Edad', num: 1, v: r => edad(r.fecha_nac), h: r => edad(r.fecha_nac) == null ? '' : edad(r.fecha_nac) },
       { k: 'asis', t: 'Asist.', num: 1, v: r => st.per['J-' + r.id] ? st.per['J-' + r.id].pct : null, h: r => { const p = st.per['J-' + r.id]; return p ? `<b style="color:${colorPct(p.pct)}">${p.pct}%</b>` : '<span class="muted">—</span>'; } },
       { k: 'gira', t: 'Gira', v: r => viaja('J', r.id) ? 1 : 0, h: r => viaja('J', r.id) ? '✈️' : '' },
-      { t: '', h: r => `<button class="btn sm" onclick="editarJugador('${r.id}')">✏️ Editar</button>` }
-    ], J, { k: 'nombre', desc: false })}`;
+      { t: '', h: r => `<button class="btn sm" onclick="fichaJugador('${r.id}')">📊 Ficha</button>` }
+    ], J, { k: 'nombre', desc: false })}<div class="small muted" style="margin-top:6px">Tocá un nombre para editarlo · tocá los títulos para ordenar.</div>`;
   else if (PL.vista === 'E') body = tabla('plE', [
-      { k: 'apodo', t: 'Apodo', v: r => entNom(r), h: r => `<b class="clk" onclick="fichaEntrenador('${r.id}')">${esc(entNom(r))}</b>` },
+      { k: 'apodo', t: 'Apodo', v: r => entNom(r), h: r => `<b class="clk" onclick="editarEntrenador('${r.id}')">${esc(entNom(r))}</b>` },
       { k: 'nombre', t: 'Nombre', h: r => esc(r.nombre) },
       { k: 'rol', t: 'Rol', h: r => esc(r.rol) },
       { k: 'hijo', t: 'Hijo', v: r => (jugById(r.hijo_id) || {}).nombre || '', h: r => `<span class="muted">${esc((jugById(r.hijo_id) || {}).nombre || '')}</span>` },
       { k: 'asig', t: 'Arma equipos', v: r => r.asigna_equipos, h: r => r.asigna_equipos === 'NO' ? 'No' : 'Sí' },
       { k: 'asis', t: 'Asist.', num: 1, v: r => st.per['E-' + r.id] ? st.per['E-' + r.id].pct : null, h: r => { const p = st.per['E-' + r.id]; return p ? `<b style="color:${colorPct(p.pct)}">${p.pct}%</b>` : '<span class="muted">—</span>'; } },
       { k: 'gira', t: 'Gira', v: r => viaja('E', r.id) ? 1 : 0, h: r => viaja('E', r.id) ? '✈️' : '' },
-      { t: '', h: r => `<button class="btn sm" onclick="editarEntrenador('${r.id}')">✏️ Editar</button>` }
+      { t: '', h: r => `<button class="btn sm" onclick="fichaEntrenador('${r.id}')">📊 Ficha</button>` }
     ], E, { k: 'apodo', desc: false });
   else body = `<div class="info" style="margin-bottom:10px">Siguen guardados en la base con todo su historial, pero no aparecen en la asistencia ni en el armado de equipos. Si vuelven, tocá "Vuelve".</div>` + tabla('plB', [
       { k: 'nombre', t: 'Nombre', h: r => `<b class="clk" onclick="${r.t === 'J' ? 'fichaJugador' : 'fichaEntrenador'}('${r.id}')">${esc(r.nombre)}</b>` },
@@ -1143,10 +1247,11 @@ function renderPlantel() {
       { t: '', h: r => `<button class="btn sm grn" onclick="reactivar('${r.t}','${r.id}')">↩︎ Vuelve</button>` }
     ], bajas, { k: 'f', desc: true });
   $('v-plantel').innerHTML = `
-  <h2 class="sec">👥 Plantel <span class="sp"></span><button class="btn sm pri" onclick="editarJugador()">➕ Jugador</button><button class="btn sm vio" onclick="editarEntrenador()">➕ Entrenador</button></h2>
-  <div class="row" style="margin-bottom:10px">
-    <div class="seg"><button class="${PL.vista === 'J' ? 'on' : ''}" onclick="PL.vista='J';renderPlantel()">Jugadores (${jugActivos().length})</button><button class="${PL.vista === 'E' ? 'on' : ''}" onclick="PL.vista='E';renderPlantel()">Entrenadores (${entActivos().length})</button><button class="${PL.vista === 'B' ? 'on' : ''}" onclick="PL.vista='B';renderPlantel()">No vienen más (${bajas.length})</button></div>
-    ${PL.vista !== 'B' ? `<input class="grow" id="plBuscar" style="max-width:260px" placeholder="🔎 Buscar nombre o colegio…" value="${esc(PL.filtro)}" oninput="PL.filtro=this.value;clearTimeout(window._pf);window._pf=setTimeout(()=>{renderPlantel();const i=$('plBuscar');i.focus();i.setSelectionRange(i.value.length,i.value.length)},250)">` : ''}
+  <h2 class="sec">👥 Plantel</h2>
+  <div class="head-acts"><button class="btn sm pri" onclick="editarJugador()">➕ Jugador</button><button class="btn sm vio" onclick="editarEntrenador()">➕ Entrenador</button></div>
+  <div class="seg full" style="margin-bottom:8px"><button class="${PL.vista === 'J' ? 'on' : ''}" onclick="PL.vista='J';renderPlantel()">Jugadores<span class="c">${jugActivos().length}</span></button><button class="${PL.vista === 'E' ? 'on' : ''}" onclick="PL.vista='E';renderPlantel()">Entrenadores<span class="c">${entActivos().length}</span></button><button class="${PL.vista === 'B' ? 'on' : ''}" onclick="PL.vista='B';renderPlantel()">No vienen más<span class="c">${bajas.length}</span></button></div>
+  <div style="margin-bottom:10px">
+    ${PL.vista !== 'B' ? `<input id="plBuscar" placeholder="🔎 Buscar nombre o colegio…" value="${esc(PL.filtro)}" oninput="PL.filtro=this.value;clearTimeout(window._pf);window._pf=setTimeout(()=>{renderPlantel();const i=$('plBuscar');i.focus();i.setSelectionRange(i.value.length,i.value.length)},250)">` : ''}
   </div>${body}`;
 }
 function abrirModal(html) { $('mbox').innerHTML = html; $('modal').classList.add('on'); }
@@ -1237,17 +1342,16 @@ const ordRol = p => /head/i.test(p.rol_gira) ? 0 : /manager/i.test(p.rol_gira) ?
 function tablaGira(id, lista, esJ) {
   const st = calcStats({ anio: new Date().getFullYear() });
   const cols = [
-    { t: '#', h: (r, i) => `<span class="muted">${i + 1}</span>` },
-    { k: 'nombre', t: 'Nombre', h: r => `<b>${esc(r.nombre)}</b>${r.activo === 'NO' ? ' <span class="pill" style="background:rgba(148,163,184,.2)">baja</span>' : ''}` },
-    ...(esJ ? [] : [{ k: 'rol', t: 'Rol', v: r => ordRol(r) + r.rol_gira, h: r => `<span class="small">${esc(r.rol_gira)}</span>` }]),
-    { k: 'dni', t: 'DNI', h: r => `<span class="small">${esc(r.dni)}</span>` },
-    { k: 'nac', t: 'Nac.', h: r => `<span class="small">${fmtF(r.nac)}</span>` }
+    { t: '#', h: () => '' },
+    { k: 'nombre', t: 'Nombre', h: r => `<b>${esc(r.nombre)}</b>${r.activo === 'NO' ? ' <span class="pill" style="background:rgba(148,163,184,.2)">baja</span>' : ''}${esJ ? '' : `<div class="tiny muted">${esc(r.rol_gira)}</div>`}` },
+    { k: 'va', t: 'Viaja', v: r => r.va, h: r => `<button class="tg ${r.va === 'SI' ? 'on' : ''}" style="min-width:58px" onclick="setVa('${r.t}','${r.id}','${r.va === 'SI' ? 'NO' : 'SI'}')">${r.va === 'SI' ? '✓ Sí' : 'No'}</button>` }
   ];
   if (GI.vista === 'SI') cols.push(
-    { k: 'pap', t: 'Papeles', num: 1, v: r => r.aut + r.fic + r.pag, h: r => `<button class="tg ${r.aut ? 'on' : ''}" onclick="toggleGira('${r.t}','${r.id}','autorizacion')">Aut.</button> <button class="tg ${r.fic ? 'on' : ''}" onclick="toggleGira('${r.t}','${r.id}','ficha_medica')">Ficha</button> <button class="tg ${r.pag ? 'on' : ''}" onclick="toggleGira('${r.t}','${r.id}','pago')">Pago</button>` },
-    { k: 'obs', t: 'Obs.', h: r => `<button class="btn sm" onclick="obsGira('${r.t}','${r.id}')" title="${esc(r.obs)}">${r.obs ? '📝 ' + esc(r.obs.slice(0, 18)) : '＋'}</button>` });
-  else if (esJ) cols.push({ k: 'asis', t: 'Asist. año', num: 1, v: r => st.per['J-' + r.id] ? st.per['J-' + r.id].pct : null, h: r => { const p = st.per['J-' + r.id]; return p ? `<b style="color:${colorPct(p.pct)}">${p.pct}%</b>` : '—'; } });
-  cols.push({ t: '', h: r => r.va === 'SI' ? `<button class="btn sm red" onclick="setVa('${r.t}','${r.id}','NO')">✕ No viaja</button>` : `<button class="btn sm grn" onclick="setVa('${r.t}','${r.id}','SI')">＋ Viaja</button>` });
+    { k: 'pap', t: 'Papeles', num: 1, v: r => r.aut + r.fic + r.pag, h: r => `<div class="row" style="gap:4px;flex-wrap:nowrap"><button class="tg ${r.aut ? 'on' : ''}" onclick="toggleGira('${r.t}','${r.id}','autorizacion')">Aut.</button><button class="tg ${r.fic ? 'on' : ''}" onclick="toggleGira('${r.t}','${r.id}','ficha_medica')">Ficha</button><button class="tg ${r.pag ? 'on' : ''}" onclick="toggleGira('${r.t}','${r.id}','pago')">Pago</button></div>` },
+    { k: 'obs', t: 'Obs.', h: r => `<button class="btn sm" onclick="obsGira('${r.t}','${r.id}')" title="${esc(r.obs)}">${r.obs ? '📝 ' + esc(r.obs.slice(0, 18)) : '＋ Nota'}</button>` });
+  else if (esJ) cols.push({ k: 'asis', t: 'Asist.', num: 1, v: r => st.per['J-' + r.id] ? st.per['J-' + r.id].pct : null, h: r => { const p = st.per['J-' + r.id]; return p ? `<b style="color:${colorPct(p.pct)}">${p.pct}%</b>` : '—'; } });
+  if (!esJ) cols.push({ k: 'rol', t: 'Rol', v: r => ordRol(r) + r.rol_gira, h: r => `<span class="small">${esc(r.rol_gira)}</span>` });
+  cols.push({ k: 'dni', t: 'DNI', h: r => `<span class="small">${esc(r.dni)}</span>` }, { k: 'nac', t: 'Nac.', h: r => `<span class="small">${fmtF(r.nac)}</span>` });
   return tabla(id, cols, lista, esJ ? { k: 'nombre', desc: false } : { k: 'rol', desc: false });
 }
 function renderGira() {
@@ -1260,25 +1364,22 @@ function renderGira() {
   const f = GI.filtro.toLowerCase(), fil = l => l.filter(p => !f || p.nombre.toLowerCase().includes(f));
   const LJ = fil(GI.vista === 'SI' ? vJ : nJ), LE = fil(GI.vista === 'SI' ? vE : nE);
   $('v-gira').innerHTML = `
-  <h2 class="sec">🚌 ${esc(C.GIRA_NOMBRE || 'Gira')} <span class="sp"></span><button class="btn sm" onclick="configGira()">⚙️ Datos de la gira</button></h2>
+  <h2 class="sec">🚌 ${esc(C.GIRA_NOMBRE || 'Gira')}</h2>
   <div class="gira-hero">
-    <div><div class="big">${cuenta}</div><div class="small muted">${sub}</div></div>
-    <div class="grow"><div style="font-weight:800">${C.GIRA_DESDE ? '📅 ' + fmtF(C.GIRA_DESDE) + (C.GIRA_HASTA ? ' → ' + fmtF(C.GIRA_HASTA) : '') : 'Fechas a definir'}</div><div class="small muted">Viajan ${vJ.length} jugadores y ${vE.length} adultos · ${vJ.length + vE.length} pasajeros</div></div>
+    ${C.GIRA_DESDE ? `<div><div class="big">${cuenta}</div><div class="small muted">${sub}</div></div>` : ''}
+    <div class="grow"><div style="font-weight:800;font-size:1.05rem">${C.GIRA_DESDE ? '📅 ' + fmtF(C.GIRA_DESDE) + (C.GIRA_HASTA ? ' → ' + fmtF(C.GIRA_HASTA) : '') : '📅 Fechas a definir'}</div><div class="small muted" style="margin-top:2px">${vJ.length + vE.length} pasajeros: ${vJ.length} jugadores y ${vE.length} adultos</div>${C.GIRA_DESDE ? '' : `<button class="btn sm" style="margin-top:8px" onclick="configGira()">Cargar fechas</button>`}</div>
     <button class="btn vio" onclick="equiposDesdeGira()">🧩 Armar equipos de la gira</button>
   </div>
   <div class="kpis">
     <div class="kpi"><div class="l">Jugadores que viajan</div><div class="v" style="color:var(--gr)">${vJ.length}</div><div class="s">de ${vJ.length + nJ.length} activos (${pct(vJ.length, vJ.length + nJ.length)}%)</div></div>
     <div class="kpi"><div class="l">Staff que viaja</div><div class="v" style="color:var(--vi2)">${vE.length}</div><div class="s">${vE.filter(p => !/manager/i.test(p.rol_gira)).length} entrenadores · ${vE.filter(p => /manager/i.test(p.rol_gira)).length} managers</div></div>
-    <div class="kpi"><div class="l">No viajan</div><div class="v" style="color:var(--rd)">${nJ.length}</div><div class="s">jugadores (+${nE.length} adultos)</div></div>
+    <div class="kpi"><div class="l">No viajan</div><div class="v" style="color:var(--rd)">${nJ.length}</div><div class="s">jugadores (+${nE.length} ${nE.length === 1 ? 'adulto' : 'adultos'})</div></div>
     <div class="kpi"><div class="l">Papeles pendientes</div><div class="v" style="color:var(--am)">${pend}</div><div class="s">jugadores con algo sin entregar</div></div>
   </div>
-  <div class="row" style="margin-bottom:10px">
-    <div class="seg"><button class="${GI.vista === 'SI' ? 'on' : ''}" onclick="GI.vista='SI';renderGira()">✈️ Viajan (${vJ.length + vE.length})</button><button class="${GI.vista === 'NO' ? 'on' : ''}" onclick="GI.vista='NO';renderGira()">🏠 No viajan (${nJ.length + nE.length})</button></div>
-    <input class="grow" id="giBuscar" style="max-width:240px" placeholder="🔎 Buscar…" value="${esc(GI.filtro)}" oninput="GI.filtro=this.value;clearTimeout(window._gf);window._gf=setTimeout(()=>{renderGira();const i=$('giBuscar');i.focus();i.setSelectionRange(i.value.length,i.value.length)},250)">
-    <button class="btn sm" onclick="imprimirGira()">🖨️ Listado de pasajeros</button>
-    <button class="btn sm" onclick="copiarGira()">📋 Copiar listas</button>
-  </div>
-  ${GI.vista === 'SI' ? `<div class="small muted" style="margin-bottom:6px">Tocá Aut. / Ficha / Pago para marcar lo entregado. Se guarda solo. Tocá los títulos para ordenar.</div>` : ''}
+  <div class="acts" style="grid-template-columns:repeat(3,1fr)"><button class="btn sm" onclick="configGira()">⚙️ Fechas</button><button class="btn sm" onclick="imprimirGira()">🖨️ Pasajeros</button><button class="btn sm" onclick="copiarGira()">📋 Copiar</button></div>
+  <div class="seg full" style="margin-bottom:8px"><button class="${GI.vista === 'SI' ? 'on' : ''}" onclick="GI.vista='SI';renderGira()">✈️ Viajan<span class="c">${vJ.length + vE.length}</span></button><button class="${GI.vista === 'NO' ? 'on' : ''}" onclick="GI.vista='NO';renderGira()">🏠 No viajan<span class="c">${nJ.length + nE.length}</span></button></div>
+  <input id="giBuscar" style="margin-bottom:10px" placeholder="🔎 Buscar…" value="${esc(GI.filtro)}" oninput="GI.filtro=this.value;clearTimeout(window._gf);window._gf=setTimeout(()=>{renderGira();const i=$('giBuscar');i.focus();i.setSelectionRange(i.value.length,i.value.length)},250)">
+  ${true ? `<div class="small muted" style="margin-bottom:6px">Tocá <b>Sí/No</b> para cambiar si viaja y <b>Aut. / Ficha / Pago</b> para marcar lo entregado (se guarda solo). Deslizá la tabla para ver DNI y nacimiento.</div>` : ''}
   <h3 class="sub-h">👦 Jugadores <span class="pill" style="background:rgba(34,197,94,.15);color:var(--gr2)">${LJ.length}</span></h3>
   ${tablaGira('giJ', LJ, true)}
   <h3 class="sub-h" style="margin-top:18px">🧢 Entrenadores y staff <span class="pill" style="background:rgba(139,92,246,.18);color:#ddd6fe">${LE.length}</span></h3>
@@ -1327,7 +1428,7 @@ function renderStats() {
   if (!anios.includes(ST.anio) && anios.length) ST.anio = anios[0];
   const S = calcStats({ anio: ST.anio, mes: ST.mes, tipo: ST.tipo }), pj = S.porSesion;
   const promJ = pj.length ? Math.round(pj.reduce((s, x) => s + pct(x.jp, x.jt), 0) / pj.length) : null;
-  const promPres = pj.length ? (pj.reduce((s, x) => s + x.jp, 0) / pj.length).toFixed(1) : 0;
+  const promPres = pj.length ? (Math.round(pj.reduce((s, x) => s + x.jp, 0) / pj.length * 10) / 10).toLocaleString('es-AR') : 0;
   const Ep = Object.values(S.per).filter(p => p.tipo === 'E'), promE = Ep.length ? Math.round(Ep.reduce((s, p) => s + p.pct, 0) / Ep.length) : null;
   const up = S.recs.filter(a => a.calif > 0).length, dn = S.recs.filter(a => a.calif < 0).length;
   const filas = (ST.vista === 'J' ? DB.JUGADORES : DB.ENTRENADORES).map(x => ({ x, p: S.per[ST.vista + '-' + x.id] || vacioStat(), nombre: ST.vista === 'J' ? x.nombre : entNom(x) })).filter(r => r.p.tot > 0 || r.x.activo !== 'NO');
@@ -1341,12 +1442,13 @@ function renderStats() {
   const meses = Object.keys(mes).sort();
   const pctT = (p, t) => p[t][1] ? pct(...p[t]) : null;
   $('v-stats').innerHTML = `
-  <h2 class="sec">📊 Estadísticas <span class="sp"></span><button class="btn sm" onclick="exportarCSV()">⬇️ Exportar CSV</button></h2>
-  <div class="row" style="margin-bottom:12px">
-    <select style="max-width:110px" onchange="ST.anio=this.value;renderStats()">${(anios.length ? anios : [ST.anio]).map(a => `<option ${a === ST.anio ? 'selected' : ''}>${a}</option>`).join('')}</select>
-    <select style="max-width:150px" onchange="ST.mes=this.value;renderStats()"><option value="">Todo el año</option>${MESES.map((m, i) => `<option value="${i + 1}" ${String(ST.mes) === String(i + 1) ? 'selected' : ''}>${m}</option>`).join('')}</select>
-    <div class="seg">${[['', 'Todos'], ['MIE', 'Miércoles'], ['SAB', 'Sábados'], ['PAR', 'Partidos']].map(([k, t]) => `<button class="${ST.tipo === k ? 'on' : ''}" onclick="ST.tipo='${k}';renderStats()">${t}</button>`).join('')}</div>
+  <h2 class="sec">📊 Estadísticas</h2>
+  <div class="grid" style="grid-template-columns:88px minmax(0,1fr) auto;gap:8px;margin-bottom:8px">
+    <select style=" onchange="ST.anio=this.value;renderStats()">${(anios.length ? anios : [ST.anio]).map(a => `<option ${a === ST.anio ? 'selected' : ''}>${a}</option>`).join('')}</select>
+    <select onchange="ST.mes=this.value;renderStats()"><option value="">Mes: todos</option>${MESES.map((m, i) => `<option value="${i + 1}" ${String(ST.mes) === String(i + 1) ? 'selected' : ''}>${m}</option>`).join('')}</select>
+    <button class="btn sm" onclick="exportarCSV()" title="Exportar a Excel (CSV)">⬇️ CSV</button>
   </div>
+  <div class="seg full" style="margin-bottom:12px">${[['', 'Todos'], ['MIE', 'Mié'], ['SAB', 'Sáb'], ['PAR', 'Partidos']].map(([k, t]) => `<button class="${ST.tipo === k ? 'on' : ''}" onclick="ST.tipo='${k}';renderStats()">${t}</button>`).join('')}</div>
   <div class="kpis">
     <div class="kpi"><div class="l">Entrenamientos</div><div class="v">${S.ses.length}</div><div class="s">${S.ses.filter(s => s.tipo === 'MIE').length} mié · ${S.ses.filter(s => s.tipo === 'SAB').length} sáb · ${S.ses.filter(s => s.tipo === 'PAR').length} part.</div></div>
     <div class="kpi"><div class="l">Asistencia jugadores</div><div class="v" style="color:${promJ == null ? 'var(--tx3)' : colorPct(promJ)}">${promJ == null ? '—' : promJ + '%'}</div><div class="s">${promPres} presentes por entrenamiento</div></div>
@@ -1358,17 +1460,18 @@ function renderStats() {
     <div class="card chart"><h3>📅 % asistencia por mes</h3>${chartMeses(meses, mes)}</div>
   </div>
   <div class="card">
-    <h3>🏅 Ranking de asistencia <span class="sp"></span><div class="seg"><button class="${ST.vista === 'J' ? 'on' : ''}" onclick="ST.vista='J';renderStats()">Jugadores</button><button class="${ST.vista === 'E' ? 'on' : ''}" onclick="ST.vista='E';renderStats()">Entrenadores</button></div></h3>
-    <div class="small muted" style="margin-bottom:6px">Tocá cualquier título para ordenar de mayor a menor o al revés.</div>
+    <h3>🏅 Ranking de asistencia</h3>
+    <div class="seg full" style="margin-bottom:8px"><button class="${ST.vista === 'J' ? 'on' : ''}" onclick="ST.vista='J';renderStats()">Jugadores</button><button class="${ST.vista === 'E' ? 'on' : ''}" onclick="ST.vista='E';renderStats()">Entrenadores</button></div>
+    <div class="small muted" style="margin-bottom:6px">Tocá un título para ordenar ↑↓ · tocá un nombre para ver su ficha.</div>
     ${tabla('st' + ST.vista, [
-      { t: '#', h: (r, i) => `<span class="muted">${i + 1}</span>` },
+      { t: '#', h: () => '' },
       { k: 'nombre', t: 'Nombre', h: r => `<b>${esc(r.nombre)}</b>${r.x.activo === 'NO' ? ' <span class="pill" style="background:rgba(148,163,184,.2)">baja</span>' : ''}` },
+      { k: 'pct', t: '%', num: 1, v: r => r.p.tot ? r.p.pct : null, h: r => `<b style="color:${r.p.tot ? colorPct(r.p.pct) : 'var(--tx4)'}">${r.p.tot ? r.p.pct + '%' : '—'}</b>` },
       ...(ST.vista === 'J' ? (adm ? [{ k: 'nivel', t: 'Nivel', v: r => r.x.nivel === 'G' ? (r.x.nivel2 || 0) / 10 : nivelNum(r.x), h: r => nivelBadge(r.x) }] : []) : [{ k: 'rol', t: 'Rol', v: r => r.x.rol, h: r => esc(r.x.rol || '') }]),
       { k: 'P', t: 'Pres.', num: 1, v: r => r.p.P, h: r => r.p.P },
       { k: 'A', t: 'Aus.', num: 1, v: r => r.p.A, h: r => r.p.A },
       { k: 'aviso', t: 'Avisó', num: 1, v: r => r.p.aviso, h: r => r.p.aviso || '' },
-      { k: 'pct', t: '%', num: 1, v: r => r.p.tot ? r.p.pct : null, h: r => `<b style="color:${r.p.tot ? colorPct(r.p.pct) : 'var(--tx4)'}">${r.p.tot ? r.p.pct + '%' : '—'}</b>` },
-      { t: '', h: r => `<div class="bar"><i style="width:${r.p.pct}%;background:${colorPct(r.p.pct)}"></i></div>` },
+
       { k: 'MIE', t: '% Mié', num: 1, v: r => pctT(r.p, 'MIE'), h: r => pctT(r.p, 'MIE') == null ? '—' : pctT(r.p, 'MIE') + '%' },
       { k: 'SAB', t: '% Sáb', num: 1, v: r => pctT(r.p, 'SAB'), h: r => pctT(r.p, 'SAB') == null ? '—' : pctT(r.p, 'SAB') + '%' },
       { k: 'up', t: '▲', num: 1, v: r => r.p.up, h: r => `<span class="up">${r.p.up || ''}</span>` },
@@ -1378,7 +1481,8 @@ function renderStats() {
     ], filas, { k: 'pct', desc: true }, r => `class="clk" onclick="${ST.vista === 'J' ? 'fichaJugador' : 'fichaEntrenador'}('${r.x.id}')"`)}
   </div>
   <div class="grid g3">
-    <div class="card"><h3>⭐ Destacados y comentarios <span class="sp"></span><select style="width:auto" onchange="ST.dest=this.value;renderStats()">${[['todos', 'Todos'], ['up', '▲ Positivos'], ['dn', '▼ A mejorar'], ['cm', '💬 Con comentario']].map(([k, t]) => `<option value="${k}" ${ST.dest === k ? 'selected' : ''}>${t}</option>`).join('')}</select></h3>
+    <div class="card"><h3>⭐ Destacados y comentarios</h3>
+      <div class="seg full" style="margin-bottom:8px">${[['todos', 'Todos'], ['up', '▲'], ['dn', '▼'], ['cm', '💬']].map(([k, t]) => `<button class="${ST.dest === k ? 'on' : ''}" onclick="ST.dest='${k}';renderStats()">${t}</button>`).join('')}</div>
       <div style="max-height:420px;overflow-y:auto">${dest.length ? dest.map(a => `<div class="cmt-i clk" onclick="${a.persona_tipo === 'J' ? 'fichaJugador' : 'fichaEntrenador'}('${a.persona_id}')"><div class="h">${fmtFC(a.fecha)} · ${TIPOS_C[a.tipo] || a.tipo}</div>${a.calif > 0 ? '<b class="up">▲</b> ' : a.calif < 0 ? '<b class="dn">▼</b> ' : '💬 '}<b>${esc(a.nombre)}</b>${a.comentario ? ' — ' + esc(a.comentario) : ''}</div>`).join('') : '<div class="empty">Sin marcas en el período.</div>'}</div>
     </div>
     <div class="card"><h3>🚫 Motivos de ausencia</h3>
@@ -1391,7 +1495,7 @@ function renderStats() {
 }
 function chartSesiones(pj) {
   if (!pj.length) return '<div class="empty">Sin entrenamientos en el período.</div>';
-  const W = 600, H = 200, pl = 28, pb = 22, max = Math.max(...pj.map(x => x.jt), 1), bw = (W - pl) / pj.length, col = { MIE: '#06b6d4', SAB: '#8b5cf6', PAR: '#f59e0b', OTR: '#94a3b8' };
+  const W = Math.max(300, Math.min(600, innerWidth - 56)), H = 200, pl = 28, pb = 22, max = Math.max(...pj.map(x => x.jt), 1), bw = (W - pl) / pj.length, col = { MIE: '#06b6d4', SAB: '#8b5cf6', PAR: '#f59e0b', OTR: '#94a3b8' };
   const y = v => H - pb - (v / max) * (H - pb - 10);
   let g = '';
   [0, .5, 1].forEach(t => { const v = Math.round(max * t); g += `<line x1="${pl}" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="rgba(255,255,255,.08)"/><text x="${pl - 4}" y="${y(v) + 3}" text-anchor="end">${v}</text>`; });
@@ -1404,7 +1508,7 @@ function chartSesiones(pj) {
 }
 function chartMeses(meses, mes) {
   if (!meses.length) return '<div class="empty">Sin datos.</div>';
-  const W = 600, H = 200, pb = 22, bw = W / meses.length, y80 = H - pb - (H - pb - 14) * .8;
+  const W = Math.max(300, Math.min(600, innerWidth - 56)), H = 200, pb = 22, bw = W / meses.length, y80 = H - pb - (H - pb - 14) * .8;
   let g = `<line x1="0" x2="${W}" y1="${y80}" y2="${y80}" stroke="rgba(34,197,94,.35)" stroke-dasharray="4 4"/><text x="${W - 2}" y="${y80 - 4}" text-anchor="end">80%</text>`;
   meses.forEach((m, i) => { const p = pct(...mes[m]), h = (H - pb - 14) * p / 100, bx = i * bw + bw * .2, w = bw * .6; g += `<rect x="${bx}" y="${H - pb - h}" width="${w}" height="${h}" rx="4" fill="${p >= 80 ? '#22c55e' : p >= 60 ? '#f59e0b' : '#ef4444'}"/><text x="${bx + w / 2}" y="${H - pb - h - 4}" text-anchor="middle" style="fill:#f1f5f9;font-weight:700">${p}%</text><text x="${bx + w / 2}" y="${H - 6}" text-anchor="middle">${MESES[Number(m.slice(5, 7)) - 1]}</text>`; });
   return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Asistencia por mes">${g}</svg>`;
@@ -1446,8 +1550,20 @@ function abrirAjustes() {
   <div class="list-i"><span class="grow">Última sincronización</span><b>${ULTIMA_SYNC || '—'}</b></div>
   <div class="list-i"><span class="grow">Cambios pendientes de subir</span><b style="color:${PEND.length ? 'var(--am2)' : 'var(--gr2)'}">${PEND.length}</b></div>
   <div class="mact"><button class="btn pri" onclick="cerrarModal();refrescar(true).then(ok=>toast(ok?'🔄 Datos actualizados':'📶 Sin conexión',!ok))">🔄 Actualizar datos</button>${PEND.length ? `<button class="btn" onclick="cerrarModal();subirPendientes().then(ok=>toast(ok?'✅ Cambios subidos':'📶 Todavía sin conexión',!ok))">⬆️ Subir pendientes</button>` : ''}</div>
+  ${isAdmin() ? `<label class="lbl" style="margin-top:16px">🕒 Horarios predeterminados</label>
+  <div class="small muted" style="margin-bottom:6px">Se cargan solos al crear un entrenamiento; en cada uno se pueden cambiar.</div>
+  <div class="small" style="font-weight:800;margin:6px 0 4px">Miércoles <span class="muted" style="font-weight:500">· desde / hasta</span></div>
+  <div class="grid" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px"><input type="time" id="hMie1" value="${hIni(DB.CONFIG.HORARIO_MIE || HORARIOS_DEF.MIE)}"><input type="time" id="hMie2" value="${hFin(DB.CONFIG.HORARIO_MIE || HORARIOS_DEF.MIE)}"></div>
+  <div class="small" style="font-weight:800;margin:10px 0 4px">Sábado <span class="muted" style="font-weight:500">· desde / hasta</span></div>
+  <div class="grid" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px"><input type="time" id="hSab1" value="${hIni(DB.CONFIG.HORARIO_SAB || HORARIOS_DEF.SAB)}"><input type="time" id="hSab2" value="${hFin(DB.CONFIG.HORARIO_SAB || HORARIOS_DEF.SAB)}"></div>
+  <button class="btn sm" style="width:100%;margin-top:8px" onclick="guardarHorarios()">💾 Guardar horarios</button>` : ''}
   <div class="mact"><button class="btn red" onclick="salir()">🔒 Cerrar sesión</button></div>
   <p class="small muted" style="margin-top:12px">${isAdmin() ? 'Como administrador ves y editás las calificaciones (niveles) de los jugadores.' : 'Con el PIN de staff no se ven las calificaciones de los jugadores.'}</p>`);
+}
+async function guardarHorarios() {
+  const v = (a, b) => $(a).value + ($(b).value ? '-' + $(b).value : '');
+  const rows = [{ clave: 'HORARIO_MIE', valor: v('hMie1', 'hMie2'), descripcion: 'Horario predeterminado miércoles (desde-hasta)' }, { clave: 'HORARIO_SAB', valor: v('hSab1', 'hSab2'), descripcion: 'Horario predeterminado sábado (desde-hasta)' }];
+  cerrarModal(); await guardar([{ op: 'upsert', sheet: 'CONFIG', key: 'clave', rows }], '🕒 Horarios guardados'); renderTab();
 }
 window.addEventListener('beforeunload', e => { if ((AS && AS.sucio) || PEND.length) { e.preventDefault(); e.returnValue = ''; } });
 $('pinIn').addEventListener('keydown', e => { if (e.key === 'Enter') entrar(); });
