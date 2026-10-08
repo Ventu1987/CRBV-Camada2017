@@ -281,6 +281,9 @@ th .ar{color:var(--cy);font-size:.8em}
 @media print{.ficha{border-radius:0;padding:0}.ficha .pg{grid-template-columns:repeat(2,1fr)!important}}
 
 /* ===== v3 · sistema móvil unificado ===== */
+.step{display:flex;align-items:center;gap:.55rem;font-weight:900;font-size:1rem;margin:18px 0 8px}
+.step span{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--cy),var(--cy2));color:#04131a;display:inline-flex;align-items:center;justify-content:center;font-size:.85rem}
+#eqBox .teams{margin-top:4px}
 .plan-h{width:100%;display:flex;align-items:center;gap:.5rem;background:none;border:none;text-align:left;font-weight:800;font-size:.95rem;min-height:var(--tap-sm);padding:0}
 .plan-h .chev{color:var(--tx3);font-size:.8rem;width:20px;text-align:center}
 .lbl.t0{margin-top:0}
@@ -407,7 +410,6 @@ th,td{padding:.55rem .5rem}
   <div class="banner hidden" id="banner"></div>
   <section id="v-inicio"></section>
   <section id="v-asistencia" class="hidden"></section>
-  <section id="v-equipos" class="hidden"></section>
   <section id="v-plantel" class="hidden"></section>
   <section id="v-gira" class="hidden"></section>
   <section id="v-stats" class="hidden"></section>
@@ -427,7 +429,7 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbw3STeF0y6gLe6DfeLqwrk5
 const TIPOS = { MIE: 'Miércoles', SAB: 'Sábado', PAR: 'Partido / Encuentro', OTR: 'Otro' };
 const TIPOS_C = { MIE: 'Miércoles', SAB: 'Sábado', PAR: 'Partido', OTR: 'Otro' };
 const MOTIVOS = ['Sin aviso', 'Avisó', 'Lesionado', 'Enfermo'];
-const TABS = [['inicio', '🏠', 'Inicio'], ['asistencia', '✅', 'Asistencia'], ['equipos', '🧩', 'Equipos'], ['plantel', '👥', 'Plantel'], ['gira', '🚌', 'Gira'], ['stats', '📊', 'Estadísticas']];
+const TABS = [['inicio', '🏠', 'Inicio'], ['asistencia', '🏉', 'Entrenamiento'], ['plantel', '👥', 'Plantel'], ['gira', '🚌', 'Gira'], ['stats', '📊', 'Estadísticas']];
 const LS = { pin: 'm9_pin', cache: 'm9_cache_v2', pend: 'm9_pend_v2', tab: 'm9_tab', draft: 'm9_equipos_draft' };
 
 /* ---------- utilidades ---------- */
@@ -677,7 +679,7 @@ function ir(tab) {
   TABS.forEach(([k]) => $('v-' + k).classList.toggle('hidden', k !== tab));
   renderNav(); renderTab(); window.scrollTo(0, 0);
 }
-function renderTab() { if (!DB) return; ({ inicio: renderInicio, asistencia: renderAsistencia, equipos: renderEquipos, plantel: renderPlantel, gira: renderGira, stats: renderStats })[TAB](); }
+function renderTab() { if (!DB) return; ({ inicio: renderInicio, asistencia: renderAsistencia, plantel: renderPlantel, gira: renderGira, stats: renderStats })[TAB](); }
 
 /* =====================================================================
    MOTOR DE ESTADÍSTICAS
@@ -766,7 +768,7 @@ function renderInicio() {
       <div class="row" style="margin-top:10px"><button class="btn pri" onclick="irAsistencia('${prox}')">✅ Tomar asistencia</button><button class="btn" onclick="irAsistencia('${prox}',null,true)">📋 Planificación</button></div>
     </div>
     <div class="qa" style="margin:0;grid-template-columns:1fr 1fr">
-      <button onclick="ir('equipos')">🧩 Armar equipos<small>con los presentes del día</small></button>
+      <button onclick="irAsistencia(hoyISO())">🏉 Entrenamiento de hoy<small>asistencia y equipos</small></button>
       <button onclick="ir('gira')">🚌 ${esc(C.GIRA_NOMBRE || 'Gira')}<small>${cuenta || 'quiénes viajan'}</small></button>
       <button onclick="ir('stats')">📊 Estadísticas<small>asistencia y destacados</small></button>
       <button onclick="ir('plantel')">👥 Plantel<small>altas, bajas y datos</small></button>
@@ -797,6 +799,7 @@ function cargarSesionAS(fecha, tipo) {
   const regs = DB.ASISTENCIA.filter(a => a.sesion_id === id);
   const marcas = {};
   regs.forEach(a => marcas[a.persona_tipo + '-' + a.persona_id] = { estado: a.estado === 'A' ? 'A' : 'P', calif: Number(a.calif || 0), comentario: a.comentario || '', motivo: a.motivo || '' });
+  if (EQ.fuente === 'S:' + id) EQ.fuente = '';
   AS = { fecha, tipo, id, hora: (s && s.hora) || horarioDef(fecha), detalle: s ? s.detalle || '' : '', notas: s ? s.notas || '' : '', archivos: s ? [...s.archivos] : [], vista: (AS && AS.vista) || 'J', filtro: '', marcas, abiertos: new Set(), existe: !!s, tomada: regs.length > 0, sucio: false };
   personasAS().J.concat(personasAS().E).forEach(p => { if (!AS.marcas[p.k]) AS.marcas[p.k] = { estado: 'P', calif: 0, comentario: '', motivo: '' }; });
 }
@@ -814,7 +817,8 @@ function renderAsistencia() {
   const cA = conAsistencia();
   const hist = sesionesOrd().map(s => { const r = DB.ASISTENCIA.filter(a => a.sesion_id === s.id); return { s, jp: r.filter(a => a.persona_tipo === 'J' && a.estado === 'P').length, jt: r.filter(a => a.persona_tipo === 'J').length, ep: r.filter(a => a.persona_tipo === 'E' && a.estado === 'P').length, tomada: cA.has(s.id) }; });
   $('v-asistencia').innerHTML = `
-  <h2 class="sec">✅ Entrenamiento</h2><div style="margin:-6px 0 10px">${AS.tomada ? '<span class="pill" style="background:rgba(34,197,94,.15);color:var(--gr2)">Asistencia guardada · editando</span>' : AS.existe ? '<span class="pill" style="background:rgba(6,182,212,.15);color:#67e8f9">Planificado · falta asistencia</span>' : '<span class="pill" style="background:rgba(245,158,11,.15);color:var(--am2)">Entrenamiento nuevo</span>'}</div>
+  <h2 class="sec">🏉 Entrenamiento</h2><div style="margin:-6px 0 10px">${AS.tomada ? '<span class="pill" style="background:rgba(34,197,94,.15);color:var(--gr2)">Asistencia guardada · editando</span>' : AS.existe ? '<span class="pill" style="background:rgba(6,182,212,.15);color:#67e8f9">Planificado · falta asistencia</span>' : '<span class="pill" style="background:rgba(245,158,11,.15);color:var(--am2)">Entrenamiento nuevo</span>'}</div>
+  <div class="step"><span>1</span>Datos del día</div>
   <div class="card">
     <div class="att-head" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
       <div><label class="tiny muted">Fecha</label><input type="date" id="asFecha" value="${AS.fecha}" onchange="cambiarSesionAS()"></div>
@@ -824,13 +828,16 @@ function renderAsistencia() {
       <div style="grid-column:1/-1"><label class="tiny muted">${AS.tipo === 'PAR' ? 'Rival / lugar' : 'Detalle'}</label><input id="asDet" value="${esc(AS.detalle)}" placeholder="${AS.tipo === 'PAR' ? 'vs. …' : 'Opcional'}" oninput="AS.detalle=this.value;AS.sucio=true"></div>
     </div>
   </div>
-  <div class="card" id="asPlanCard"><button class="plan-h" onclick="AS.planOpen=!AS.planOpen;renderAsistencia()"><span class="grow">📋 Planificación del entrenamiento del día</span>${AS.notas || AS.archivos.length ? `<span class="pill" style="background:rgba(6,182,212,.15);color:#67e8f9">${AS.notas ? '📝' : ''}${AS.archivos.length ? ' 📎' + AS.archivos.length : ''}</span>` : '<span class="pill" style="background:rgba(148,163,184,.15)">vacía</span>'}<span class="chev">${AS.planOpen ? '▲' : '▼'}</span></button>
+  <div class="step"><span>2</span>Planificación</div>
+  <div class="card" id="asPlanCard"><button class="plan-h" onclick="AS.planOpen=!AS.planOpen;renderAsistencia()"><span class="grow">📋 ${AS.planOpen ? 'Plan del día' : (AS.notas || AS.archivos.length ? 'Ver planificación del día' : 'Cargar planificación del día')}<div class="small muted" style="font-weight:500;margin-top:2px">Objetivos, ejercicios, foto o PDF</div></span>${AS.notas || AS.archivos.length ? `<span class="pill" style="background:rgba(6,182,212,.15);color:#67e8f9">${AS.notas ? '📝' : ''}${AS.archivos.length ? ' 📎' + AS.archivos.length : ''}</span>` : '<span class="pill" style="background:rgba(148,163,184,.15)">vacía</span>'}<span class="chev">${AS.planOpen ? '▲' : '▼'}</span></button>
     ${AS.planOpen ? `<div style="margin-top:10px"><textarea id="asNotas" rows="3" placeholder="Objetivos, bloques, ejercicios, tiempos…" oninput="AS.notas=this.value;AS.sucio=true">${esc(AS.notas)}</textarea>
     <div class="files" id="asFiles">${filesHTML(AS.archivos, true)}<label class="upl" id="uplBtn"><span>📎</span>Foto o PDF<input type="file" accept="image/*,application/pdf" multiple class="hidden" onchange="subirArchivosAS(this.files);this.value=''"></label></div>
     <button class="btn sm" style="width:100%;margin-top:10px" onclick="guardarPlanAS()">💾 Guardar solo la planificación</button>
     <div class="small muted" style="margin-top:6px">Podés cargarla antes del entrenamiento.</div></div>` : ''}
   </div>
-  <h3 class="sub-h">👥 Asistencia</h3>
+  <div class="step"><span>3</span>Asistencia</div>
+  ${AS.tomada && !AS.listaOpen ? `<div class="card"><button class="plan-h" onclick="AS.listaOpen=true;renderAsistencia()"><span class="grow">✅ Asistencia tomada<div class="small muted" style="font-weight:500;margin-top:3px;line-height:1.5">👦 <b style="color:var(--gr2)">${cj.P}</b> presentes · <b style="color:var(--rd2)">${cj.A}</b> ausentes<br>🧢 <b style="color:var(--gr2)">${ce.P}</b> de ${ce.P + ce.A} entrenadores</div></span><span class="btn sm">✏️ Editar</span></button></div>` : `
+  <div id="asBloque">
   <div class="att-legend"><span>Todos arrancan <b style="color:var(--gr2)">presentes</b>: tocá ✓ solo en los que faltan.</span><span>⋯ = destacar o comentar</span></div>
   <div class="att-tools">
     <div class="seg full"><button class="${AS.vista === 'J' ? 'on' : ''}" onclick="AS.vista='J';renderAsistencia()">Jugadores <span class="c">${J.length}</span></button><button class="${AS.vista === 'E' ? 'on' : ''}" onclick="AS.vista='E';renderAsistencia()">Entrenadores <span class="c">${E.length}</span></button></div>
@@ -840,11 +847,13 @@ function renderAsistencia() {
   <div class="att-list" id="asLista"></div>
   <div class="stick">
     <div class="grow cnt small" id="asCont"></div>
-    <button class="btn grn" onclick="guardarAS()">💾 Guardar</button>
+    <button class="btn grn" onclick="guardarAS()">💾 ${AS.tomada ? 'Guardar cambios' : 'Guardar asistencia'}</button>
   </div>
-  <div class="acts">
-    <button class="btn vio" onclick="equiposDesdeSesion('${AS.id}')" ${AS.tomada ? '' : 'disabled'}>🧩 Armar equipos</button>
-    <button class="btn pri" onclick="fichaEntrenamiento('${AS.id}')" ${AS.existe ? '' : 'disabled'}>📄 Ficha (PDF / imagen)</button>
+  </div>`}
+  <div class="step"><span>4</span>Equipos</div>
+  <div id="eqBox">${AS.tomada ? '' : '<div class="card"><div class="empty">🔒 Guardá la asistencia y los equipos se arman solos con los presentes.</div></div>'}</div>
+  <div class="acts" style="grid-template-columns:1fr">
+    <button class="btn pri" onclick="fichaEntrenamiento('${AS.id}')" ${AS.existe ? '' : 'disabled'}>📄 Ficha del entrenamiento (PDF / imagen)</button>
   </div>
   ${AS.existe ? `<div style="text-align:right"><button class="btn red sm" onclick="borrarSesionAS()">🗑 Borrar entrenamiento</button></div>` : ''}
   <div class="card" style="margin-top:14px"><h3>🗂️ Historial de entrenamientos</h3>
@@ -858,7 +867,9 @@ function renderAsistencia() {
       { k: 'plan', t: 'Plan', num: 1, v: r => (r.s.notas ? 1 : 0) + r.s.archivos.length, h: r => (r.s.notas ? '📝' : '') + (r.s.archivos.length ? ' 📎' + r.s.archivos.length : '') }
     ], hist, { k: 'fecha', desc: true }, r => `class="clk" onclick="cargarSesionAS('${r.s.fecha}','${r.s.tipo}');renderAsistencia();window.scrollTo(0,0)"`)}
   </div>`;
-  renderListaAS(); cargarThumbs();
+  if ($('asLista')) renderListaAS();
+  if (AS.tomada) { if (EQ.fuente !== 'S:' + AS.id) setFuenteEQ('S:' + AS.id); renderEquipos(); }
+  cargarThumbs();
 }
 function renderContAS() {
   const { J, E } = personasAS(); const cj = contarAS(J), ce = contarAS(E);
@@ -902,7 +913,9 @@ async function guardarAS() {
   const { J, E } = personasAS(); const todos = J.concat(E);
   const rows = todos.map(p => { const m = AS.marcas[p.k] || {}; const est = m.estado === 'A' ? 'A' : 'P'; return { sesion_id: AS.id, fecha: AS.fecha, tipo: AS.tipo, persona_tipo: p.t, persona_id: p.id, nombre: p.nombre, estado: est, calif: m.calif || 0, comentario: m.comentario || '', motivo: est === 'A' ? (m.motivo || 'Sin aviso') : '' }; });
   await guardar([{ op: 'upsert', sheet: 'SESIONES', key: 'id', rows: [filaSesionAS()] }, { op: 'replace', sheet: 'ASISTENCIA', field: 'sesion_id', value: AS.id, rows }], '✅ Asistencia guardada');
-  const f = AS.fecha, t = AS.tipo; cargarSesionAS(f, t); renderAsistencia();
+  const f = AS.fecha, t = AS.tipo, nuevo = !AS.tomada; cargarSesionAS(f, t); renderAsistencia();
+  setTimeout(() => { const e = $('eqBox'); if (e) e.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150);
+  if (nuevo) toast('✅ Asistencia guardada · equipos armados');
 }
 async function guardarPlanAS() {
   await guardar([{ op: 'upsert', sheet: 'SESIONES', key: 'id', rows: [filaSesionAS()] }], '📋 Planificación guardada');
@@ -1029,25 +1042,31 @@ async function fichaImagen(sid) {
 /* =====================================================================
    EQUIPOS
    ===================================================================== */
-let EQ = { fuente: '', modo: 'mixtos', n: 6, presentesJ: new Set(), presentesE: new Set(), equipos: [], sel: null, verNiveles: true, ajustar: false, tipoEvento: 'entrenamiento', rival: '', fecha: '', cargando: false };
-function equiposDesdeSesion(sid) { EQ.fuente = ''; setFuenteEQ('S:' + sid); ir('equipos'); }
-function equiposDesdeGira() { setFuenteEQ('GIRA'); ir('equipos'); }
+let EQ = { fuente: '', modo: 'mixtos', n: 6, presentesJ: new Set(), presentesE: new Set(), equipos: [], sel: null, verNiveles: true, fecha: '', cargando: false, confirmados: false };
+// Los equipos se arman SIEMPRE desde lo ya cargado: presentes del entrenamiento o los que viajan a la gira.
+function equiposDesdeSesion(sid) { const s = DB.SESIONES.find(x => x.id === sid); if (s) irAsistencia(s.fecha, s.tipo); setTimeout(() => { const e = $('eqBox'); if (e) e.scrollIntoView({ behavior: 'smooth' }); }, 120); }
+function equiposDesdeGira() { GI.eqOpen = true; ir('gira'); setTimeout(() => { const e = $('eqBox'); if (e) e.scrollIntoView({ behavior: 'smooth' }); }, 120); }
 function setFuenteEQ(f) {
   EQ.fuente = f; EQ.equipos = []; EQ.sel = null;
-  const J = jugActivos(), E = entActivos().filter(e => e.asigna_equipos !== 'NO');
+  const E = entActivos().filter(e => e.asigna_equipos !== 'NO');
   if (f.startsWith('S:')) {
     const sid = f.slice(2), r = DB.ASISTENCIA.filter(a => a.sesion_id === sid && a.estado === 'P');
     EQ.presentesJ = new Set(r.filter(a => a.persona_tipo === 'J').map(a => a.persona_id));
     EQ.presentesE = new Set(r.filter(a => a.persona_tipo === 'E').map(a => a.persona_id));
     const s = DB.SESIONES.find(x => x.id === sid); EQ.fecha = s ? s.fecha : hoyISO();
-    EQ.tipoEvento = s && s.tipo === 'PAR' ? 'partido' : 'entrenamiento'; EQ.rival = s && s.tipo === 'PAR' ? s.detalle || '' : '';
-  } else if (f === 'GIRA') {
-    EQ.presentesJ = new Set(J.filter(j => viaja('J', j.id)).map(j => j.id)); EQ.presentesE = new Set(E.filter(e => viaja('E', e.id)).map(e => e.id)); EQ.fecha = DB.CONFIG.GIRA_DESDE || hoyISO();
-  } else { EQ.presentesJ = new Set(J.map(j => j.id)); EQ.presentesE = new Set(E.map(e => e.id)); EQ.fecha = hoyISO(); }
-  if (DB.EQUIPOS.some(x => x.grupo_id === grupoIdEQ())) cargarGuardadoEQ(true); else generarEQ();
+  } else {
+    EQ.presentesJ = new Set(jugActivos().filter(j => viaja('J', j.id)).map(j => j.id)); EQ.presentesE = new Set(E.filter(e => viaja('E', e.id)).map(e => e.id)); EQ.fecha = String(DB.CONFIG.GIRA_DESDE || hoyISO()).slice(0, 10);
+  }
+  let d = null; try { d = JSON.parse(lsGet(LS.draft) || 'null'); } catch (e) {}
+  if (DB.EQUIPOS.some(x => x.grupo_id === grupoIdEQ())) cargarGuardadoEQ(true);
+  else if (d && d.fuente === f && d.equipos && d.equipos.length) { EQ.equipos = d.equipos; EQ.modo = d.modo || EQ.modo; EQ.n = d.n || EQ.n; EQ.confirmados = false; sincronizarEQ(); }
+  else { EQ.confirmados = false; generarEQ(); }
 }
-const grupoIdEQ = () => EQ.fuente.startsWith('S:') ? EQ.fuente.slice(2) : EQ.fuente === 'GIRA' ? 'GIRA' : 'LIBRE_' + (EQ.fecha || hoyISO());
-function fuenteDefault() { const cA = conAsistencia(); const s = sesionesOrd().find(x => cA.has(x.id)); return s && s.fecha === hoyISO() ? 'S:' + s.id : 'TODOS'; }
+// saca de los equipos a quien ya no está presente / no viaja (los nuevos presentes quedan "sin equipo" para ubicarlos)
+function sincronizarEQ() {
+  EQ.equipos.forEach(e => { e.jugadores = e.jugadores.filter(id => EQ.presentesJ.has(id) && jugById(id)); e.entrenadores = e.entrenadores.filter(id => EQ.presentesE.has(id)); });
+}
+const grupoIdEQ = () => EQ.fuente.startsWith('S:') ? EQ.fuente.slice(2) : 'GIRA';
 
 // MISMA función que en Code.gs (el servidor la usa para el staff, que no ve niveles)
 function armarEquipos(J, E, presJ, presE, modo, n) {
@@ -1091,65 +1110,49 @@ function armarEquipos(J, E, presJ, presE, modo, n) {
 }
 async function generarEQ() {
   const presJ = [...EQ.presentesJ].filter(id => (jugById(id) || {}).activo !== 'NO'), presE = [...EQ.presentesE];
-  if (isAdmin()) { EQ.equipos = armarEquipos(jugActivos(), entActivos(), presJ, presE, EQ.modo, EQ.n); EQ.sel = null; guardarBorradorEQ(); return; }
-  EQ.cargando = true; if (TAB === 'equipos') renderEquipos();
+  if (isAdmin()) { EQ.equipos = armarEquipos(jugActivos(), entActivos(), presJ, presE, EQ.modo, EQ.n); EQ.sel = null; EQ.confirmados = false; guardarBorradorEQ(); return; }
+  EQ.cargando = true; renderEquipos();
   try { const j = await llamar(null, { action: 'equipos', presJ, presE, modo: EQ.modo, n: EQ.n }); EQ.equipos = j.equipos; EQ.sel = null; guardarBorradorEQ(); }
   catch (e) { toast('⚠️ Para mezclar equipos hace falta conexión', true); }
-  EQ.cargando = false; if (TAB === 'equipos') renderEquipos();
+  EQ.cargando = false; EQ.confirmados = false; renderEquipos();
 }
 async function regenerarEQ() { await generarEQ(); renderEquipos(); }
 function guardarBorradorEQ() { lsSet(LS.draft, JSON.stringify({ fuente: EQ.fuente, equipos: EQ.equipos, modo: EQ.modo, n: EQ.n })); }
 function promEQ(eq) { const js = eq.jugadores.map(jugById).filter(Boolean); return js.length ? js.reduce((s, j) => s + nivelNum(j), 0) / js.length : 0; }
-function renderEquipos() {
-  if (!EQ.fuente) {
-    let d = null; try { d = JSON.parse(lsGet(LS.draft) || 'null'); } catch (e) {}
-    if (d && d.equipos && d.equipos.length) { const f = d.fuente || fuenteDefault(); EQ.fuente = f; setFuenteEQ(f); EQ.equipos = d.equipos; EQ.modo = d.modo || EQ.modo; EQ.n = d.n || EQ.n; }
-    else setFuenteEQ(fuenteDefault());
-  }
-  const cA = conAsistencia(); const ses = sesionesOrd().filter(s => cA.has(s.id)).slice(0, 40);
+function renderEquipos() { const box = $('eqBox'); if (box) box.innerHTML = equiposHTML(); }
+function equiposHTML() {
   const J = jugActivos(), E = entActivos();
-  const nPres = J.filter(j => EQ.presentesJ.has(j.id)).length;
+  const nPres = J.filter(j => EQ.presentesJ.has(j.id)).length, nPresE = E.filter(e => EQ.presentesE.has(e.id)).length;
   const adm = isAdmin(), verN = adm && EQ.verNiveles;
   const proms = EQ.equipos.map(promEQ); const dif = proms.length ? Math.max(...proms) - Math.min(...proms) : 0;
-  const asignadosE = new Set(EQ.equipos.flatMap(e => e.entrenadores));
-  const libresE = E.filter(e => EQ.presentesE.has(e.id) && e.asigna_equipos !== 'NO' && !asignadosE.has(e.id));
+  const asigJ = new Set(EQ.equipos.flatMap(e => e.jugadores)), asigE = new Set(EQ.equipos.flatMap(e => e.entrenadores));
+  const libresJ = J.filter(j => EQ.presentesJ.has(j.id) && !asigJ.has(j.id));
+  const libresE = E.filter(e => EQ.presentesE.has(e.id) && e.asigna_equipos !== 'NO' && !asigE.has(e.id));
   const hayGuardado = DB.EQUIPOS.some(x => x.grupo_id === grupoIdEQ());
   const sid = EQ.fuente.startsWith('S:') ? EQ.fuente.slice(2) : '';
-  $('v-equipos').innerHTML = `
-  <h2 class="sec">🧩 Armado de equipos ${EQ.cargando ? '<span class="spin"></span>' : ''}</h2>
-  <div class="card">
-    <label class="lbl t0">¿Con quiénes?</label>
-    <select onchange="setFuenteEQ(this.value);renderEquipos()">
-      <option value="TODOS" ${EQ.fuente === 'TODOS' ? 'selected' : ''}>Todo el plantel activo</option>
-      <option value="GIRA" ${EQ.fuente === 'GIRA' ? 'selected' : ''}>🚌 Los que viajan a la gira</option>
-      <optgroup label="Presentes de un entrenamiento">${ses.map(s => `<option value="S:${s.id}" ${EQ.fuente === 'S:' + s.id ? 'selected' : ''}>${nombreEntreno(s)}</option>`).join('')}</optgroup>
-    </select>
-    <div class="row" style="margin-top:8px"><span class="grow">👦 <b>${nPres}</b> jugadores<br>🧢 <b>${E.filter(e => EQ.presentesE.has(e.id)).length}</b> entrenadores</span><button class="btn sm" onclick="EQ.ajustar=!EQ.ajustar;renderEquipos()">${EQ.ajustar ? 'Ocultar' : 'Ajustar'}</button></div>
+  const origen = sid ? 'presentes de la asistencia' : 'que viajan a la gira';
+  if (!nPres) return `<div class="empty">${sid ? 'No hay jugadores presentes en este entrenamiento.' : 'Todavía no hay jugadores marcados para viajar.'}</div>`;
+  return `
+    <div class="row" style="margin-bottom:10px"><span class="grow small">Se arman solos con los <b>${nPres} jugadores</b> y <b>${nPresE} entrenadores</b> ${origen}.</span>${EQ.cargando ? '<span class="spin"></span>' : EQ.confirmados ? '<span class="pill" style="background:rgba(34,197,94,.15);color:var(--gr2)">✓ Confirmados</span>' : '<span class="pill" style="background:rgba(245,158,11,.15);color:var(--am2)">Sin confirmar</span>'}</div>
     <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0 16px">
-      <div><label class="lbl">Tipo de equipos</label>
+      <div><label class="lbl t0">Tipo de equipos</label>
       <div class="seg full"><button class="${EQ.modo === 'mixtos' ? 'on' : ''}" onclick="EQ.modo='mixtos';regenerarEQ()">🔀 Mixtos</button><button class="${EQ.modo === 'por-nivel' ? 'on' : ''}" onclick="EQ.modo='por-nivel';if(EQ.n<3)EQ.n=3;regenerarEQ()">📊 Por nivel</button></div></div>
       <div><label class="lbl">Cantidad de equipos</label>
-      <div class="stepper"><button onclick="if(EQ.n>2){EQ.n--;regenerarEQ()}" aria-label="Menos equipos">−</button><div class="v"><b>${EQ.n}</b>~${EQ.n ? Math.ceil(nPres / EQ.n) : 0} por equipo</div><button onclick="if(EQ.n<12){EQ.n++;regenerarEQ()}" aria-label="Más equipos">+</button></div></div>
+      <div class="stepper"><button onclick="if(EQ.n>2){EQ.n--;regenerarEQ()}" aria-label="Menos equipos">−</button><div class="v"><b>${EQ.n}</b>~${Math.ceil(nPres / EQ.n)} por equipo</div><button onclick="if(EQ.n<12){EQ.n++;regenerarEQ()}" aria-label="Más equipos">+</button></div></div>
     </div>
-    <div class="small muted" style="margin-top:8px">${EQ.modo === 'mixtos' ? 'Equipos parejos, con niveles mezclados.' : '2 equipos Gloriosa + el resto por nivel.'}</div>
-  </div>
-  ${EQ.ajustar ? `<div class="card"><div class="grid g2">
-    <div><h3>👦 Jugadores <span class="sp"></span><button class="btn sm" onclick="todosEQ('J',true)">Todos</button> <button class="btn sm" onclick="todosEQ('J',false)">Ninguno</button></h3><div class="ckl">${J.map(j => `<label><input type="checkbox" ${EQ.presentesJ.has(j.id) ? 'checked' : ''} onchange="togglePresEQ('J','${j.id}',this.checked)"> ${esc(j.nombre)} ${nivelBadge(j)}</label>`).join('')}</div></div>
-    <div><h3>🧢 Entrenadores</h3><div class="ckl">${E.map(e => `<label><input type="checkbox" ${EQ.presentesE.has(e.id) ? 'checked' : ''} onchange="togglePresEQ('E','${e.id}',this.checked)"> ${esc(entNom(e))} <span class="muted small">${esc(e.rol || '')}${e.asigna_equipos === 'NO' ? ' · no se asigna' : ''}</span></label>`).join('')}</div></div>
-  </div><button class="btn pri" style="margin-top:10px;width:100%" onclick="regenerarEQ()">🔄 Rearmar con esta selección</button></div>` : ''}
-  <div class="acts">
-    <button class="btn vio" onclick="regenerarEQ()" ${EQ.cargando ? 'disabled' : ''}>🔄 Mezclar</button>
-    <button class="btn grn" onclick="guardarEQ()">💾 Confirmar</button>
-    <button class="btn pri" onclick="copiarEQ()">📋 WhatsApp</button>
-    ${sid ? `<button class="btn" onclick="fichaEntrenamiento('${sid}')">📄 Ficha</button>` : `<button class="btn" onclick="imprimirEQ()">🖨️ PDF</button>`}
-  </div>
-  <div class="row" style="margin-bottom:8px">${hayGuardado ? `<button class="btn sm" onclick="cargarGuardadoEQ();renderEquipos()">↩︎ Volver a los confirmados</button>` : ''}${adm ? `<label class="small row" style="gap:.4rem;margin-left:auto;min-height:36px"><input type="checkbox" style="width:20px;height:20px;min-height:0" ${EQ.verNiveles ? 'checked' : ''} onchange="EQ.verNiveles=this.checked;renderEquipos()"> ver niveles</label>` : ''}</div>
-  ${!sid ? `<div class="card"><div class="seg full"><button class="${EQ.tipoEvento === 'entrenamiento' ? 'on' : ''}" onclick="EQ.tipoEvento='entrenamiento';renderEquipos()">🏋️ Entrenamiento</button><button class="${EQ.tipoEvento === 'partido' ? 'on' : ''}" onclick="EQ.tipoEvento='partido';renderEquipos()">🏉 Partido</button></div><div class="grid" style="grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">${EQ.tipoEvento === 'partido' ? `<input placeholder="vs. (rival)" value="${esc(EQ.rival)}" oninput="EQ.rival=this.value">` : ''}<input type="date" value="${EQ.fecha}" onchange="EQ.fecha=this.value" ${EQ.tipoEvento === 'partido' ? '' : 'style="grid-column:1/-1"'}></div></div>` : ''}
-  ${verN && dif >= .5 ? `<div class="warn">⚠️ Diferencia de nivel entre equipos: ${dif.toFixed(2)}. Mezclá de nuevo o mové jugadores.</div>` : ''}
-  ${libresE.length ? `<div class="warn">🧢 Entrenadores presentes sin equipo: ${libresE.map(e => `<span class="chip" onclick="selEQ('E','${e.id}',0)">${esc(entNom(e))}</span>`).join('')}</div>` : ''}
-  <div class="small muted" style="margin:8px 0">Para mover: tocá un jugador o entrenador y después <b>⇢ Mover acá</b> en el equipo destino (en compu también podés arrastrar). Tocá el nombre del equipo para cambiarlo.</div>
-  <div class="teams">${EQ.equipos.map(eq => teamHTML(eq, verN)).join('') || '<div class="empty">No hay jugadores seleccionados.</div>'}</div>
-  ${EQ.sel ? `<div class="selbar"><span class="grow">👉 <b>${esc(EQ.sel.t === 'J' ? (jugById(EQ.sel.id) || {}).nombre : entNom(entById(EQ.sel.id)))}</b><br><span class="small">Tocá "⇢ Mover acá" en el equipo destino</span></span><button class="btn sm" onclick="EQ.sel=null;renderEquipos()">Cancelar</button></div>` : ''}`;
+    <div class="acts">
+      <button class="btn vio" onclick="regenerarEQ()" ${EQ.cargando ? 'disabled' : ''}>🔄 Mezclar</button>
+      <button class="btn grn" onclick="guardarEQ()">💾 Confirmar</button>
+      <button class="btn pri" onclick="copiarEQ()">📋 WhatsApp</button>
+      ${sid ? `<button class="btn" onclick="fichaEntrenamiento('${sid}')">📄 Ficha</button>` : `<button class="btn" onclick="imprimirEQ()">🖨️ PDF</button>`}
+    </div>
+    ${hayGuardado && !EQ.confirmados || adm ? `<div class="row" style="margin-bottom:6px">${hayGuardado && !EQ.confirmados ? `<button class="btn sm" onclick="cargarGuardadoEQ();renderEquipos()">↩︎ Volver a los confirmados</button>` : ''}${adm ? `<label class="small row" style="gap:.4rem;margin-left:auto;min-height:36px"><input type="checkbox" style="width:20px;height:20px;min-height:0" ${EQ.verNiveles ? 'checked' : ''} onchange="EQ.verNiveles=this.checked;renderEquipos()"> ver niveles</label>` : ''}</div>` : ''}
+    ${verN && dif >= .5 ? `<div class="warn">⚠️ Diferencia de nivel entre equipos: ${dif.toFixed(2)}. Mezclá de nuevo o mové jugadores.</div>` : ''}
+    ${libresJ.length ? `<div class="warn">👦 Presentes sin equipo (tocá uno y después "Mover acá"): ${libresJ.map(j => `<span class="chip ${EQ.sel && EQ.sel.id === j.id ? 'sel' : ''}" style="background:rgba(6,182,212,.18)" onclick="selEQ('J','${j.id}',0)">${esc(j.nombre)}</span>`).join('')}</div>` : ''}
+    ${libresE.length ? `<div class="warn">🧢 Entrenadores sin equipo: ${libresE.map(e => `<span class="chip ${EQ.sel && EQ.sel.id === e.id ? 'sel' : ''}" onclick="selEQ('E','${e.id}',0)">${esc(entNom(e))}</span>`).join('')}</div>` : ''}
+    <div class="small muted" style="margin:8px 0">Para mover: tocá un jugador o entrenador y después <b>⇢ Mover acá</b> en el equipo destino. Tocá el nombre del equipo para cambiarlo.</div>
+    <div class="teams">${EQ.equipos.map(eq => teamHTML(eq, verN)).join('')}</div>
+    ${EQ.sel ? `<div class="selbar"><span class="grow">👉 <b>${esc(EQ.sel.t === 'J' ? (jugById(EQ.sel.id) || {}).nombre : entNom(entById(EQ.sel.id)))}</b><br><span class="small">Tocá "⇢ Mover acá" en el equipo destino</span></span><button class="btn sm" onclick="EQ.sel=null;renderEquipos()">Cancelar</button></div>` : ''}`;
 }
 function teamHTML(eq, verN) {
   return `<div class="team" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="dropEQ(event,${eq.id})">
@@ -1168,14 +1171,12 @@ function moverEQ(to) {
   const dest = EQ.equipos.find(e => e.id === to), orig = EQ.equipos.find(e => e.id === s.from), campo = s.t === 'J' ? 'jugadores' : 'entrenadores';
   if (orig) orig[campo] = orig[campo].filter(x => x !== s.id);
   if (!dest[campo].includes(s.id)) dest[campo].push(s.id);
-  EQ.sel = null; guardarBorradorEQ(); renderEquipos(); toast('✓ Movido a ' + dest.nombre);
+  EQ.sel = null; EQ.confirmados = false; guardarBorradorEQ(); renderEquipos(); toast('✓ Movido a ' + dest.nombre);
 }
-function renombrarEQ(id, txt) { const e = EQ.equipos.find(x => x.id === id); if (e && txt.trim()) { e.nombre = txt.trim(); guardarBorradorEQ(); } }
-function togglePresEQ(t, id, on) { const s = t === 'J' ? EQ.presentesJ : EQ.presentesE; on ? s.add(id) : s.delete(id); }
-function todosEQ(t, on) { const s = t === 'J' ? EQ.presentesJ : EQ.presentesE; s.clear(); if (on) (t === 'J' ? jugActivos() : entActivos()).forEach(x => s.add(x.id)); renderEquipos(); }
+function renombrarEQ(id, txt) { const e = EQ.equipos.find(x => x.id === id); if (e && txt.trim() && e.nombre !== txt.trim()) { e.nombre = txt.trim(); EQ.confirmados = false; guardarBorradorEQ(); renderEquipos(); } }
 function textoEQ() {
   const s = EQ.fuente.startsWith('S:') && DB.SESIONES.find(x => x.id === EQ.fuente.slice(2));
-  const cab = s ? `${s.tipo === 'PAR' ? 'PARTIDO' + (s.detalle ? ' vs ' + s.detalle : '') : 'ENTRENAMIENTO'} · ${fmtF(s.fecha)}${horaSes(s) ? ' · ' + fmtHora(horaSes(s)) : ''}` : `${EQ.tipoEvento === 'partido' ? 'PARTIDO' + (EQ.rival ? ' vs ' + EQ.rival : '') : 'ENTRENAMIENTO'} · ${fmtF(EQ.fecha)}`;
+  const cab = s ? `${s.tipo === 'PAR' ? 'PARTIDO' + (s.detalle ? ' vs ' + s.detalle : '') : 'ENTRENAMIENTO'} · ${fmtF(s.fecha)}${horaSes(s) ? ' · ' + fmtHora(horaSes(s)) : ''}` : `🚌 ${DB.CONFIG.GIRA_NOMBRE || 'GIRA'}`;
   return `🏉 *REGATAS M9 · Camada 2017*\n${cab}\n\n` + EQ.equipos.map(eq => `*${eq.nombre}* (${eq.jugadores.length})\n🧢 ${eq.entrenadores.map(id => entNom(entById(id))).join(', ') || 'Sin asignar'}\n` + eq.jugadores.map((id, i) => `${i + 1}. ${(jugById(id) || {}).nombre || ''}`).join('\n')).join('\n\n');
 }
 function copiarTexto(t, ok) { (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast(ok)).catch(() => prompt('Copiá el texto:', t)); }
@@ -1187,18 +1188,20 @@ async function guardarEQ() {
     eq.jugadores.forEach(id => rows.push({ grupo_id: g, fecha: EQ.fecha, contexto: ctx, equipo: eq.nombre, persona_tipo: 'J', persona_id: id, nombre: (jugById(id) || {}).nombre || '' }));
   });
   await guardar([{ op: 'replace', sheet: 'EQUIPOS', field: 'grupo_id', value: g, rows }], '💾 Equipos confirmados y guardados');
-  renderEquipos();
+  EQ.confirmados = true; renderEquipos();
 }
 function cargarGuardadoEQ(silencioso) {
   const rows = DB.EQUIPOS.filter(x => x.grupo_id === grupoIdEQ()), nombres = [...new Set(rows.map(r => r.equipo))];
   EQ.equipos = nombres.map((n, i) => ({ id: i + 1, nombre: n, jugadores: rows.filter(r => r.equipo === n && r.persona_tipo === 'J').map(r => r.persona_id), entrenadores: rows.filter(r => r.equipo === n && r.persona_tipo === 'E').map(r => r.persona_id) }));
-  EQ.n = nombres.length || EQ.n; EQ.sel = null; if (!silencioso) toast('Equipos guardados cargados');
+  EQ.n = nombres.length || EQ.n; EQ.sel = null; EQ.confirmados = true;
+  const antes = EQ.equipos.reduce((a, e) => a + e.jugadores.length + e.entrenadores.length, 0); sincronizarEQ();
+  if (EQ.equipos.reduce((a, e) => a + e.jugadores.length + e.entrenadores.length, 0) !== antes) EQ.confirmados = false;
+  if (!silencioso) toast('Equipos confirmados cargados');
 }
 function cabeceraPrint(derecha) { const C = DB.CONFIG; return `<div class="ph"><img src="${esc(C.ESCUDO_URL || 'escudo.png')}" onerror="this.src=ESCUDO_FALLBACK"><div><div class="a">${esc(C.CLUB || 'Regatas Bella Vista')}</div><div class="b">${esc(C.DIVISION || 'M9')} · Camada ${esc(C.CAMADA || '2017')}</div></div><div class="c">${derecha}</div></div>`; }
 function imprimirEQ() {
   if (!EQ.equipos.length) return toast('No hay equipos armados', true);
-  const ev = EQ.tipoEvento === 'partido' ? '🏉 PARTIDO' + (EQ.rival ? ' vs ' + esc(EQ.rival) : '') : '🏋️ ENTRENAMIENTO';
-  $('printArea').innerHTML = cabeceraPrint(`${ev}<br>📅 ${fmtF(EQ.fecha)}`) + `<div class="pg">${EQ.equipos.map(eq => `<div class="pt"><h5>${esc(eq.nombre)} · ${eq.jugadores.length}</h5><div class="pc">Entrenadores: ${esc(eq.entrenadores.map(id => entNom(entById(id))).join(', ') || 'Sin asignar')}</div><ol>${eq.jugadores.map(id => `<li>${esc((jugById(id) || {}).nombre || '')}</li>`).join('')}</ol></div>`).join('')}</div>`;
+  $('printArea').innerHTML = cabeceraPrint(`🚌 ${esc(DB.CONFIG.GIRA_NOMBRE || 'Gira')}<br>Equipos de la gira`) + `<div class="pg">${EQ.equipos.map(eq => `<div class="pt"><h5>${esc(eq.nombre)} · ${eq.jugadores.length}</h5><div class="pc">Entrenadores: ${esc(eq.entrenadores.map(id => entNom(entById(id))).join(', ') || 'Sin asignar')}</div><ol>${eq.jugadores.map(id => `<li>${esc((jugById(id) || {}).nombre || '')}</li>`).join('')}</ol></div>`).join('')}</div>`;
   setTimeout(() => window.print(), 150);
 }
 
@@ -1331,7 +1334,7 @@ async function reactivar(t, id) { await guardar([{ op: 'upsert', sheet: t === 'J
 /* =====================================================================
    GIRA (jugadores y entrenadores en planillas separadas)
    ===================================================================== */
-let GI = { vista: 'SI', filtro: '' };
+let GI = { vista: 'SI', filtro: '', eqOpen: false };
 function filasGira() {
   const J = DB.JUGADORES.map(j => ({ t: 'J', id: j.id, nombre: j.nombre, rol: 'Jugador', dni: j.dni, nac: j.fecha_nac, activo: j.activo }));
   const E = DB.ENTRENADORES.map(e => ({ t: 'E', id: e.id, nombre: e.nombre || e.apodo, rol: e.rol, dni: e.dni, nac: e.fecha_nac, activo: e.activo }));
@@ -1368,7 +1371,6 @@ function renderGira() {
   <div class="gira-hero">
     ${C.GIRA_DESDE ? `<div><div class="big">${cuenta}</div><div class="small muted">${sub}</div></div>` : ''}
     <div class="grow"><div style="font-weight:800;font-size:1.05rem">${C.GIRA_DESDE ? '📅 ' + fmtF(C.GIRA_DESDE) + (C.GIRA_HASTA ? ' → ' + fmtF(C.GIRA_HASTA) : '') : '📅 Fechas a definir'}</div><div class="small muted" style="margin-top:2px">${vJ.length + vE.length} pasajeros: ${vJ.length} jugadores y ${vE.length} adultos</div>${C.GIRA_DESDE ? '' : `<button class="btn sm" style="margin-top:8px" onclick="configGira()">Cargar fechas</button>`}</div>
-    <button class="btn vio" onclick="equiposDesdeGira()">🧩 Armar equipos de la gira</button>
   </div>
   <div class="kpis">
     <div class="kpi"><div class="l">Jugadores que viajan</div><div class="v" style="color:var(--gr)">${vJ.length}</div><div class="s">de ${vJ.length + nJ.length} activos (${pct(vJ.length, vJ.length + nJ.length)}%)</div></div>
@@ -1380,10 +1382,12 @@ function renderGira() {
   <div class="seg full" style="margin-bottom:8px"><button class="${GI.vista === 'SI' ? 'on' : ''}" onclick="GI.vista='SI';renderGira()">✈️ Viajan<span class="c">${vJ.length + vE.length}</span></button><button class="${GI.vista === 'NO' ? 'on' : ''}" onclick="GI.vista='NO';renderGira()">🏠 No viajan<span class="c">${nJ.length + nE.length}</span></button></div>
   <input id="giBuscar" style="margin-bottom:10px" placeholder="🔎 Buscar…" value="${esc(GI.filtro)}" oninput="GI.filtro=this.value;clearTimeout(window._gf);window._gf=setTimeout(()=>{renderGira();const i=$('giBuscar');i.focus();i.setSelectionRange(i.value.length,i.value.length)},250)">
   ${true ? `<div class="small muted" style="margin-bottom:6px">Tocá <b>Sí/No</b> para cambiar si viaja y <b>Aut. / Ficha / Pago</b> para marcar lo entregado (se guarda solo). Deslizá la tabla para ver DNI y nacimiento.</div>` : ''}
+  <div class="card" style="margin-bottom:14px"><button class="plan-h" onclick="GI.eqOpen=!GI.eqOpen;renderGira()"><span class="grow">🧩 Equipos de la gira</span>${DB.EQUIPOS.some(x => x.grupo_id === 'GIRA') ? '<span class="pill" style="background:rgba(34,197,94,.15);color:var(--gr2)">✓ Confirmados</span>' : ''}<span class="chev">${GI.eqOpen ? '▲' : '▼'}</span></button>${GI.eqOpen ? '<div id="eqBox" style="margin-top:10px"></div>' : ''}</div>
   <h3 class="sub-h">👦 Jugadores <span class="pill" style="background:rgba(34,197,94,.15);color:var(--gr2)">${LJ.length}</span></h3>
   ${tablaGira('giJ', LJ, true)}
   <h3 class="sub-h" style="margin-top:18px">🧢 Entrenadores y staff <span class="pill" style="background:rgba(139,92,246,.18);color:#ddd6fe">${LE.length}</span></h3>
   ${tablaGira('giE', LE, false)}`;
+  if (GI.eqOpen) { if (EQ.fuente !== 'GIRA') setFuenteEQ('GIRA'); else { const v = new Set(jugActivos().filter(j => viaja('J', j.id)).map(j => j.id)); EQ.presentesJ = v; EQ.presentesE = new Set(entActivos().filter(e => e.asigna_equipos !== 'NO' && viaja('E', e.id)).map(e => e.id)); sincronizarEQ(); } renderEquipos(); }
 }
 function filaGiraBase(t, id) {
   const g = giraDe(t, id); if (g) return { clave: g.clave };
