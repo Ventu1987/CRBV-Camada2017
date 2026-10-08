@@ -281,6 +281,9 @@ th .ar{color:var(--cy);font-size:.8em}
 @media print{.ficha{border-radius:0;padding:0}.ficha .pg{grid-template-columns:repeat(2,1fr)!important}}
 
 /* ===== v3 · sistema móvil unificado ===== */
+.aus-box{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.aus-chip{display:inline-flex;align-items:baseline;gap:.3rem;margin:3px 4px 3px 0;padding:.3rem .6rem;border-radius:8px;background:rgba(239,68,68,.14);border:1px solid rgba(239,68,68,.3);color:#fecaca;font-size:.85rem;font-weight:700}
+.aus-chip small{font-size:.72rem;font-weight:600;color:var(--am2)}
 .step{display:flex;align-items:center;gap:.55rem;font-weight:900;font-size:1rem;margin:18px 0 8px}
 .step span{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--cy),var(--cy2));color:#04131a;display:inline-flex;align-items:center;justify-content:center;font-size:.85rem}
 #eqBox .teams{margin-top:4px}
@@ -836,7 +839,7 @@ function renderAsistencia() {
     <div class="small muted" style="margin-top:6px">Podés cargarla antes del entrenamiento.</div></div>` : ''}
   </div>
   <div class="step"><span>3</span>Asistencia</div>
-  ${AS.tomada && !AS.listaOpen ? `<div class="card"><button class="plan-h" onclick="AS.listaOpen=true;renderAsistencia()"><span class="grow">✅ Asistencia tomada<div class="small muted" style="font-weight:500;margin-top:3px;line-height:1.5">👦 <b style="color:var(--gr2)">${cj.P}</b> presentes · <b style="color:var(--rd2)">${cj.A}</b> ausentes<br>🧢 <b style="color:var(--gr2)">${ce.P}</b> de ${ce.P + ce.A} entrenadores</div></span><span class="btn sm">✏️ Editar</span></button></div>` : `
+  ${AS.tomada && !AS.listaOpen ? `<div class="card"><button class="plan-h" onclick="AS.listaOpen=true;renderAsistencia()"><span class="grow">✅ Asistencia tomada<div class="small muted" style="font-weight:500;margin-top:3px;line-height:1.5">👦 <b style="color:var(--gr2)">${cj.P}</b> presentes · <b style="color:var(--rd2)">${cj.A}</b> ausentes<br>🧢 <b style="color:var(--gr2)">${ce.P}</b> de ${ce.P + ce.A} entrenadores</div></span><span class="btn sm">✏️ Editar</span></button>${ausentesHTML(J, E)}</div>` : `
   <div id="asBloque">
   <div class="att-legend"><span>Todos arrancan <b style="color:var(--gr2)">presentes</b>: tocá ✓ solo en los que faltan.</span><span>⋯ = destacar o comentar</span></div>
   <div class="att-tools">
@@ -870,6 +873,19 @@ function renderAsistencia() {
   if ($('asLista')) renderListaAS();
   if (AS.tomada) { if (EQ.fuente !== 'S:' + AS.id) setFuenteEQ('S:' + AS.id); renderEquipos(); }
   cargarThumbs();
+}
+// apellido corto; si hay dos con el mismo apellido, agrega la inicial del nombre
+function apellido(nombre, todos) {
+  const [ap, no] = String(nombre).split(',').map(x => (x || '').trim());
+  const rep = todos.filter(t => String(t).split(',')[0].trim().toLowerCase() === ap.toLowerCase()).length > 1;
+  return rep && no ? `${ap} ${no[0]}.` : ap;
+}
+function ausentesHTML(J, E) {
+  const nombres = J.map(p => p.nombre);
+  const aj = J.filter(p => (AS.marcas[p.k] || {}).estado === 'A'), ae = E.filter(p => (AS.marcas[p.k] || {}).estado === 'A');
+  if (!aj.length && !ae.length) return '<div class="aus-box"><span class="small" style="color:var(--gr2)">🎉 Vinieron todos</span></div>';
+  const chip = (p, nom) => { const mo = (AS.marcas[p.k] || {}).motivo; return `<span class="aus-chip">${esc(nom)}${mo && mo !== 'Sin aviso' ? `<small>${esc(mo.toLowerCase())}</small>` : ''}</span>`; };
+  return `<div class="aus-box"><div class="lbl t0" style="color:var(--rd2)">🚫 Ausentes</div>${aj.map(p => chip(p, apellido(p.nombre, nombres))).join('')}${ae.map(p => chip(p, '🧢 ' + p.nombre)).join('')}</div>`;
 }
 function renderContAS() {
   const { J, E } = personasAS(); const cj = contarAS(J), ce = contarAS(E);
