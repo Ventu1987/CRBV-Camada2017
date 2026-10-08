@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<title>Regatas M9 · Camada 2017</title>
+<link rel="icon" href="escudo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b1222; --bg2:#111b30; --card:rgba(255,255,255,.045); --card2:rgba(255,255,255,.08);
+  --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.18);
+  --tx:#f1f5f9; --tx2:#cbd5e1; --tx3:#94a3b8; --tx4:#64748b;
+  --cy:#06b6d4; --cy2:#0891b2; --vi:#8b5cf6; --vi2:#c4b5fd; --gr:#22c55e; --gr2:#86efac; --rd:#ef4444; --rd2:#fca5a5; --am:#f59e0b; --am2:#fcd34d;
+  --r:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Figtree',system-ui,sans-serif;background:linear-gradient(160deg,#0b1222 0%,#132039 60%,#0f172a 100%) fixed;background-color:var(--bg);color:var(--tx);min-height:100vh;font-size:15px;line-height:1.4;padding-bottom:84px}
+button{font-family:inherit;cursor:pointer;color:inherit}
+input,select,textarea{font-family:inherit;font-size:15px;color:var(--tx);background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:10px;padding:.6rem .7rem;width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--cy);background:rgba(6,182,212,.08)}
+select option{background:#1e293b}
+.wrap{max-width:1200px;margin:0 auto;padding:0 16px}
+.hidden{display:none!important}
+.muted{color:var(--tx3)} .small{font-size:.8rem} .tiny{font-size:.72rem}
+.row{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+.grow{flex:1;min-width:0}
+.grid{display:grid;gap:12px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:.85rem .9rem}
+.kpi .l{font-size:.75rem;color:var(--tx3);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.kpi .v{font-size:1.7rem;font-weight:800;margin-top:.15rem;font-variant-numeric:tabular-nums}
+.kpi .s{font-size:.75rem;color:var(--tx3)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:1rem;margin-bottom:12px}
+.card h3{font-size:1rem;font-weight:800;margin-bottom:.7rem;display:flex;align-items:center;gap:.45rem}
+.card h3 .sp{flex:1}
+h2.sec{font-size:1.35rem;font-weight:900;margin:18px 0 12px;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+h2.sec .sp{flex:1}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.6rem .9rem;border-radius:10px;border:1px solid var(--line2);background:transparent;font-weight:700;font-size:.9rem;white-space:nowrap}
+.btn:hover{background:var(--card2)}
+.btn.pri{background:linear-gradient(135deg,var(--cy),var(--cy2));border:none;color:#04131a}
+.btn.vio{background:linear-gradient(135deg,var(--vi),#7c3aed);border:none}
+.btn.grn{background:linear-gradient(135deg,var(--gr),#16a34a);border:none;color:#04150a}
+.btn.red{border-color:rgba(239,68,68,.5);color:var(--rd2)}
+.btn.sm{padding:.4rem .6rem;font-size:.8rem;border-radius:8px}
+.btn.on{border:2px solid var(--cy);background:rgba(6,182,212,.12)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:10px;overflow:hidden}
+.seg button{background:transparent;border:none;padding:.5rem .8rem;font-weight:700;font-size:.85rem;color:var(--tx2)}
+.seg button.on{background:rgba(6,182,212,.18);color:#a5f3fc}
+.pill{display:inline-flex;align-items:center;gap:.25rem;padding:.12rem .5rem;border-radius:999px;font-size:.72rem;font-weight:700;white-space:nowrap}
+.lv{padding:.15rem .5rem;border-radius:6px;font-size:.72rem;font-weight:800;white-space:nowrap}
+.lv-G{background:rgba(168,85,247,.22);color:#d8b4fe}.lv-1{background:rgba(34,197,94,.2);color:#86efac}.lv-2{background:rgba(59,130,246,.2);color:#93c5fd}.lv-3{background:rgba(239,68,68,.2);color:#fca5a5}
+.t-MIE{background:rgba(6,182,212,.18);color:#67e8f9}.t-SAB{background:rgba(139,92,246,.22);color:#ddd6fe}.t-PAR{background:rgba(245,158,11,.2);color:#fcd34d}.t-OTR{background:rgba(148,163,184,.2);color:#cbd5e1}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:.86rem}
+th,td{padding:.5rem .55rem;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;color:var(--tx3);background:rgba(255,255,255,.03);position:sticky;top:0;cursor:pointer;user-select:none}
+tr:last-child td{border-bottom:none}
+tbody tr:hover{background:rgba(255,255,255,.03)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.clk{cursor:pointer}
+.bar{height:6px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden;min-width:60px}
+.bar>i{display:block;height:100%;border-radius:3px}
+.dots{display:inline-flex;gap:3px}
+.dots i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.dP{background:var(--gr)}.dA{background:var(--rd)}.dN{background:rgba(255,255,255,.12)}
+
+/* header */
+.top{position:sticky;top:0;z-index:50;background:rgba(11,18,34,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:.7rem;height:56px}
+.top img{width:34px;height:34px;object-fit:contain}
+.top .t1{font-weight:900;font-size:1rem;line-height:1.1}
+.top .t2{font-size:.72rem;color:var(--cy);font-weight:700}
+.sync{font-size:.72rem;color:var(--tx3);display:flex;align-items:center;gap:.3rem}
+.top .t1,.top .t2{white-space:nowrap}
+@media(max-width:420px){#syncTxt{display:none}}
+.sync i{width:8px;height:8px;border-radius:50%;background:var(--gr);display:inline-block}
+.sync.busy i{background:var(--am);animation:pulse 1s infinite}.sync.err i{background:var(--rd)}
+@keyframes pulse{50%{opacity:.3}}
+.tabs-top{display:none;gap:4px;margin-left:auto}
+.tabs-top button{background:transparent;border:none;padding:.5rem .75rem;border-radius:8px;font-weight:700;color:var(--tx2);font-size:.9rem}
+.tabs-top button.on{background:rgba(6,182,212,.15);color:#a5f3fc}
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:60;background:rgba(11,18,34,.95);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(6,1fr);padding-bottom:env(safe-area-inset-bottom)}
+.nav button{background:none;border:none;padding:.5rem 0 .55rem;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.66rem;font-weight:700;color:var(--tx3)}
+.nav button span{font-size:1.25rem;line-height:1}
+.nav button.on{color:#67e8f9}
+@media(min-width:900px){.tabs-top{display:flex}.nav{display:none}body{padding-bottom:30px}}
+
+/* hero */
+.hero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:26px 0 18px}
+.hero img{width:120px;height:120px;object-fit:contain;filter:drop-shadow(0 8px 24px rgba(6,182,212,.25))}
+.hero h1{font-size:clamp(1.7rem,6vw,2.6rem);font-weight:900;margin-top:10px;letter-spacing:-.02em}
+.hero .sub{font-size:clamp(1rem,3.5vw,1.25rem);font-weight:800;color:var(--cy);margin-top:2px}
+.hero .chips{display:flex;gap:.4rem;margin-top:10px;flex-wrap:wrap;justify-content:center}
+.hero .chips span{padding:.3rem .75rem;border-radius:999px;border:1px solid var(--line2);font-size:.8rem;font-weight:700;color:var(--tx2)}
+.qa{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.qa button{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:1rem;text-align:left;font-weight:800;font-size:.95rem}
+.qa button small{display:block;color:var(--tx3);font-weight:500;font-size:.75rem;margin-top:2px}
+.qa button:hover{border-color:var(--cy)}
+.alert{display:flex;gap:.6rem;align-items:center;padding:.55rem .7rem;border-radius:10px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);margin-bottom:6px;font-size:.88rem}
+.alert.am{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.25)}
+.list-i{display:flex;align-items:center;gap:.6rem;padding:.55rem 0;border-bottom:1px solid var(--line)}
+.list-i:last-child{border-bottom:none}
+
+/* asistencia */
+.att-head{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.att-head .full{grid-column:1/-1}
+@media(min-width:700px){.att-head{grid-template-columns:160px 170px 1fr}.att-head .full{grid-column:auto}}
+.att-tools{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin:10px 0}
+.att-list{display:flex;flex-direction:column;gap:6px}
+.att{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:.55rem .6rem}
+.att.P{border-color:rgba(34,197,94,.45);background:rgba(34,197,94,.06)}
+.att.A{border-color:rgba(239,68,68,.45);background:rgba(239,68,68,.06)}
+.att .main{display:flex;align-items:center;gap:.5rem}
+.att .nm{flex:1;min-width:0}
+.att .nm b{display:block;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.att .nm small{color:var(--tx4);font-size:.72rem}
+.sb{width:40px;height:38px;border-radius:9px;border:1px solid var(--line2);background:transparent;font-weight:900;font-size:1rem;flex-shrink:0}
+.sb.p.on{background:var(--gr);border-color:var(--gr);color:#04150a}
+.sb.a.on{background:var(--rd);border-color:var(--rd);color:#fff}
+.cb{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:transparent;font-size:.95rem;flex-shrink:0;color:var(--tx3)}
+.cb.up.on{background:rgba(34,197,94,.25);border-color:var(--gr);color:var(--gr2)}
+.cb.dn.on{background:rgba(239,68,68,.25);border-color:var(--rd);color:var(--rd2)}
+.cb.cm.on{background:rgba(245,158,11,.2);border-color:var(--am);color:var(--am2)}
+.att .cmt{margin-top:.45rem}
+.stick{position:sticky;bottom:72px;z-index:40;margin-top:12px;background:rgba(17,27,48,.96);border:1px solid var(--line2);border-radius:14px;padding:.6rem .7rem;display:flex;gap:.6rem;align-items:center;backdrop-filter:blur(10px)}
+@media(min-width:900px){.stick{bottom:12px}}
+.cnt b{font-variant-numeric:tabular-nums}
+
+/* equipos */
+.teams{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.team{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.team.over{border-color:var(--cy);background:rgba(6,182,212,.08)}
+.team .th{padding:.7rem .85rem;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:.5rem}
+.team .th h4{font-size:1.02rem;font-weight:800;color:#67e8f9;flex:1}
+.team .ts{font-size:.78rem;color:var(--tx3);display:flex;gap:.6rem}
+.team .tb{padding:.7rem .85rem}
+.coaches{background:rgba(139,92,246,.13);border-left:4px solid var(--vi);border-radius:8px;padding:.5rem .6rem;margin-bottom:.6rem}
+.coaches strong{font-size:.75rem;color:#e9d5ff;display:block;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.04em}
+.chip{display:inline-flex;align-items:center;gap:.3rem;padding:.3rem .55rem;margin:2px;border-radius:7px;background:rgba(139,92,246,.18);color:#ede9fe;font-size:.82rem;font-weight:600;cursor:grab;border:1px solid transparent}
+.pl{display:flex;align-items:center;gap:.45rem;padding:.42rem .45rem;border-radius:8px;cursor:grab;border:1px solid transparent}
+.pl:hover{background:rgba(255,255,255,.05)}
+.pl .n{color:#a78bfa;font-weight:800;min-width:20px;font-size:.8rem}
+.pl .nm{flex:1;min-width:0;font-weight:600;font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pl .nm small{display:block;color:var(--tx4);font-size:.7rem;font-weight:500}
+.sel{border-color:var(--am)!important;background:rgba(245,158,11,.14)!important}
+.moveto{width:100%;margin-top:.5rem;padding:.5rem;border-radius:8px;border:1px dashed var(--am);background:rgba(245,158,11,.08);color:var(--am2);font-weight:800}
+.warn{padding:.6rem .75rem;border-radius:10px;background:rgba(251,146,60,.1);color:#fb923c;font-size:.85rem;margin-top:8px}
+.info{padding:.6rem .75rem;border-radius:10px;background:rgba(129,230,217,.08);color:#81e6d9;font-size:.85rem}
+.ckl{max-height:280px;overflow-y:auto;border:1px solid var(--line);border-radius:10px;padding:.35rem}
+.ckl label{display:flex;gap:.5rem;align-items:center;padding:.3rem .35rem;font-size:.86rem;cursor:pointer;border-radius:6px}
+.ckl label:hover{background:rgba(255,255,255,.04)}
+.ckl input{width:auto}
+.nums{display:flex;gap:6px;flex-wrap:wrap}
+.nums button{width:40px;height:38px;border-radius:9px;border:1px solid var(--line2);background:transparent;font-weight:800}
+.nums button.on{border:2px solid var(--cy);background:rgba(6,182,212,.12)}
+
+/* gira */
+.gira-hero{background:linear-gradient(135deg,rgba(6,182,212,.16),rgba(139,92,246,.16));border:1px solid rgba(6,182,212,.35);border-radius:18px;padding:1.1rem 1.2rem;margin-bottom:14px;display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
+.gira-hero .big{font-size:2.4rem;font-weight:900;line-height:1;color:#a5f3fc;font-variant-numeric:tabular-nums}
+.tg{border:1px solid var(--line2);background:transparent;border-radius:7px;padding:.25rem .45rem;font-size:.74rem;font-weight:800;color:var(--tx3)}
+.tg.on{background:rgba(34,197,94,.2);border-color:var(--gr);color:var(--gr2)}
+.va-SI{color:var(--gr2)}.va-NO{color:var(--rd2)}
+
+/* charts */
+.chart svg{width:100%;height:auto;display:block}
+.chart text{fill:var(--tx3);font-size:10px;font-family:Figtree,sans-serif}
+.legend{display:flex;gap:.8rem;flex-wrap:wrap;font-size:.75rem;color:var(--tx3);margin-top:.4rem}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:4px;vertical-align:-1px}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.6);display:none;align-items:flex-end;justify-content:center}
+.modal.on{display:flex}
+.mbox{background:#16213a;border:1px solid rgba(6,182,212,.3);border-radius:18px 18px 0 0;width:100%;max-width:640px;max-height:92vh;overflow-y:auto;padding:1.2rem 1.1rem calc(1.2rem + env(safe-area-inset-bottom))}
+@media(min-width:700px){.modal{align-items:center}.mbox{border-radius:18px}}
+.mbox h3{font-size:1.2rem;font-weight:900;color:#67e8f9;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+.mbox h3 .sp{flex:1}
+.fg{margin-bottom:.75rem}
+.fg label{display:block;font-size:.8rem;font-weight:700;color:var(--tx2);margin-bottom:.3rem}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 .7rem}
+.fgrid .full{grid-column:1/-1}
+.mact{display:flex;gap:.5rem;margin-top:1rem;flex-wrap:wrap}
+.mact .btn{flex:1}
+.x{background:none;border:none;font-size:1.4rem;color:var(--tx3);line-height:1}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:200;background:#0e7490;color:#ecfeff;padding:.65rem 1rem;border-radius:12px;font-weight:700;font-size:.9rem;box-shadow:0 8px 24px rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:opacity .25s;max-width:90vw;text-align:center}
+.toast.on{opacity:1}.toast.err{background:#991b1b}
+.empty{text-align:center;color:var(--tx3);padding:1.6rem .5rem;font-size:.9rem}
+.loading{position:fixed;inset:0;z-index:300;background:var(--bg);display:flex;flex-direction:column;gap:1rem;align-items:center;justify-content:center}
+.loading img{width:90px;height:90px;object-fit:contain;animation:pulse 1.4s infinite}
+.timeline{display:flex;flex-wrap:wrap;gap:4px}
+.timeline span{width:22px;height:22px;border-radius:5px;font-size:.62rem;font-weight:800;display:inline-flex;align-items:center;justify-content:center;color:#0b1222}
+.cmt-i{padding:.5rem .6rem;border-radius:9px;background:rgba(255,255,255,.04);margin-bottom:5px;font-size:.86rem}
+.cmt-i .h{font-size:.72rem;color:var(--tx3);margin-bottom:2px}
+.up{color:var(--gr2)}.dn{color:var(--rd2)}
+
+/* print */
+#printArea{display:none}
+@media print{
+  html,body{background:#fff!important;color:#0f172a!important;padding:0!important}
+  body>*:not(#printArea){display:none!important}
+  #printArea{display:block!important;padding:10mm;font-family:Figtree,sans-serif}
+  #printArea *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  @page{margin:8mm}
+}
+.ph{display:flex;align-items:center;gap:14px;margin-bottom:14px;border-bottom:3px solid #0e7490;padding-bottom:10px}
+.ph img{width:60px;height:60px;object-fit:contain}
+.ph .a{font-size:22px;font-weight:900;color:#0f172a}.ph .b{font-size:13px;font-weight:700;color:#0e7490}
+.ph .c{margin-left:auto;text-align:right;font-size:12px;color:#334155;font-weight:700}
+.pg{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.pt{border:1.5px solid #0e7490;border-radius:10px;overflow:hidden;break-inside:avoid}
+.pt h5{background:#0e7490;color:#fff;font-size:14px;padding:6px 10px;margin:0}
+.pt .pc{font-size:11.5px;font-weight:700;color:#5b21b6;background:#ede9fe;padding:5px 10px}
+.pt ol{margin:0;padding:6px 10px 8px 30px;font-size:12.5px}
+.pt ol li{padding:2px 0;border-bottom:1px solid #e2e8f0}
+.ptab{width:100%;border-collapse:collapse;font-size:11.5px}
+.ptab th{background:#0e7490;color:#fff;padding:5px 6px;text-align:left;font-size:10.5px;position:static}
+.ptab td{padding:4px 6px;border-bottom:1px solid #cbd5e1;color:#0f172a}
+.ptab tr:nth-child(even) td{background:#f1f5f9}
+</style>
+<script>
+var ESCUDO_FALLBACK = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+ '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 116"><path d="M50 3 L94 16 V56 C94 84 74 103 50 113 C26 103 6 84 6 56 V16 Z" fill="#0e7490" stroke="#a5f3fc" stroke-width="4"/><text x="50" y="66" text-anchor="middle" font-family="Arial" font-weight="900" font-size="28" fill="#fff">RBV</text></svg>');
+</script>
+</head>
+<body>
+
+<div class="loading" id="loading"><img src="escudo.png" onerror="this.src=ESCUDO_FALLBACK"><div class="muted" id="loadingMsg">Cargando base…</div></div>
+
+<header class="top">
+  <div class="wrap">
+    <img class="escudo" src="escudo.png" alt="Escudo Regatas" onerror="this.src=ESCUDO_FALLBACK">
+    <div><div class="t1">Regatas Bella Vista</div><div class="t2">M9 · Camada 2017</div></div>
+    <nav class="tabs-top" id="tabsTop"></nav>
+    <div class="sync" id="sync" style="margin-left:auto"><i></i><span id="syncTxt">—</span></div>
+    <button class="btn sm" onclick="abrirAjustes()" title="Ajustes">⚙️</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- INICIO -->
+  <section id="v-inicio"></section>
+  <!-- ASISTENCIA -->
+  <section id="v-asistencia" class="hidden"></section>
+  <!-- EQUIPOS -->
+  <section id="v-equipos" class="hidden"></section>
+  <!-- PLANTEL -->
+  <section id="v-plantel" class="hidden"></section>
+  <!-- GIRA -->
+  <section id="v-gira" class="hidden"></section>
+  <!-- ESTADISTICAS -->
+  <section id="v-stats" class="hidden"></section>
+</main>
+
+<nav class="nav" id="navBottom"></nav>
+
+<div class="modal" id="modal"><div class="mbox" id="mbox"></div></div>
+<div class="toast" id="toast"></div>
+<div id="printArea"></div>
+
+<script>
+/* =====================================================================
+   CONFIGURACIÓN — pegá acá la URL de tu Apps Script (termina en /exec)
+   ===================================================================== */
+const API_URL = 'https://script.google.com/macros/s/AKfycbw3STeF0y6gLe6DfeLqwrk57_quHXv33JFRWevNE9wp4Vy0VzF5lkT0pE6w7vnGLs7w/exec';
+
+
+const TIPOS = { MIE: 'Miércoles', SAB: 'Sábado', PAR: 'Partido', OTR: 'Otro' };
+const TABS = [
+  ['inicio', '🏠', 'Inicio'], ['asistencia', '✅', 'Asistencia'], ['equipos', '🧩', 'Equipos'],
+  ['plantel', '👥', 'Plantel'], ['gira', '🚌', 'Gira'], ['stats', '📊', 'Stats']
+];
+const LS = { url: 'm9_api_url', pin: 'm9_pin', demo: 'm9_demo_db', mode: 'm9_mode', tab: 'm9_tab', draft: 'm9_equipos_draft' };
+
+/* ---------- utilidades ---------- */
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
+const lsDel = k => { try { localStorage.removeItem(k); } catch (e) {} };
+const pad = n => String(n).padStart(2, '0');
+const isoDate = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const hoyISO = () => isoDate(new Date());
+const parseISO = s => { const [y, m, d] = String(s).slice(0, 10).split('-').map(Number); return new Date(y, (m || 1) - 1, d || 1); };
+const fmtF = s => { if (!s) return ''; const p = String(s).slice(0, 10).split('-'); return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : String(s); };
+const fmtFC = s => { if (!s) return ''; const d = parseISO(s); return ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'][d.getDay()] + ' ' + pad(d.getDate()) + '/' + pad(d.getMonth() + 1); };
+const MESES = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+const pct = (a, b) => b ? Math.round(a * 100 / b) : 0;
+const colorPct = p => p >= 80 ? 'var(--gr)' : p >= 60 ? 'var(--am)' : 'var(--rd)';
+function toast(msg, err) { const t = $('toast'); t.textContent = msg; t.className = 'toast on' + (err ? ' err' : ''); clearTimeout(t._h); t._h = setTimeout(() => t.className = 'toast', 2600); }
+function setSync(state, txt) { const s = $('sync'); s.className = 'sync ' + (state || ''); $('syncTxt').textContent = txt; }
+
+/* =====================================================================
+   CAPA DE DATOS  (API Google Apps Script  |  modo demo local)
+   ===================================================================== */
+let DB = null;
+let MODE = 'api';
+const apiUrl = () => (lsGet(LS.url) || API_URL || '').trim();
+
+async function cargarBase() {
+  MODE = lsGet(LS.mode) === 'demo' ? 'demo' : 'api';
+  if (MODE === 'api' && !apiUrl()) { MODE = 'none'; return false; }
+  if (MODE === 'demo') {
+    let raw = lsGet(LS.demo);
+    DB = raw ? JSON.parse(raw) : generarDemo();
+    guardarDemo();
+    normalizar(); setSync('', 'Modo demo');
+    return true;
+  }
+  setSync('busy', 'Cargando…');
+  const pin = lsGet(LS.pin) || '';
+  const r = await fetch(apiUrl() + '?action=all&pin=' + encodeURIComponent(pin) + '&t=' + Date.now());
+  const j = await r.json();
+  if (!j.ok) { setSync('err', 'Error'); throw new Error(j.error || 'Error'); }
+  DB = j.data; normalizar(); setSync('', 'Sincronizado');
+  return true;
+}
+
+function normalizar() {
+  ['JUGADORES', 'ENTRENADORES', 'SESIONES', 'ASISTENCIA', 'EQUIPOS', 'GIRA'].forEach(k => DB[k] = DB[k] || []);
+  DB.CONFIG = DB.CONFIG || {};
+  DB.JUGADORES.forEach(j => {
+    j.id = String(j.id); j.nivel = String(j.nivel || '2').toUpperCase();
+    j.nivel2 = j.nivel2 === '' || j.nivel2 == null ? null : Number(j.nivel2);
+    j.activo = String(j.activo || 'SI').toUpperCase() === 'NO' ? 'NO' : 'SI';
+    j.dni = j.dni == null ? '' : String(j.dni);
+  });
+  DB.ENTRENADORES.forEach(e => {
+    e.id = String(e.id); e.hijo_id = e.hijo_id == null || e.hijo_id === '' ? '' : String(e.hijo_id);
+    e.activo = String(e.activo || 'SI').toUpperCase() === 'NO' ? 'NO' : 'SI';
+    e.asigna_equipos = String(e.asigna_equipos || 'SI').toUpperCase() === 'NO' ? 'NO' : 'SI';
+    e.dni = e.dni == null ? '' : String(e.dni);
+  });
+  DB.SESIONES.forEach(s => { s.id = String(s.id); s.fecha = String(s.fecha).slice(0, 10); });
+  DB.ASISTENCIA.forEach(a => { a.sesion_id = String(a.sesion_id); a.persona_id = String(a.persona_id); a.fecha = String(a.fecha).slice(0, 10); a.calif = Number(a.calif || 0); });
+  DB.EQUIPOS.forEach(e => { e.grupo_id = String(e.grupo_id); e.persona_id = String(e.persona_id); });
+  DB.GIRA.forEach(g => { g.persona_id = String(g.persona_id); g.clave = String(g.clave); });
+}
+
+function guardarDemo() { if (MODE === 'demo') lsSet(LS.demo, JSON.stringify(DB)); }
+
+// aplica una operación sobre DB en memoria (misma lógica que el servidor)
+function aplicarLocal(op) {
+  if (op.sheet === 'CONFIG') { (op.rows || []).forEach(r => { if (r.clave !== 'PIN') DB.CONFIG[r.clave] = r.valor; }); return; }
+  const arr = DB[op.sheet];
+  if (op.op === 'upsert') {
+    op.rows.forEach(r => {
+      const i = arr.findIndex(x => String(x[op.key]) === String(r[op.key]));
+      if (i >= 0) arr[i] = Object.assign({}, arr[i], r); else arr.push(Object.assign({}, r));
+    });
+  } else {
+    DB[op.sheet] = arr.filter(x => String(x[op.field]) !== String(op.value));
+    if (op.op === 'replace') op.rows.forEach(r => DB[op.sheet].push(Object.assign({}, r)));
+  }
+}
+
+async function guardar(ops, msgOk) {
+  ops.forEach(aplicarLocal); normalizar();
+  if (MODE === 'demo') { guardarDemo(); if (msgOk) toast(msgOk); return true; }
+  setSync('busy', 'Guardando…');
+  try {
+    const r = await fetch(apiUrl(), { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ pin: lsGet(LS.pin) || '', ops }) });
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error);
+    setSync('', 'Guardado ' + new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', hour12: false }));
+    if (msgOk) toast(msgOk);
+    return true;
+  } catch (e) {
+    setSync('err', 'Sin guardar'); toast('⚠️ No se pudo guardar: ' + e.message, true);
+    return false;
+  }
+}
+
+// cola con demora para cambios chicos (gira, toggles)
+let colaOps = [], colaTimer = null;
+function encolar(op) {
+  aplicarLocal(op); normalizar(); guardarDemo();
+  if (MODE === 'demo') return;
+  colaOps.push(op); setSync('busy', 'Pendiente…');
+  clearTimeout(colaTimer);
+  colaTimer = setTimeout(async () => {
+    const ops = colaOps; colaOps = [];
+    // reenvía sin volver a aplicar localmente
+    setSync('busy', 'Guardando…');
+    try {
+      const r = await fetch(apiUrl(), { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ pin: lsGet(LS.pin) || '', ops }) });
+      const j = await r.json(); if (!j.ok) throw new Error(j.error);
+      setSync('', 'Guardado ' + new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', hour12: false }));
+    } catch (e) { colaOps = ops.concat(colaOps); setSync('err', 'Sin guardar'); toast('⚠️ No se pudo guardar. Reintento al próximo cambio.', true); }
+  }, 900);
+}
+
+/* ---------- datos demo (ficticios, nunca datos reales en GitHub) ---------- */
+function generarDemo() {
+  let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  const ap = ['Acosta', 'Benítez', 'Castro', 'Díaz', 'Escobar', 'Funes', 'García', 'Herrera', 'Ibáñez', 'Juárez', 'Kramer', 'López', 'Molina', 'Núñez', 'Ortiz', 'Paz', 'Quiroga', 'Ríos', 'Sosa', 'Torres', 'Urquiza', 'Vera', 'Wilson', 'Zabala'];
+  const no = ['Bautista', 'Benjamín', 'Felipe', 'Francisco', 'Joaquín', 'Juan', 'Mateo', 'Santiago', 'Tomás', 'Valentín'];
+  const col = ['Colegio A', 'Colegio B', 'Colegio C', 'Colegio D', 'Colegio E'];
+  const J = [];
+  for (let i = 1; i <= 44; i++) {
+    const r = rnd(); const nivel = r < .25 ? 'G' : r < .5 ? '1' : r < .85 ? '2' : '3';
+    J.push({ id: String(i), nombre: `${ap[i % ap.length]}${i > 24 ? ' ' + ap[(i * 7) % ap.length] : ''}, ${no[(i * 3) % no.length]}`, nivel, nivel2: nivel === 'G' ? [1, 2, 3][Math.floor(rnd() * 3)] : null, colegio: col[Math.floor(rnd() * 5)], grado: rnd() < .5 ? '3ro' : '4to', dni: String(56000000 + i * 1371), fecha_nac: `2017-${pad(1 + (i % 12))}-${pad(1 + (i % 27))}`, activo: i === 44 ? 'NO' : 'SI', fecha_baja: i === 44 ? '2026-08-20' : '', motivo_baja: i === 44 ? 'Se mudó' : '', fecha_alta: '2026-03-01', observaciones: '' });
+  }
+  const ap2 = ['Coach Ana', 'Coach Beto', 'Coach Caro', 'Coach Dani', 'Coach Edu', 'Coach Fer', 'Coach Gus', 'Coach Hernán'];
+  const E = ap2.map((n, i) => ({ id: 'E' + pad(i + 1), apodo: n.split(' ')[1], nombre: n, rol: i < 2 ? 'Head Coach' : i === 7 ? 'Manager' : 'Entrenador', hijo_id: String(3 + i * 5), asigna_equipos: i === 7 ? 'NO' : 'SI', activo: 'SI', fecha_baja: '', motivo_baja: '', dni: String(28000000 + i * 99991), fecha_nac: '1982-05-10', observaciones: '' }));
+  const S = [], A = [];
+  const d = new Date(2026, 7, 1), fin = new Date(); fin.setDate(fin.getDate() - 1);
+  const coment = ['Gran actitud en el contacto', 'Muy buen liderazgo en su equipo', 'Distraído, hablar con los padres', 'Excelente tackle', 'Llegó tarde', 'Ayudó a un compañero nuevo'];
+  while (d <= fin) {
+    const wd = d.getDay();
+    if (wd === 3 || wd === 6) {
+      const f = isoDate(d), t = wd === 3 ? 'MIE' : 'SAB', id = f + '_' + t;
+      S.push({ id, fecha: f, tipo: t, detalle: '', notas: '', actualizado: f });
+      J.forEach(j => {
+        if (j.activo === 'NO' && f > j.fecha_baja) return;
+        const base = (Number(j.id) % 7 === 0 ? .45 : .82) - (t === 'MIE' ? .1 : 0);
+        const P = rnd() < base; const rc = rnd(); const calif = P && rc < .05 ? 1 : P && rc < .07 ? -1 : 0;
+        A.push({ sesion_id: id, fecha: f, tipo: t, persona_tipo: 'J', persona_id: j.id, nombre: j.nombre, estado: P ? 'P' : 'A', calif, comentario: calif ? coment[Math.floor(rnd() * coment.length)] : '' });
+      });
+      E.forEach(e => A.push({ sesion_id: id, fecha: f, tipo: t, persona_tipo: 'E', persona_id: e.id, nombre: e.apodo, estado: rnd() < .8 ? 'P' : 'A', calif: 0, comentario: '' }));
+    }
+    d.setDate(d.getDate() + 1);
+  }
+  const G = J.map(j => ({ clave: 'J-' + j.id, persona_tipo: 'J', persona_id: j.id, nombre: j.nombre, va: Number(j.id) % 5 === 0 ? 'NO' : 'SI', rol_gira: 'Jugador', autorizacion: rnd() < .6 ? 'SI' : 'NO', ficha_medica: rnd() < .5 ? 'SI' : 'NO', pago: rnd() < .7 ? 'SI' : 'NO', observaciones: '' }))
+    .concat(E.map(e => ({ clave: 'E-' + e.id, persona_tipo: 'E', persona_id: e.id, nombre: e.nombre, va: 'SI', rol_gira: e.rol, autorizacion: 'NO', ficha_medica: 'NO', pago: 'NO', observaciones: '' })));
+  return { CONFIG: { CLUB: 'Regatas Bella Vista', DIVISION: 'M9', CAMADA: '2017', TEMPORADA: String(new Date().getFullYear()), GIRA_NOMBRE: 'Gira Tandil (demo)', GIRA_DESDE: '', GIRA_HASTA: '', ESCUDO_URL: 'escudo.png' }, JUGADORES: J, ENTRENADORES: E, SESIONES: S, ASISTENCIA: A, EQUIPOS: [], GIRA: G };
+}
+
+/* =====================================================================
+   HELPERS DE DOMINIO
+   ===================================================================== */
+const jugActivos = () => DB.JUGADORES.filter(j => j.activo !== 'NO').sort((a, b) => a.nombre.localeCompare(b.nombre));
+const entActivos = () => DB.ENTRENADORES.filter(e => e.activo !== 'NO').sort((a, b) => (a.apodo || a.nombre).localeCompare(b.apodo || b.nombre));
+const jugById = id => DB.JUGADORES.find(j => j.id === String(id));
+const entById = id => DB.ENTRENADORES.find(e => e.id === String(id));
+const entNom = e => e ? (e.apodo || e.nombre) : '';
+const nivelTxt = j => j.nivel === 'G' ? 'G' + (j.nivel2 ? ' ' + Number(j.nivel2).toFixed(1) : '') : j.nivel;
+const nivelBadge = j => `<span class="lv lv-${esc(j.nivel)}">${esc(nivelTxt(j))}</span>`;
+const nivelNum = j => j.nivel === 'G' ? (j.nivel2 || 0) : (parseInt(j.nivel) || 0);
+const giraDe = (t, id) => DB.GIRA.find(g => g.clave === t + '-' + id);
+const viaja = (t, id) => { const g = giraDe(t, id); return g && String(g.va).toUpperCase() === 'SI'; };
+const sesionesOrd = () => [...DB.SESIONES].sort((a, b) => (b.fecha + b.tipo).localeCompare(a.fecha + a.tipo));
+const tipoDeFecha = f => { const w = parseISO(f).getDay(); return w === 3 ? 'MIE' : w === 6 ? 'SAB' : 'OTR'; };
+function proximoEntreno() {
+  const d = new Date(); d.setHours(0, 0, 0, 0);
+  for (let i = 0; i < 8; i++) { const w = d.getDay(); if (w === 3 || w === 6) return isoDate(d); d.setDate(d.getDate() + 1); }
+  return hoyISO();
+}
+
+/* =====================================================================
+   NAVEGACIÓN
+   ===================================================================== */
+let TAB = 'inicio';
+function renderNav() {
+  const h = TABS.map(([k, i, n]) => `<button class="${TAB === k ? 'on' : ''}" onclick="ir('${k}')"><span>${i}</span>${n}</button>`).join('');
+  $('navBottom').innerHTML = h;
+  $('tabsTop').innerHTML = TABS.map(([k, i, n]) => `<button class="${TAB === k ? 'on' : ''}" onclick="ir('${k}')">${i} ${n}</button>`).join('');
+}
+function ir(tab) {
+  TAB = tab; lsSet(LS.tab, tab);
+  TABS.forEach(([k]) => $('v-' + k).classList.toggle('hidden', k !== tab));
+  renderNav(); renderTab(); window.scrollTo(0, 0);
+}
+function renderTab() {
+  ({ inicio: renderInicio, asistencia: renderAsistencia, equipos: renderEquipos, plantel: renderPlantel, gira: renderGira, stats: renderStats })[TAB]();
+}
+
+/* =====================================================================
+   ESTADÍSTICAS (motor)
+   ===================================================================== */
+function calcStats(filtro) {
+  filtro = filtro || {};
+  const ses = DB.SESIONES.filter(s =>
+    (!filtro.anio || s.fecha.slice(0, 4) === String(filtro.anio)) &&
+    (!filtro.mes || Number(s.fecha.slice(5, 7)) === Number(filtro.mes)) &&
+    (!filtro.tipo || s.tipo === filtro.tipo));
+  const ids = new Set(ses.map(s => s.id));
+  const recs = DB.ASISTENCIA.filter(a => ids.has(a.sesion_id)).sort((a, b) => a.fecha.localeCompare(b.fecha));
+  const per = {};
+  recs.forEach(a => {
+    const k = a.persona_tipo + '-' + a.persona_id;
+    const p = per[k] || (per[k] = { k, tipo: a.persona_tipo, id: a.persona_id, P: 0, A: 0, MIE: [0, 0], SAB: [0, 0], PAR: [0, 0], up: 0, dn: 0, hist: [] });
+    const pr = a.estado === 'P';
+    pr ? p.P++ : p.A++;
+    if (p[a.tipo]) { p[a.tipo][1]++; if (pr) p[a.tipo][0]++; }
+    if (a.calif > 0) p.up++; if (a.calif < 0) p.dn++;
+    p.hist.push(a);
+  });
+  Object.values(per).forEach(p => {
+    p.tot = p.P + p.A; p.pct = pct(p.P, p.tot);
+    const h = p.hist; let n = 0; const last = h.length ? h[h.length - 1].estado : null;
+    for (let i = h.length - 1; i >= 0 && h[i].estado === last; i--) n++;
+    p.racha = last ? { e: last, n } : null;
+  });
+  const porSesion = ses.map(s => {
+    const r = recs.filter(a => a.sesion_id === s.id);
+    const jp = r.filter(a => a.persona_tipo === 'J' && a.estado === 'P').length, jt = r.filter(a => a.persona_tipo === 'J').length;
+    const ep = r.filter(a => a.persona_tipo === 'E' && a.estado === 'P').length;
+    return { s, jp, jt, ep };
+  }).sort((a, b) => a.s.fecha.localeCompare(b.s.fecha));
+  return { ses, recs, per, porSesion };
+}
+
+function alertas() {
+  const out = [];
+  const st = calcStats({ anio: new Date().getFullYear() });
+  jugActivos().forEach(j => {
+    const p = st.per['J-' + j.id]; if (!p) return;
+    if (p.racha && p.racha.e === 'A' && p.racha.n >= 3) out.push({ t: 'rd', j, txt: `${p.racha.n} faltas seguidas` });
+    else {
+      const ult = p.hist.slice(-8); const pr = ult.filter(a => a.estado === 'P').length;
+      if (ult.length >= 6 && pr / ult.length < .5) out.push({ t: 'am', j, txt: `vino ${pr} de las últimas ${ult.length}` });
+    }
+  });
+  return out;
+}
+
+/* =====================================================================
+   INICIO
+   ===================================================================== */
+function renderInicio() {
+  const C = DB.CONFIG, anio = new Date().getFullYear();
+  const st = calcStats({ anio });
+  const jp = Object.values(st.per).filter(p => p.tipo === 'J');
+  const prom = st.porSesion.length ? Math.round(st.porSesion.reduce((s, x) => s + pct(x.jp, x.jt), 0) / st.porSesion.length) : 0;
+  const vj = DB.GIRA.filter(g => g.persona_tipo === 'J' && String(g.va).toUpperCase() === 'SI').length;
+  const vs = DB.GIRA.filter(g => g.persona_tipo === 'E' && String(g.va).toUpperCase() === 'SI').length;
+  const prox = proximoEntreno();
+  const al = alertas();
+  const ult = sesionesOrd().slice(0, 6);
+  let cuenta = '';
+  if (C.GIRA_DESDE) { const dd = Math.ceil((parseISO(C.GIRA_DESDE) - new Date(new Date().toDateString())) / 864e5); cuenta = dd > 0 ? `Faltan <b>${dd}</b> días` : dd === 0 ? '<b>¡Es hoy!</b>' : 'Gira realizada'; }
+  $('v-inicio').innerHTML = `
+  <div class="hero">
+    <img src="${esc(C.ESCUDO_URL || 'escudo.png')}" onerror="this.src=ESCUDO_FALLBACK" alt="Escudo Club Regatas Bella Vista">
+    <h1>${esc(C.CLUB || 'Regatas Bella Vista')}</h1>
+    <div class="sub">Camada ${esc(C.CAMADA || '2017')} · ${esc(C.DIVISION || 'M9')} ${esc(C.TEMPORADA || anio)}</div>
+    <div class="chips"><span>Entrenamientos: Miércoles y Sábados</span>${MODE === 'demo' ? '<span style="color:var(--am2);border-color:var(--am)">MODO DEMO · datos ficticios</span>' : ''}</div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="l">Plantel activo</div><div class="v" style="color:var(--cy)">${jugActivos().length}</div><div class="s">${DB.JUGADORES.length - jugActivos().length} no vienen más</div></div>
+    <div class="kpi"><div class="l">Entrenadores</div><div class="v" style="color:var(--vi2)">${entActivos().length}</div><div class="s">staff activo</div></div>
+    <div class="kpi"><div class="l">Sesiones ${anio}</div><div class="v">${st.ses.length}</div><div class="s">registradas</div></div>
+    <div class="kpi"><div class="l">Asistencia prom.</div><div class="v" style="color:${st.ses.length ? colorPct(prom) : 'var(--tx3)'}">${st.ses.length ? prom + '%' : '—'}</div><div class="s">jugadores por sesión</div></div>
+    <div class="kpi"><div class="l">Gira</div><div class="v" style="color:var(--gr)">${vj}</div><div class="s">jugadores + ${vs} adultos</div></div>
+  </div>
+  <div class="qa">
+    <button onclick="irAsistencia('${prox}')">✅ Tomar asistencia<small>${fmtFC(prox)} · ${TIPOS[tipoDeFecha(prox)]}</small></button>
+    <button onclick="ir('equipos')">🧩 Armar equipos<small>con los presentes del día</small></button>
+    <button onclick="ir('gira')">🚌 ${esc(C.GIRA_NOMBRE || 'Gira')}<small>${cuenta || 'quiénes viajan'}</small></button>
+    <button onclick="ir('stats')">📊 Estadísticas<small>asistencia y destacados</small></button>
+  </div>
+  <div class="grid g2">
+    <div class="card"><h3>⚠️ Para seguir de cerca <span class="sp"></span><span class="pill" style="background:rgba(239,68,68,.15);color:var(--rd2)">${al.length}</span></h3>
+      ${al.length ? al.slice(0, 10).map(a => `<div class="alert ${a.t === 'am' ? 'am' : ''} clk" onclick="fichaJugador('${a.j.id}')"><b class="grow">${esc(a.j.nombre)}</b><span class="small">${a.txt}</span></div>`).join('') + (al.length > 10 ? `<div class="muted small">y ${al.length - 10} más en Estadísticas</div>` : '') : '<div class="empty">Sin alertas de asistencia 👌</div>'}
+    </div>
+    <div class="card"><h3>🗓️ Últimas sesiones</h3>
+      ${ult.length ? ult.map(s => { const x = st.porSesion.find(p => p.s.id === s.id) || calcStats({}).porSesion.find(p => p.s.id === s.id) || { jp: 0, jt: 0, ep: 0 }; return `<div class="list-i clk" onclick="irAsistencia('${s.fecha}','${s.tipo}')"><span class="pill t-${s.tipo}">${TIPOS[s.tipo] || s.tipo}</span><span class="grow"><b>${fmtFC(s.fecha)}</b> ${s.detalle ? '· ' + esc(s.detalle) : ''}</span><span class="small"><b style="color:var(--gr2)">${x.jp}</b>/${x.jt} · ${x.ep} ent.</span></div>`; }).join('') : '<div class="empty">Todavía no hay asistencias cargadas.<br><br><button class="btn pri" onclick="irAsistencia()">Cargar la primera</button></div>'}
+    </div>
+  </div>`;
+}
+
+/* =====================================================================
+   ASISTENCIA
+   ===================================================================== */
+let AS = null; // {fecha,tipo,detalle,notas,vista,filtro,marcas:{'J-1':{estado,calif,comentario}},abiertos:Set}
+function irAsistencia(fecha, tipo) { AS = null; cargarSesionAS(fecha || hoyISO(), tipo); ir('asistencia'); }
+function cargarSesionAS(fecha, tipo) {
+  tipo = tipo || tipoDeFecha(fecha);
+  const id = fecha + '_' + tipo;
+  const s = DB.SESIONES.find(x => x.id === id);
+  const marcas = {};
+  DB.ASISTENCIA.filter(a => a.sesion_id === id).forEach(a => marcas[a.persona_tipo + '-' + a.persona_id] = { estado: a.estado, calif: Number(a.calif || 0), comentario: a.comentario || '' });
+  AS = { fecha, tipo, detalle: s ? s.detalle || '' : '', notas: s ? s.notas || '' : '', vista: (AS && AS.vista) || 'J', filtro: '', marcas, abiertos: new Set(), existe: !!s, sucio: false };
+}
+function personasAS() {
+  const conReg = new Set(Object.keys(AS.marcas));
+  const J = DB.JUGADORES.filter(j => j.activo !== 'NO' || conReg.has('J-' + j.id)).sort((a, b) => a.nombre.localeCompare(b.nombre)).map(j => ({ k: 'J-' + j.id, t: 'J', id: j.id, nombre: j.nombre, sub: `${j.colegio || ''} ${j.grado && j.grado !== 'N/A' ? '· ' + j.grado : ''}`, inactivo: j.activo === 'NO' }));
+  const E = DB.ENTRENADORES.filter(e => e.activo !== 'NO' || conReg.has('E-' + e.id)).sort((a, b) => entNom(a).localeCompare(entNom(b))).map(e => ({ k: 'E-' + e.id, t: 'E', id: e.id, nombre: entNom(e), sub: e.rol || '', inactivo: e.activo === 'NO' }));
+  return { J, E };
+}
+function renderAsistencia() {
+  if (!AS) cargarSesionAS(hoyISO());
+  const { J, E } = personasAS();
+  const lista = (AS.vista === 'J' ? J : E).filter(p => !AS.filtro || p.nombre.toLowerCase().includes(AS.filtro.toLowerCase()));
+  const cont = arr => { let P = 0, A = 0; arr.forEach(p => { const m = AS.marcas[p.k]; if (m && m.estado === 'P') P++; else if (m && m.estado === 'A') A++; }); return { P, A, N: arr.length - P - A }; };
+  const cj = cont(J), ce = cont(E);
+  const hist = sesionesOrd().slice(0, 30);
+  $('v-asistencia').innerHTML = `
+  <h2 class="sec">✅ Asistencia <span class="sp"></span>${AS.existe ? '<span class="pill" style="background:rgba(34,197,94,.15);color:var(--gr2)">Sesión guardada · editando</span>' : '<span class="pill" style="background:rgba(245,158,11,.15);color:var(--am2)">Sesión nueva</span>'}</h2>
+  <div class="card">
+    <div class="att-head">
+      <div><label class="tiny muted">Fecha</label><input type="date" id="asFecha" value="${AS.fecha}" onchange="cambiarSesionAS()"></div>
+      <div><label class="tiny muted">Tipo</label><select id="asTipo" onchange="cambiarSesionAS()">${Object.entries(TIPOS).map(([k, v]) => `<option value="${k}" ${AS.tipo === k ? 'selected' : ''}>${k === 'MIE' || k === 'SAB' ? 'Entrenamiento ' + v : v}</option>`).join('')}</select></div>
+      <div class="full"><label class="tiny muted">${AS.tipo === 'PAR' ? 'Rival / lugar' : 'Detalle (opcional)'}</label><input id="asDet" value="${esc(AS.detalle)}" placeholder="${AS.tipo === 'PAR' ? 'vs. ...' : 'Ej: lluvia, cancha 3, trabajo de tackle'}" oninput="AS.detalle=this.value;AS.sucio=true"></div>
+    </div>
+    <div style="margin-top:8px"><label class="tiny muted">Notas del día (staff)</label><textarea id="asNotas" rows="2" placeholder="Situaciones generales del entrenamiento…" oninput="AS.notas=this.value;AS.sucio=true">${esc(AS.notas)}</textarea></div>
+  </div>
+  <div class="att-tools">
+    <div class="seg"><button class="${AS.vista === 'J' ? 'on' : ''}" onclick="AS.vista='J';renderAsistencia()">Jugadores (${J.length})</button><button class="${AS.vista === 'E' ? 'on' : ''}" onclick="AS.vista='E';renderAsistencia()">Entrenadores (${E.length})</button></div>
+    <input class="grow" style="max-width:260px" placeholder="🔎 Buscar…" value="${esc(AS.filtro)}" oninput="AS.filtro=this.value;renderListaAS()" id="asBuscar">
+    <button class="btn sm" onclick="marcarTodosAS('P')">✓ Todos presentes</button>
+    <button class="btn sm" onclick="marcarTodosAS(null)">Limpiar</button>
+  </div>
+  <div class="small muted" style="margin-bottom:6px">Tocá ✓ / ✗ para presente/ausente · ▲ ▼ destacan algo puntual del día · 💬 agrega un comentario.</div>
+  <div class="att-list" id="asLista"></div>
+  <div class="stick">
+    <div class="grow cnt small">
+      <div>👦 <b style="color:var(--gr2)">${cj.P}</b> P · <b style="color:var(--rd2)">${cj.A}</b> A · <b class="muted">${cj.N}</b> sin marcar</div>
+      <div>🧢 <b style="color:var(--gr2)">${ce.P}</b> P · <b style="color:var(--rd2)">${ce.A}</b> A · <b class="muted">${ce.N}</b> sin marcar</div>
+    </div>
+    <button class="btn grn" onclick="guardarAS()">💾 Guardar</button>
+  </div>
+  <div class="row" style="margin-top:12px">
+    <button class="btn vio" onclick="equiposDesdeSesion('${AS.fecha}_${AS.tipo}')" ${AS.existe ? '' : 'disabled'}>🧩 Armar equipos con estos presentes</button>
+    ${AS.existe ? `<button class="btn red sm" onclick="borrarSesionAS()">🗑 Borrar sesión</button>` : ''}
+  </div>
+  <div class="card" style="margin-top:14px"><h3>🗂️ Historial de sesiones</h3>
+    ${hist.length ? `<div class="tbl-wrap"><table><thead><tr><th>Fecha</th><th>Tipo</th><th>Detalle</th><th class="num">Jug.</th><th class="num">Ent.</th></tr></thead><tbody>
+    ${hist.map(s => { const r = DB.ASISTENCIA.filter(a => a.sesion_id === s.id); const jp = r.filter(a => a.persona_tipo === 'J' && a.estado === 'P').length, jt = r.filter(a => a.persona_tipo === 'J').length, ep = r.filter(a => a.persona_tipo === 'E' && a.estado === 'P').length; return `<tr class="clk" onclick="cargarSesionAS('${s.fecha}','${s.tipo}');renderAsistencia()"><td><b>${fmtFC(s.fecha)}</b></td><td><span class="pill t-${s.tipo}">${TIPOS[s.tipo] || s.tipo}</span></td><td class="muted">${esc(s.detalle || '')}</td><td class="num"><b>${jp}</b>/${jt}</td><td class="num">${ep}</td></tr>`; }).join('')}
+    </tbody></table></div>` : '<div class="empty">Sin sesiones aún.</div>'}
+  </div>`;
+  renderListaAS();
+}
+function renderListaAS() {
+  const { J, E } = personasAS();
+  const lista = (AS.vista === 'J' ? J : E).filter(p => !AS.filtro || p.nombre.toLowerCase().includes(AS.filtro.toLowerCase()));
+  $('asLista').innerHTML = lista.length ? lista.map(p => {
+    const m = AS.marcas[p.k] || {}; const ab = AS.abiertos.has(p.k);
+    return `<div class="att ${m.estado || ''}" id="att-${p.k}">
+      <div class="main">
+        <div class="nm"><b>${esc(p.nombre)}${p.inactivo ? ' <span class="pill" style="background:rgba(148,163,184,.2)">baja</span>' : ''}</b><small>${esc(p.sub)}</small></div>
+        <button class="cb up ${m.calif > 0 ? 'on' : ''}" onclick="califAS('${p.k}',1)" title="Destacar positivo">▲</button>
+        <button class="cb dn ${m.calif < 0 ? 'on' : ''}" onclick="califAS('${p.k}',-1)" title="Destacar negativo">▼</button>
+        <button class="cb cm ${m.comentario ? 'on' : ''}" onclick="toggleCmtAS('${p.k}')" title="Comentario">💬</button>
+        <button class="sb p ${m.estado === 'P' ? 'on' : ''}" onclick="estadoAS('${p.k}','P')">✓</button>
+        <button class="sb a ${m.estado === 'A' ? 'on' : ''}" onclick="estadoAS('${p.k}','A')">✗</button>
+      </div>
+      ${ab || m.comentario ? `<div class="cmt"><input placeholder="Comentario del día…" value="${esc(m.comentario || '')}" oninput="cmtAS('${p.k}',this.value)"></div>` : ''}
+    </div>`;
+  }).join('') : '<div class="empty">Nadie con ese nombre.</div>';
+}
+function mk(k) { return AS.marcas[k] || (AS.marcas[k] = { estado: null, calif: 0, comentario: '' }); }
+function refrescarContadorAS() { const y = window.scrollY; renderAsistencia(); const b = $('asBuscar'); window.scrollTo(0, y); if (AS.filtro && b) { b.focus(); b.setSelectionRange(b.value.length, b.value.length); } }
+function estadoAS(k, e) { const m = mk(k); m.estado = m.estado === e ? null : e; AS.sucio = true; refrescarContadorAS(); }
+function califAS(k, v) { const m = mk(k); m.calif = m.calif === v ? 0 : v; if (m.calif !== 0 && !m.estado) m.estado = 'P'; AS.sucio = true; if (m.calif !== 0) AS.abiertos.add(k); refrescarContadorAS(); }
+function toggleCmtAS(k) { AS.abiertos.has(k) ? AS.abiertos.delete(k) : AS.abiertos.add(k); renderListaAS(); const i = document.querySelector(`#att-${CSS.escape(k)} .cmt input`); if (i) i.focus(); }
+function cmtAS(k, v) { mk(k).comentario = v; AS.sucio = true; }
+function marcarTodosAS(e) {
+  const { J, E } = personasAS();
+  (AS.vista === 'J' ? J : E).forEach(p => { if (e === null) { if (AS.marcas[p.k]) AS.marcas[p.k].estado = null; } else if (!AS.marcas[p.k] || !AS.marcas[p.k].estado) mk(p.k).estado = e; });
+  AS.sucio = true; refrescarContadorAS();
+}
+function cambiarSesionAS() {
+  const f = $('asFecha').value, t = $('asTipo').value;
+  if (AS.sucio && !confirm('Hay cambios sin guardar en esta sesión. ¿Descartarlos?')) { $('asFecha').value = AS.fecha; $('asTipo').value = AS.tipo; return; }
+  const tipo = f !== AS.fecha && t === AS.tipo ? tipoDeFecha(f) : t;
+  cargarSesionAS(f, tipo); renderAsistencia();
+}
+async function guardarAS() {
+  if (!AS.fecha) return toast('Elegí la fecha', true);
+  const { J, E } = personasAS();
+  const todos = J.concat(E);
+  const sin = todos.filter(p => !AS.marcas[p.k] || !AS.marcas[p.k].estado);
+  const marcados = todos.length - sin.length;
+  if (!marcados) return toast('No marcaste a nadie todavía', true);
+  if (sin.length && !confirm(`${sin.length} persona(s) sin marcar se van a guardar como AUSENTES.\n\n¿Continuar?`)) return;
+  const id = AS.fecha + '_' + AS.tipo;
+  const rows = todos.map(p => { const m = AS.marcas[p.k] || {}; return { sesion_id: id, fecha: AS.fecha, tipo: AS.tipo, persona_tipo: p.t, persona_id: p.id, nombre: p.nombre, estado: m.estado || 'A', calif: m.calif || 0, comentario: m.comentario || '' }; });
+  const ok = await guardar([
+    { op: 'upsert', sheet: 'SESIONES', key: 'id', rows: [{ id, fecha: AS.fecha, tipo: AS.tipo, detalle: AS.detalle, notas: AS.notas, actualizado: new Date().toISOString().slice(0, 16).replace('T', ' ') }] },
+    { op: 'replace', sheet: 'ASISTENCIA', field: 'sesion_id', value: id, rows }
+  ], '✅ Asistencia guardada');
+  if (ok) { cargarSesionAS(AS.fecha, AS.tipo); renderAsistencia(); }
+}
+async function borrarSesionAS() {
+  const id = AS.fecha + '_' + AS.tipo;
+  if (!confirm(`¿Borrar la sesión ${fmtF(AS.fecha)} (${TIPOS[AS.tipo]}) y toda su asistencia?`)) return;
+  await guardar([{ op: 'remove', sheet: 'SESIONES', field: 'id', value: id }, { op: 'remove', sheet: 'ASISTENCIA', field: 'sesion_id', value: id }], 'Sesión borrada');
+  cargarSesionAS(AS.fecha, AS.tipo); renderAsistencia();
+}
+
+/* =====================================================================
+   EQUIPOS  (lógica del monitor original + mejoras)
+   ===================================================================== */
+let EQ = { fuente: '', modo: 'mixtos', n: 6, presentesJ: new Set(), presentesE: new Set(), equipos: [], sel: null, verNiveles: true, ajustar: false, tipoEvento: 'entrenamiento', rival: '', fecha: '' };
+function equiposDesdeSesion(sid) { setFuenteEQ('S:' + sid); ir('equipos'); }
+function equiposDesdeGira() { setFuenteEQ('GIRA'); ir('equipos'); }
+function setFuenteEQ(f) {
+  EQ.fuente = f; EQ.equipos = []; EQ.sel = null;
+  const J = jugActivos(), E = entActivos().filter(e => e.asigna_equipos !== 'NO');
+  if (f.startsWith('S:')) {
+    const sid = f.slice(2); const r = DB.ASISTENCIA.filter(a => a.sesion_id === sid && a.estado === 'P');
+    EQ.presentesJ = new Set(r.filter(a => a.persona_tipo === 'J').map(a => a.persona_id));
+    EQ.presentesE = new Set(r.filter(a => a.persona_tipo === 'E').map(a => a.persona_id));
+    const s = DB.SESIONES.find(x => x.id === sid); EQ.fecha = s ? s.fecha : hoyISO();
+    EQ.tipoEvento = s && s.tipo === 'PAR' ? 'partido' : 'entrenamiento'; EQ.rival = s && s.tipo === 'PAR' ? s.detalle || '' : '';
+  } else if (f === 'GIRA') {
+    EQ.presentesJ = new Set(J.filter(j => viaja('J', j.id)).map(j => j.id));
+    EQ.presentesE = new Set(E.filter(e => viaja('E', e.id)).map(e => e.id));
+    EQ.fecha = DB.CONFIG.GIRA_DESDE || hoyISO();
+  } else {
+    EQ.presentesJ = new Set(J.map(j => j.id)); EQ.presentesE = new Set(E.map(e => e.id)); EQ.fecha = hoyISO();
+  }
+  const guardado = DB.EQUIPOS.filter(x => x.grupo_id === grupoIdEQ());
+  if (guardado.length) cargarGuardadoEQ(true); else generarEQ();
+}
+function grupoIdEQ() { return EQ.fuente.startsWith('S:') ? EQ.fuente.slice(2) : EQ.fuente === 'GIRA' ? 'GIRA' : 'LIBRE_' + (EQ.fecha || hoyISO()); }
+function fuenteDefault() { const s = sesionesOrd()[0]; return s && s.fecha === hoyISO() ? 'S:' + s.id : 'TODOS'; }
+
+function generarEQ() {
+  const pres = jugActivos().filter(j => EQ.presentesJ.has(j.id));
+  let n = EQ.n; const equipos = [];
+  if (!pres.length) { EQ.equipos = []; return; }
+  const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const k = Math.floor(Math.random() * (i + 1)); [a[i], a[k]] = [a[k], a[i]]; } return a; };
+  const ord = { G: 0, '1': 1, '2': 2, '3': 3 };
+  const porNivel = arr => { const g = {}; arr.forEach(j => (g[j.nivel === 'G' ? 'G' + (j.nivel2 || 9) : j.nivel] = g[j.nivel === 'G' ? 'G' + (j.nivel2 || 9) : j.nivel] || []).push(j)); return Object.keys(g).sort((a, b) => (ord[a[0]] - ord[b[0]]) || a.localeCompare(b)).flatMap(k => shuffle(g[k])); };
+  const snake = (lista, eqs) => { let i = 0, dir = 1; lista.forEach(j => { eqs[i].jugadores.push(j); i += dir; if (i === eqs.length) { i = eqs.length - 1; dir = -1; } else if (i < 0) { i = 0; dir = 1; } }); };
+  if (EQ.modo === 'por-nivel' && pres.some(j => j.nivel === 'G')) {
+    n = Math.max(n, 3);
+    equipos.push({ id: 1, nombre: 'Gloriosa A', jugadores: [], entrenadores: [] }, { id: 2, nombre: 'Gloriosa B', jugadores: [], entrenadores: [] });
+    snake(porNivel(pres.filter(j => j.nivel === 'G')), equipos.slice(0, 2));
+    const resto = Array.from({ length: n - 2 }, (_, i) => ({ id: i + 3, nombre: `Equipo ${i + 3}`, jugadores: [], entrenadores: [] }));
+    snake(porNivel(pres.filter(j => j.nivel !== 'G')), resto); equipos.push(...resto);
+  } else {
+    for (let i = 0; i < n; i++) equipos.push({ id: i + 1, nombre: `Equipo ${i + 1}`, jugadores: [], entrenadores: [] });
+    snake(porNivel(pres), equipos);
+  }
+  // entrenadores: primero con su hijo, el resto repartido parejo
+  const ents = entActivos().filter(e => e.asigna_equipos !== 'NO' && EQ.presentesE.has(e.id));
+  const sinHijo = [];
+  shuffle(ents).forEach(e => {
+    const eq = e.hijo_id && equipos.find(q => q.jugadores.some(j => j.id === e.hijo_id));
+    if (eq && eq.entrenadores.length < 2) eq.entrenadores.push(e.id); else sinHijo.push(e);
+  });
+  sinHijo.forEach(e => { const eq = [...equipos].sort((a, b) => a.entrenadores.length - b.entrenadores.length)[0]; eq.entrenadores.push(e.id); });
+  equipos.forEach(e => e.jugadores = e.jugadores.map(j => j.id));
+  EQ.equipos = equipos; EQ.sel = null; guardarBorradorEQ();
+}
+function guardarBorradorEQ() { lsSet(LS.draft, JSON.stringify({ fuente: EQ.fuente, equipos: EQ.equipos, modo: EQ.modo, n: EQ.n })); }
+function promEQ(eq) { const js = eq.jugadores.map(jugById).filter(Boolean); return js.length ? js.reduce((s, j) => s + nivelNum(j), 0) / js.length : 0; }
+
+function renderEquipos() {
+  if (!EQ.fuente) {
+    let d = null; try { d = JSON.parse(lsGet(LS.draft) || 'null'); } catch (e) {}
+    if (d && d.equipos && d.equipos.length) { setFuenteEQ(d.fuente || fuenteDefault()); EQ.equipos = d.equipos; EQ.modo = d.modo || EQ.modo; EQ.n = d.n || EQ.n; }
+    else setFuenteEQ(fuenteDefault());
+  }
+  const ses = sesionesOrd().slice(0, 40);
+  const J = jugActivos(), E = entActivos();
+  const nPres = J.filter(j => EQ.presentesJ.has(j.id)).length;
+  const proms = EQ.equipos.map(promEQ);
+  const dif = proms.length ? Math.max(...proms) - Math.min(...proms) : 0;
+  const asignadosE = new Set(EQ.equipos.flatMap(e => e.entrenadores));
+  const libresE = E.filter(e => EQ.presentesE.has(e.id) && !asignadosE.has(e.id));
+  const hayGuardado = DB.EQUIPOS.some(x => x.grupo_id === grupoIdEQ());
+  $('v-equipos').innerHTML = `
+  <h2 class="sec">🧩 Armado de equipos</h2>
+  <div class="grid g3">
+    <div class="card"><h3>📥 ¿Con quiénes?</h3>
+      <select onchange="setFuenteEQ(this.value);renderEquipos()">
+        <option value="TODOS" ${EQ.fuente === 'TODOS' ? 'selected' : ''}>Todo el plantel activo</option>
+        <option value="GIRA" ${EQ.fuente === 'GIRA' ? 'selected' : ''}>🚌 Los que viajan a la gira</option>
+        <optgroup label="Presentes de una sesión">${ses.map(s => `<option value="S:${s.id}" ${EQ.fuente === 'S:' + s.id ? 'selected' : ''}>${fmtFC(s.fecha)} · ${TIPOS[s.tipo] || s.tipo}${s.detalle ? ' · ' + esc(s.detalle) : ''}</option>`).join('')}</optgroup>
+      </select>
+      <div class="info" style="margin-top:8px">👦 ${nPres} jugadores · 🧢 ${E.filter(e => EQ.presentesE.has(e.id)).length} entrenadores</div>
+      <button class="btn sm" style="width:100%;margin-top:8px" onclick="EQ.ajustar=!EQ.ajustar;renderEquipos()">${EQ.ajustar ? '↑ Ocultar' : '↓ Ajustar'} presentes / ausentes</button>
+    </div>
+    <div class="card"><h3>⚙️ Tipo de equipos</h3>
+      <div class="seg" style="width:100%;display:grid;grid-template-columns:1fr 1fr"><button class="${EQ.modo === 'mixtos' ? 'on' : ''}" onclick="EQ.modo='mixtos';generarEQ();renderEquipos()">🔀 Mixtos</button><button class="${EQ.modo === 'por-nivel' ? 'on' : ''}" onclick="EQ.modo='por-nivel';if(EQ.n<3)EQ.n=3;generarEQ();renderEquipos()">📊 Por nivel</button></div>
+      <div class="info" style="margin-top:8px">${EQ.modo === 'mixtos' ? '✓ Todos los equipos con niveles mezclados (reparto en serpentina)' : '✓ 2 equipos Gloriosa + el resto por nivel'}</div>
+    </div>
+    <div class="card"><h3>🔢 Cantidad de equipos</h3>
+      <div class="nums">${[2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => `<button class="${EQ.n === n ? 'on' : ''}" onclick="EQ.n=${n};generarEQ();renderEquipos()">${n}</button>`).join('')}</div>
+      <div class="info" style="margin-top:8px">~${EQ.n ? Math.ceil(nPres / EQ.n) : 0} jugadores por equipo</div>
+    </div>
+  </div>
+  ${EQ.ajustar ? `<div class="card"><div class="grid g2">
+    <div><h3>👦 Jugadores <span class="sp"></span><button class="btn sm" onclick="todosEQ('J',true)">Todos</button><button class="btn sm" onclick="todosEQ('J',false)">Ninguno</button></h3><div class="ckl">${J.map(j => `<label><input type="checkbox" ${EQ.presentesJ.has(j.id) ? 'checked' : ''} onchange="togglePresEQ('J','${j.id}',this.checked)"> ${esc(j.nombre)} ${nivelBadge(j)}</label>`).join('')}</div></div>
+    <div><h3>🧢 Entrenadores</h3><div class="ckl">${E.map(e => `<label><input type="checkbox" ${EQ.presentesE.has(e.id) ? 'checked' : ''} onchange="togglePresEQ('E','${e.id}',this.checked)"> ${esc(entNom(e))} <span class="muted small">${esc(e.rol || '')}${e.asigna_equipos === 'NO' ? ' · no se asigna' : ''}</span></label>`).join('')}</div></div>
+  </div><button class="btn pri" style="margin-top:10px" onclick="generarEQ();renderEquipos()">🔄 Rearmar con esta selección</button></div>` : ''}
+  <div class="row" style="margin:6px 0 10px">
+    <button class="btn vio" onclick="generarEQ();renderEquipos()">🔄 Mezclar de nuevo</button>
+    <button class="btn pri" onclick="copiarEQ()">📋 Copiar (WhatsApp)</button>
+    <button class="btn grn" onclick="guardarEQ()">💾 Guardar en planilla</button>
+    ${hayGuardado ? `<button class="btn sm" onclick="cargarGuardadoEQ();renderEquipos()">↩︎ Cargar los guardados</button>` : ''}
+    <label class="small row" style="gap:.3rem;margin-left:auto"><input type="checkbox" style="width:auto" ${EQ.verNiveles ? 'checked' : ''} onchange="EQ.verNiveles=this.checked;renderEquipos()"> ver niveles</label>
+  </div>
+  <div class="card"><div class="row">
+    <div class="seg"><button class="${EQ.tipoEvento === 'entrenamiento' ? 'on' : ''}" onclick="EQ.tipoEvento='entrenamiento';renderEquipos()">🏋️ Entrenamiento</button><button class="${EQ.tipoEvento === 'partido' ? 'on' : ''}" onclick="EQ.tipoEvento='partido';renderEquipos()">🏉 Partido</button></div>
+    ${EQ.tipoEvento === 'partido' ? `<input style="max-width:200px" placeholder="vs. (rival)" value="${esc(EQ.rival)}" oninput="EQ.rival=this.value">` : ''}
+    <input type="date" style="max-width:170px" value="${EQ.fecha}" onchange="EQ.fecha=this.value">
+    <button class="btn" onclick="imprimirEQ()">🖨️ Imprimir / PDF (sin niveles)</button>
+  </div></div>
+  ${dif >= .5 ? `<div class="warn">⚠️ Diferencia de nivel entre equipos: ${dif.toFixed(2)} (mín ${Math.min(...proms).toFixed(1)} · máx ${Math.max(...proms).toFixed(1)}). Mezclá de nuevo o mové jugadores.</div>` : ''}
+  ${libresE.length ? `<div class="warn">🧢 Entrenadores presentes sin equipo: ${libresE.map(e => `<span class="chip" onclick="selEQ('E','${e.id}',0)">${esc(entNom(e))}</span>`).join('')} <span class="small">(tocá uno y después "Mover acá")</span></div>` : ''}
+  ${EQ.sel ? `<div class="info" style="margin:8px 0">👉 Seleccionado: <b>${esc(EQ.sel.t === 'J' ? (jugById(EQ.sel.id) || {}).nombre : entNom(entById(EQ.sel.id)))}</b>. Tocá "Mover acá" en el equipo destino. <button class="btn sm" onclick="EQ.sel=null;renderEquipos()">Cancelar</button></div>` : '<div class="small muted" style="margin:8px 0">En compu: arrastrá jugadores/entrenadores. En el celu: tocá uno y después "Mover acá".</div>'}
+  <div class="teams">${EQ.equipos.map(eq => teamHTML(eq)).join('') || '<div class="empty">No hay jugadores seleccionados.</div>'}</div>`;
+}
+function teamHTML(eq) {
+  const p = promEQ(eq);
+  return `<div class="team" data-team="${eq.id}" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="dropEQ(event,${eq.id})">
+    <div class="th"><h4 contenteditable="true" onblur="renombrarEQ(${eq.id},this.textContent)">${esc(eq.nombre)}</h4><div class="ts"><span>👥 ${eq.jugadores.length}</span>${EQ.verNiveles ? `<span>📊 ${p.toFixed(1)}</span>` : ''}</div></div>
+    <div class="tb">
+      <div class="coaches"><strong>Entrenadores</strong>${eq.entrenadores.length ? eq.entrenadores.map(id => `<span class="chip ${EQ.sel && EQ.sel.t === 'E' && EQ.sel.id === id ? 'sel' : ''}" draggable="true" ondragstart="dragEQ(event,'E','${id}',${eq.id})" onclick="selEQ('E','${id}',${eq.id})">${esc(entNom(entById(id)))}</span>`).join('') : '<span class="small muted">Sin asignar</span>'}</div>
+      ${eq.jugadores.map((id, i) => { const j = jugById(id); if (!j) return ''; return `<div class="pl ${EQ.sel && EQ.sel.t === 'J' && EQ.sel.id === id ? 'sel' : ''}" draggable="true" ondragstart="dragEQ(event,'J','${id}',${eq.id})" onclick="selEQ('J','${id}',${eq.id})"><span class="n">${i + 1}.</span><span class="nm">${esc(j.nombre)}<small>${esc(j.colegio || '')}${j.grado && j.grado !== 'N/A' ? ', ' + esc(j.grado) : ''}</small></span>${EQ.verNiveles ? nivelBadge(j) : ''}<button class="btn sm" style="padding:.2rem .4rem" onclick="event.stopPropagation();editarJugador('${id}')">✏️</button></div>`; }).join('')}
+      ${EQ.sel && EQ.sel.from !== eq.id ? `<button class="moveto" onclick="moverEQ(${eq.id})">⇢ Mover acá</button>` : ''}
+    </div></div>`;
+}
+let DRAG = null;
+function dragEQ(ev, t, id, from) { DRAG = { t, id, from }; ev.dataTransfer.effectAllowed = 'move'; try { ev.dataTransfer.setData('text/plain', id); } catch (e) {} }
+function dropEQ(ev, to) { ev.preventDefault(); if (!DRAG) return; EQ.sel = DRAG; DRAG = null; moverEQ(to); }
+function selEQ(t, id, from) { EQ.sel = EQ.sel && EQ.sel.t === t && EQ.sel.id === id ? null : { t, id, from }; renderEquipos(); }
+function moverEQ(to) {
+  const s = EQ.sel; if (!s) return;
+  const dest = EQ.equipos.find(e => e.id === to); const orig = EQ.equipos.find(e => e.id === s.from);
+  const campo = s.t === 'J' ? 'jugadores' : 'entrenadores';
+  if (orig) orig[campo] = orig[campo].filter(x => x !== s.id);
+  if (!dest[campo].includes(s.id)) dest[campo].push(s.id);
+  EQ.sel = null; guardarBorradorEQ(); renderEquipos();
+}
+function renombrarEQ(id, txt) { const e = EQ.equipos.find(x => x.id === id); if (e && txt.trim()) { e.nombre = txt.trim(); guardarBorradorEQ(); } }
+function togglePresEQ(t, id, on) { const s = t === 'J' ? EQ.presentesJ : EQ.presentesE; on ? s.add(id) : s.delete(id); }
+function todosEQ(t, on) { const s = t === 'J' ? EQ.presentesJ : EQ.presentesE; s.clear(); if (on) (t === 'J' ? jugActivos() : entActivos()).forEach(x => s.add(x.id)); renderEquipos(); }
+function textoEQ() {
+  const tit = `🏉 REGATAS M9 · Camada 2017\n${EQ.tipoEvento === 'partido' ? 'PARTIDO' + (EQ.rival ? ' vs ' + EQ.rival : '') : 'ENTRENAMIENTO'} · ${fmtF(EQ.fecha)}\n`;
+  return tit + '\n' + EQ.equipos.map(eq => `*${eq.nombre}* (${eq.jugadores.length})\n🧢 ${eq.entrenadores.map(id => entNom(entById(id))).join(', ') || 'Sin asignar'}\n` + eq.jugadores.map((id, i) => `${i + 1}. ${(jugById(id) || {}).nombre || ''}`).join('\n')).join('\n\n');
+}
+function copiarEQ() {
+  const t = textoEQ();
+  (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast('📋 Copiado: pegalo en WhatsApp')).catch(() => { prompt('Copiá el texto:', t); });
+}
+async function guardarEQ() {
+  const g = grupoIdEQ();
+  const ctx = EQ.fuente === 'GIRA' ? 'Gira' : EQ.fuente.startsWith('S:') ? 'Sesión' : 'Libre';
+  const rows = [];
+  EQ.equipos.forEach(eq => {
+    eq.entrenadores.forEach(id => rows.push({ grupo_id: g, fecha: EQ.fecha, contexto: ctx, equipo: eq.nombre, persona_tipo: 'E', persona_id: id, nombre: entNom(entById(id)) }));
+    eq.jugadores.forEach(id => rows.push({ grupo_id: g, fecha: EQ.fecha, contexto: ctx, equipo: eq.nombre, persona_tipo: 'J', persona_id: id, nombre: (jugById(id) || {}).nombre || '' }));
+  });
+  await guardar([{ op: 'replace', sheet: 'EQUIPOS', field: 'grupo_id', value: g, rows }], '💾 Equipos guardados en la planilla');
+  renderEquipos();
+}
+function cargarGuardadoEQ(silencioso) {
+  const rows = DB.EQUIPOS.filter(x => x.grupo_id === grupoIdEQ());
+  const nombres = [...new Set(rows.map(r => r.equipo))];
+  EQ.equipos = nombres.map((n, i) => ({ id: i + 1, nombre: n, jugadores: rows.filter(r => r.equipo === n && r.persona_tipo === 'J').map(r => r.persona_id), entrenadores: rows.filter(r => r.equipo === n && r.persona_tipo === 'E').map(r => r.persona_id) }));
+  EQ.n = nombres.length || EQ.n; EQ.sel = null;
+  if (!silencioso) toast('Equipos guardados cargados');
+}
+function cabeceraPrint(derecha) {
+  const C = DB.CONFIG;
+  return `<div class="ph"><img src="${esc(C.ESCUDO_URL || 'escudo.png')}" onerror="this.src=ESCUDO_FALLBACK"><div><div class="a">${esc(C.CLUB || 'Regatas Bella Vista')}</div><div class="b">${esc(C.DIVISION || 'M9')} · Camada ${esc(C.CAMADA || '2017')}</div></div><div class="c">${derecha}</div></div>`;
+}
+function imprimirEQ() {
+  if (!EQ.equipos.length) return toast('No hay equipos armados', true);
+  const ev = EQ.tipoEvento === 'partido' ? '🏉 PARTIDO' + (EQ.rival ? ' vs ' + esc(EQ.rival) : '') : '🏋️ ENTRENAMIENTO';
+  $('printArea').innerHTML = cabeceraPrint(`${ev}<br>📅 ${fmtF(EQ.fecha)}`) + `<div class="pg">${EQ.equipos.map(eq => `<div class="pt"><h5>${esc(eq.nombre)} · ${eq.jugadores.length}</h5><div class="pc">Entrenadores: ${esc(eq.entrenadores.map(id => entNom(entById(id))).join(', ') || 'Sin asignar')}</div><ol>${eq.jugadores.map(id => `<li>${esc((jugById(id) || {}).nombre || '')}</li>`).join('')}</ol></div>`).join('')}</div>`;
+  setTimeout(() => window.print(), 150);
+}
+
+/* =====================================================================
+   PLANTEL (altas, bajas, edición)
+   ===================================================================== */
+let PL = { vista: 'J', filtro: '', nivel: '' };
+function renderPlantel() {
+  const st = calcStats({ anio: new Date().getFullYear() });
+  const f = PL.filtro.toLowerCase();
+  const J = jugActivos().filter(j => (!f || (j.nombre + ' ' + j.colegio).toLowerCase().includes(f)) && (!PL.nivel || j.nivel === PL.nivel));
+  const E = entActivos().filter(e => !f || (e.apodo + ' ' + e.nombre).toLowerCase().includes(f));
+  const bajasJ = DB.JUGADORES.filter(j => j.activo === 'NO'), bajasE = DB.ENTRENADORES.filter(e => e.activo === 'NO');
+  const cntN = n => jugActivos().filter(j => j.nivel === n).length;
+  let body = '';
+  if (PL.vista === 'J') body = `
+    <div class="row" style="margin-bottom:8px"><div class="seg">${['', 'G', '1', '2', '3'].map(n => `<button class="${PL.nivel === n ? 'on' : ''}" onclick="PL.nivel='${n}';renderPlantel()">${n ? (n === 'G' ? 'Gloriosa' : 'Nivel ' + n) + ' (' + cntN(n) + ')' : 'Todos'}</button>`).join('')}</div></div>
+    <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Jugador</th><th>Nivel</th><th>Colegio</th><th>Grado</th><th class="num">Asist.</th><th>Gira</th><th></th></tr></thead><tbody>
+    ${J.map((j, i) => { const p = st.per['J-' + j.id]; const pc = p ? p.pct : null; return `<tr><td class="muted">${i + 1}</td><td class="clk" onclick="fichaJugador('${j.id}')"><b>${esc(j.nombre)}</b>${j.observaciones ? ' <span title="' + esc(j.observaciones) + '">📝</span>' : ''}</td><td>${nivelBadge(j)}</td><td>${esc(j.colegio)}</td><td>${esc(j.grado)}</td><td class="num">${pc == null ? '<span class="muted">—</span>' : `<b style="color:${colorPct(pc)}">${pc}%</b>`}</td><td>${viaja('J', j.id) ? '✈️' : ''}</td><td><button class="btn sm" onclick="editarJugador('${j.id}')">✏️ Editar</button></td></tr>`; }).join('')}
+    </tbody></table></div>`;
+  else if (PL.vista === 'E') body = `
+    <div class="tbl-wrap"><table><thead><tr><th>Apodo</th><th>Nombre</th><th>Rol</th><th>Hijo</th><th>Arma equipos</th><th class="num">Asist.</th><th>Gira</th><th></th></tr></thead><tbody>
+    ${E.map(e => { const p = st.per['E-' + e.id]; const h = jugById(e.hijo_id); return `<tr><td class="clk" onclick="fichaEntrenador('${e.id}')"><b>${esc(e.apodo)}</b></td><td>${esc(e.nombre)}</td><td>${esc(e.rol)}</td><td class="muted">${h ? esc(h.nombre) : ''}</td><td>${e.asigna_equipos === 'NO' ? 'No' : 'Sí'}</td><td class="num">${p ? `<b style="color:${colorPct(p.pct)}">${p.pct}%</b>` : '<span class="muted">—</span>'}</td><td>${viaja('E', e.id) ? '✈️' : ''}</td><td><button class="btn sm" onclick="editarEntrenador('${e.id}')">✏️ Editar</button></td></tr>`; }).join('')}
+    </tbody></table></div>`;
+  else body = `
+    <div class="info" style="margin-bottom:10px">Siguen guardados en la base con todo su historial, pero no aparecen en la asistencia ni en el armado de equipos. Si vuelven, tocá "Vuelve".</div>
+    ${bajasJ.length + bajasE.length ? `<div class="tbl-wrap"><table><thead><tr><th>Nombre</th><th>Tipo</th><th>Desde</th><th>Motivo</th><th></th></tr></thead><tbody>
+    ${bajasJ.map(j => `<tr><td><b class="clk" onclick="fichaJugador('${j.id}')">${esc(j.nombre)}</b></td><td>Jugador</td><td>${fmtF(j.fecha_baja)}</td><td class="muted">${esc(j.motivo_baja || '')}</td><td><button class="btn sm grn" onclick="reactivar('J','${j.id}')">↩︎ Vuelve</button></td></tr>`).join('')}
+    ${bajasE.map(e => `<tr><td><b>${esc(entNom(e))}</b></td><td>Entrenador</td><td>${fmtF(e.fecha_baja)}</td><td class="muted">${esc(e.motivo_baja || '')}</td><td><button class="btn sm grn" onclick="reactivar('E','${e.id}')">↩︎ Vuelve</button></td></tr>`).join('')}
+    </tbody></table></div>` : '<div class="empty">Nadie dado de baja 🙌</div>'}`;
+  $('v-plantel').innerHTML = `
+  <h2 class="sec">👥 Plantel <span class="sp"></span><button class="btn sm pri" onclick="editarJugador()">➕ Jugador</button><button class="btn sm vio" onclick="editarEntrenador()">➕ Entrenador</button></h2>
+  <div class="row" style="margin-bottom:10px">
+    <div class="seg"><button class="${PL.vista === 'J' ? 'on' : ''}" onclick="PL.vista='J';renderPlantel()">Jugadores (${jugActivos().length})</button><button class="${PL.vista === 'E' ? 'on' : ''}" onclick="PL.vista='E';renderPlantel()">Entrenadores (${entActivos().length})</button><button class="${PL.vista === 'B' ? 'on' : ''}" onclick="PL.vista='B';renderPlantel()">No vienen más (${bajasJ.length + bajasE.length})</button></div>
+    ${PL.vista !== 'B' ? `<input class="grow" style="max-width:260px" placeholder="🔎 Buscar nombre o colegio…" value="${esc(PL.filtro)}" oninput="PL.filtro=this.value;clearTimeout(window._pf);window._pf=setTimeout(()=>{renderPlantel();const i=document.querySelector('#v-plantel input.grow');i.focus();i.setSelectionRange(i.value.length,i.value.length)},250)">` : ''}
+  </div>${body}`;
+}
+function abrirModal(html) { $('mbox').innerHTML = html; $('modal').classList.add('on'); }
+function cerrarModal() { $('modal').classList.remove('on'); }
+$('modal').addEventListener('click', e => { if (e.target.id === 'modal') cerrarModal(); });
+
+function editarJugador(id) {
+  const j = id ? jugById(id) : { id: '', nombre: '', nivel: '2', nivel2: null, colegio: '', grado: '3ro', dni: '', fecha_nac: '', observaciones: '', activo: 'SI' };
+  abrirModal(`<h3>${id ? '✏️ ' + esc(j.nombre) : '➕ Nuevo jugador'}<span class="sp"></span><button class="x" onclick="cerrarModal()">×</button></h3>
+  <div class="fgrid">
+    <div class="fg full"><label>Apellido, Nombre</label><input id="fNom" value="${esc(j.nombre)}" placeholder="Apellido, Nombre"></div>
+    <div class="fg"><label>Calificación (nivel)</label><select id="fNiv" onchange="$('fN2w').classList.toggle('hidden',this.value!=='G')">${[['G', 'Gloriosa'], ['1', 'Nivel 1'], ['2', 'Nivel 2'], ['3', 'Nivel 3']].map(([v, t]) => `<option value="${v}" ${j.nivel === v ? 'selected' : ''}>${t}</option>`).join('')}</select></div>
+    <div class="fg ${j.nivel === 'G' ? '' : 'hidden'}" id="fN2w"><label>Sub-nivel Gloriosa (1.0–3.0)</label><input id="fN2" type="number" min="1" max="3" step="0.1" value="${j.nivel2 == null ? '' : j.nivel2}"></div>
+    <div class="fg"><label>Colegio</label><input id="fCol" value="${esc(j.colegio === 'N/A' ? '' : j.colegio)}" list="colegios"><datalist id="colegios">${[...new Set(DB.JUGADORES.map(x => x.colegio).filter(Boolean))].sort().map(c => `<option value="${esc(c)}">`).join('')}</datalist></div>
+    <div class="fg"><label>Grado</label><select id="fGra">${['3ro', '4to', 'N/A'].map(g => `<option ${j.grado === g ? 'selected' : ''}>${g}</option>`).join('')}</select></div>
+    <div class="fg"><label>DNI / Pasaporte</label><input id="fDni" value="${esc(j.dni)}"></div>
+    <div class="fg"><label>Fecha de nacimiento</label><input id="fNac" type="date" value="${esc(String(j.fecha_nac || '').length === 10 ? j.fecha_nac : '')}"></div>
+    <div class="fg full"><label>Observaciones (staff)</label><textarea id="fObs" rows="2">${esc(j.observaciones || '')}</textarea></div>
+  </div>
+  <div class="mact"><button class="btn" onclick="cerrarModal()">Cancelar</button><button class="btn vio" onclick="guardarJugador('${id || ''}')">💾 Guardar</button></div>
+  ${id && j.activo !== 'NO' ? `<div class="mact"><button class="btn sm" onclick="cerrarModal();fichaJugador('${id}')">📊 Ver ficha</button><button class="btn sm red" onclick="darBaja('J','${id}')">🚶 No viene más</button></div>` : ''}`);
+  if (!id) setTimeout(() => $('fNom').focus(), 50);
+}
+async function guardarJugador(id) {
+  const nombre = $('fNom').value.trim(); if (!nombre) return toast('Falta el nombre', true);
+  const nivel = $('fNiv').value;
+  const nuevo = !id;
+  if (nuevo) id = String(Math.max(0, ...DB.JUGADORES.map(j => Number(j.id) || 0)) + 1);
+  const row = { id, nombre, nivel, nivel2: nivel === 'G' ? (parseFloat($('fN2').value) || '') : '', colegio: $('fCol').value.trim() || 'N/A', grado: $('fGra').value, dni: $('fDni').value.trim(), fecha_nac: $('fNac').value, observaciones: $('fObs').value.trim() };
+  if (nuevo) Object.assign(row, { activo: 'SI', fecha_alta: hoyISO(), fecha_baja: '', motivo_baja: '' });
+  const ops = [{ op: 'upsert', sheet: 'JUGADORES', key: 'id', rows: [row] }];
+  const g = giraDe('J', id); if (g && g.nombre !== nombre) ops.push({ op: 'upsert', sheet: 'GIRA', key: 'clave', rows: [{ clave: 'J-' + id, nombre }] });
+  cerrarModal();
+  await guardar(ops, nuevo ? '➕ Jugador agregado' : '💾 Cambios guardados');
+  renderTab();
+}
+function editarEntrenador(id) {
+  const e = id ? entById(id) : { id: '', apodo: '', nombre: '', rol: 'Entrenador', hijo_id: '', asigna_equipos: 'SI', dni: '', fecha_nac: '', observaciones: '', activo: 'SI' };
+  abrirModal(`<h3>${id ? '✏️ ' + esc(entNom(e)) : '➕ Nuevo entrenador'}<span class="sp"></span><button class="x" onclick="cerrarModal()">×</button></h3>
+  <div class="fgrid">
+    <div class="fg"><label>Apodo (como figura en equipos)</label><input id="fApo" value="${esc(e.apodo)}"></div>
+    <div class="fg"><label>Rol</label><select id="fRol">${['Head Coach', 'Entrenador', 'Ayudante', 'Manager'].map(r => `<option ${e.rol === r ? 'selected' : ''}>${r}</option>`).join('')}</select></div>
+    <div class="fg full"><label>Apellido, Nombre</label><input id="fNomE" value="${esc(e.nombre)}"></div>
+    <div class="fg full"><label>Hijo en la división (va al mismo equipo)</label><select id="fHijo"><option value="">—</option>${jugActivos().map(j => `<option value="${j.id}" ${e.hijo_id === j.id ? 'selected' : ''}>${esc(j.nombre)}</option>`).join('')}</select></div>
+    <div class="fg"><label>¿Se asigna a equipos?</label><select id="fAsig"><option value="SI" ${e.asigna_equipos !== 'NO' ? 'selected' : ''}>Sí</option><option value="NO" ${e.asigna_equipos === 'NO' ? 'selected' : ''}>No</option></select></div>
+    <div class="fg"><label>DNI</label><input id="fDniE" value="${esc(e.dni)}"></div>
+    <div class="fg"><label>Fecha de nacimiento</label><input id="fNacE" type="date" value="${esc(String(e.fecha_nac || '').length === 10 ? e.fecha_nac : '')}"></div>
+    <div class="fg full"><label>Observaciones</label><textarea id="fObsE" rows="2">${esc(e.observaciones || '')}</textarea></div>
+  </div>
+  <div class="mact"><button class="btn" onclick="cerrarModal()">Cancelar</button><button class="btn vio" onclick="guardarEntrenador('${id || ''}')">💾 Guardar</button></div>
+  ${id && e.activo !== 'NO' ? `<div class="mact"><button class="btn sm" onclick="cerrarModal();fichaEntrenador('${id}')">📊 Ver ficha</button><button class="btn sm red" onclick="darBaja('E','${id}')">🚶 No viene más</button></div>` : ''}`);
+}
+async function guardarEntrenador(id) {
+  const apodo = $('fApo').value.trim(), nombre = $('fNomE').value.trim();
+  if (!apodo && !nombre) return toast('Poné al menos el apodo', true);
+  const nuevo = !id;
+  if (nuevo) id = 'E' + pad(Math.max(0, ...DB.ENTRENADORES.map(e => parseInt(String(e.id).replace(/\D/g, '')) || 0)) + 1);
+  const row = { id, apodo: apodo || nombre, nombre, rol: $('fRol').value, hijo_id: $('fHijo').value, asigna_equipos: $('fAsig').value, dni: $('fDniE').value.trim(), fecha_nac: $('fNacE').value, observaciones: $('fObsE').value.trim() };
+  if (nuevo) Object.assign(row, { activo: 'SI', fecha_baja: '', motivo_baja: '' });
+  cerrarModal();
+  await guardar([{ op: 'upsert', sheet: 'ENTRENADORES', key: 'id', rows: [row] }], nuevo ? '➕ Entrenador agregado' : '💾 Cambios guardados');
+  renderTab();
+}
+function darBaja(t, id) {
+  const p = t === 'J' ? jugById(id) : entById(id);
+  abrirModal(`<h3>🚶 ${esc(t === 'J' ? p.nombre : entNom(p))} no viene más<span class="sp"></span><button class="x" onclick="cerrarModal()">×</button></h3>
+  <div class="info" style="margin-bottom:10px">No se borra: queda en la base con todo su historial y lo podés reactivar cuando quieras.</div>
+  <div class="fg"><label>Desde</label><input type="date" id="fBajaF" value="${hoyISO()}"></div>
+  <div class="fg"><label>Motivo (opcional)</label><input id="fBajaM" placeholder="Ej: cambió de deporte, se mudó…"></div>
+  <div class="mact"><button class="btn" onclick="cerrarModal()">Cancelar</button><button class="btn red" onclick="confirmarBaja('${t}','${id}')">Confirmar baja</button></div>`);
+}
+async function confirmarBaja(t, id) {
+  const row = { id, activo: 'NO', fecha_baja: $('fBajaF').value, motivo_baja: $('fBajaM').value.trim() };
+  cerrarModal();
+  EQ.equipos.forEach(e => { e.jugadores = e.jugadores.filter(x => !(t === 'J' && x === id)); e.entrenadores = e.entrenadores.filter(x => !(t === 'E' && x === id)); });
+  await guardar([{ op: 'upsert', sheet: t === 'J' ? 'JUGADORES' : 'ENTRENADORES', key: 'id', rows: [row] }], 'Movido a "No vienen más"');
+  renderTab();
+}
+async function reactivar(t, id) {
+  await guardar([{ op: 'upsert', sheet: t === 'J' ? 'JUGADORES' : 'ENTRENADORES', key: 'id', rows: [{ id, activo: 'SI', fecha_baja: '', motivo_baja: '' }] }], '↩︎ Reactivado');
+  renderTab();
+}
+
+/* =====================================================================
+   GIRA
+   ===================================================================== */
+let GI = { vista: 'SI', filtro: '' };
+function filasGira() {
+  const J = DB.JUGADORES.map(j => ({ t: 'J', id: j.id, nombre: j.nombre, rol: 'Jugador', dni: j.dni, nac: j.fecha_nac, activo: j.activo, x: j }));
+  const E = DB.ENTRENADORES.map(e => ({ t: 'E', id: e.id, nombre: e.nombre || e.apodo, rol: e.rol, dni: e.dni, nac: e.fecha_nac, activo: e.activo, x: e }));
+  return J.concat(E).map(p => { const g = giraDe(p.t, p.id) || {}; return Object.assign(p, { va: String(g.va || '').toUpperCase() === 'SI' ? 'SI' : 'NO', rol_gira: g.rol_gira || p.rol, aut: g.autorizacion === 'SI', fic: g.ficha_medica === 'SI', pag: g.pago === 'SI', obs: g.observaciones || '' }); })
+    .filter(p => p.activo !== 'NO' || p.va === 'SI');
+}
+function renderGira() {
+  const C = DB.CONFIG;
+  const F = filasGira();
+  const vJ = F.filter(p => p.t === 'J' && p.va === 'SI'), vE = F.filter(p => p.t === 'E' && p.va === 'SI');
+  const nJ = F.filter(p => p.t === 'J' && p.va === 'NO'), nE = F.filter(p => p.t === 'E' && p.va === 'NO');
+  const pend = vJ.filter(p => !p.aut || !p.fic || !p.pag).length;
+  let cuenta = '—', sub = 'Cargá la fecha de salida en ⚙️';
+  if (C.GIRA_DESDE) { const dd = Math.ceil((parseISO(C.GIRA_DESDE) - new Date(new Date().toDateString())) / 864e5); cuenta = dd > 0 ? dd : dd === 0 ? 'HOY' : '✓'; sub = dd > 0 ? 'días para la salida' : dd === 0 ? '¡salimos hoy!' : 'gira realizada'; }
+  const f = GI.filtro.toLowerCase();
+  const lista = (GI.vista === 'SI' ? vJ.concat(vE) : nJ.concat(nE)).filter(p => !f || p.nombre.toLowerCase().includes(f));
+  const ordRol = p => p.t === 'J' ? 9 : /head/i.test(p.rol_gira) ? 0 : /manager/i.test(p.rol_gira) ? 1 : 2;
+  lista.sort((a, b) => ordRol(a) - ordRol(b) || a.nombre.localeCompare(b.nombre));
+  $('v-gira').innerHTML = `
+  <h2 class="sec">🚌 ${esc(C.GIRA_NOMBRE || 'Gira')} <span class="sp"></span><button class="btn sm" onclick="configGira()">⚙️ Datos de la gira</button></h2>
+  <div class="gira-hero">
+    <div><div class="big">${cuenta}</div><div class="small muted">${sub}</div></div>
+    <div class="grow"><div style="font-weight:800">${C.GIRA_DESDE ? '📅 ' + fmtF(C.GIRA_DESDE) + (C.GIRA_HASTA ? ' → ' + fmtF(C.GIRA_HASTA) : '') : 'Fechas a definir'}</div><div class="small muted">Viajan ${vJ.length} jugadores y ${vE.length} adultos · ${vJ.length + vE.length} pasajeros</div></div>
+    <button class="btn vio" onclick="equiposDesdeGira()">🧩 Armar equipos de la gira</button>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="l">Jugadores que viajan</div><div class="v" style="color:var(--gr)">${vJ.length}</div><div class="s">de ${vJ.length + nJ.length} activos (${pct(vJ.length, vJ.length + nJ.length)}%)</div></div>
+    <div class="kpi"><div class="l">Staff que viaja</div><div class="v" style="color:var(--vi2)">${vE.length}</div><div class="s">${vE.filter(p => /head|entren|ayud/i.test(p.rol_gira)).length} entrenadores · ${vE.filter(p => /manager/i.test(p.rol_gira)).length} managers</div></div>
+    <div class="kpi"><div class="l">No viajan</div><div class="v" style="color:var(--rd)">${nJ.length}</div><div class="s">jugadores (+${nE.length} adultos)</div></div>
+    <div class="kpi"><div class="l">Papeles pendientes</div><div class="v" style="color:var(--am)">${pend}</div><div class="s">jugadores con algo sin entregar</div></div>
+  </div>
+  <div class="row" style="margin-bottom:10px">
+    <div class="seg"><button class="${GI.vista === 'SI' ? 'on' : ''}" onclick="GI.vista='SI';renderGira()">✈️ Viajan (${vJ.length + vE.length})</button><button class="${GI.vista === 'NO' ? 'on' : ''}" onclick="GI.vista='NO';renderGira()">🏠 No viajan (${nJ.length + nE.length})</button></div>
+    <input class="grow" style="max-width:240px" placeholder="🔎 Buscar…" value="${esc(GI.filtro)}" oninput="GI.filtro=this.value;clearTimeout(window._gf);window._gf=setTimeout(()=>{renderGira();const i=document.querySelector('#v-gira input.grow');i.focus();i.setSelectionRange(i.value.length,i.value.length)},250)">
+    <button class="btn sm" onclick="imprimirGira()">🖨️ Listado de pasajeros</button>
+    <button class="btn sm" onclick="copiarGira()">📋 Copiar listas</button>
+  </div>
+  ${GI.vista === 'SI' ? `<div class="small muted" style="margin-bottom:6px">Tocá Aut. / Ficha / Pago para marcar lo entregado. Se guarda solo.</div>` : ''}
+  <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Nombre</th><th>Rol</th><th>DNI</th><th>Nac.</th>${GI.vista === 'SI' ? '<th>Papeles</th><th>Obs.</th>' : '<th>Asist. año</th>'}<th></th></tr></thead><tbody>
+  ${lista.map((p, i) => { const st = GI.vista === 'NO' && p.t === 'J' ? (calcStats({ anio: new Date().getFullYear() }).per['J-' + p.id] || null) : null; return `<tr>
+    <td class="muted">${i + 1}</td><td><b>${esc(p.nombre)}</b>${p.activo === 'NO' ? ' <span class="pill" style="background:rgba(148,163,184,.2)">baja</span>' : ''}</td><td class="small">${esc(p.rol_gira)}</td><td class="small">${esc(p.dni)}</td><td class="small">${fmtF(p.nac)}</td>
+    ${GI.vista === 'SI' ? `<td><button class="tg ${p.aut ? 'on' : ''}" onclick="toggleGira('${p.t}','${p.id}','autorizacion')">Aut.</button> <button class="tg ${p.fic ? 'on' : ''}" onclick="toggleGira('${p.t}','${p.id}','ficha_medica')">Ficha</button> <button class="tg ${p.pag ? 'on' : ''}" onclick="toggleGira('${p.t}','${p.id}','pago')">Pago</button></td><td><button class="btn sm" onclick="obsGira('${p.t}','${p.id}')" title="${esc(p.obs)}">${p.obs ? '📝' : '＋'}</button></td>` : `<td class="small">${st ? `<b style="color:${colorPct(st.pct)}">${st.pct}%</b>` : '—'}</td>`}
+    <td>${p.va === 'SI' ? `<button class="btn sm red" onclick="setVa('${p.t}','${p.id}','NO')">✕ No viaja</button>` : `<button class="btn sm grn" onclick="setVa('${p.t}','${p.id}','SI')">＋ Viaja</button>`}</td></tr>`; }).join('') || '<tr><td colspan="8" class="empty">Sin personas en esta lista</td></tr>'}
+  </tbody></table></div>`;
+}
+function filaGiraBase(t, id) {
+  const g = giraDe(t, id); if (g) return { clave: g.clave };
+  const p = t === 'J' ? jugById(id) : entById(id);
+  return { clave: t + '-' + id, persona_tipo: t, persona_id: id, nombre: t === 'J' ? p.nombre : (p.nombre || p.apodo), va: 'NO', rol_gira: t === 'J' ? 'Jugador' : p.rol, autorizacion: 'NO', ficha_medica: 'NO', pago: 'NO', observaciones: '' };
+}
+function setVa(t, id, v) { encolar({ op: 'upsert', sheet: 'GIRA', key: 'clave', rows: [Object.assign(filaGiraBase(t, id), { va: v })] }); renderGira(); toast(v === 'SI' ? '✈️ Agregado a la gira' : '🏠 Pasado a "No viajan"'); }
+function toggleGira(t, id, campo) { const g = giraDe(t, id); const val = g && g[campo] === 'SI' ? 'NO' : 'SI'; encolar({ op: 'upsert', sheet: 'GIRA', key: 'clave', rows: [Object.assign(filaGiraBase(t, id), { [campo]: val })] }); renderGira(); }
+function obsGira(t, id) { const g = giraDe(t, id) || {}; const v = prompt('Observación para la gira (habitación, contacto, comida, etc.):', g.observaciones || ''); if (v === null) return; encolar({ op: 'upsert', sheet: 'GIRA', key: 'clave', rows: [Object.assign(filaGiraBase(t, id), { observaciones: v })] }); renderGira(); }
+function configGira() {
+  const C = DB.CONFIG;
+  abrirModal(`<h3>⚙️ Datos de la gira<span class="sp"></span><button class="x" onclick="cerrarModal()">×</button></h3>
+  <div class="fg"><label>Nombre</label><input id="gNom" value="${esc(C.GIRA_NOMBRE || '')}"></div>
+  <div class="fgrid"><div class="fg"><label>Salida</label><input type="date" id="gDes" value="${esc(C.GIRA_DESDE || '')}"></div><div class="fg"><label>Regreso</label><input type="date" id="gHas" value="${esc(C.GIRA_HASTA || '')}"></div></div>
+  <div class="mact"><button class="btn" onclick="cerrarModal()">Cancelar</button><button class="btn vio" onclick="guardarConfigGira()">💾 Guardar</button></div>`);
+}
+async function guardarConfigGira() {
+  const rows = [{ clave: 'GIRA_NOMBRE', valor: $('gNom').value.trim() }, { clave: 'GIRA_DESDE', valor: $('gDes').value }, { clave: 'GIRA_HASTA', valor: $('gHas').value }];
+  cerrarModal(); await guardar([{ op: 'upsert', sheet: 'CONFIG', key: 'clave', rows }], '💾 Gira actualizada'); renderGira();
+}
+function imprimirGira() {
+  const F = filasGira().filter(p => p.va === 'SI');
+  const ordRol = p => p.t === 'J' ? 9 : /head/i.test(p.rol_gira) ? 0 : /manager/i.test(p.rol_gira) ? 1 : 2;
+  const J = F.filter(p => p.t === 'J').sort((a, b) => a.nombre.localeCompare(b.nombre)), E = F.filter(p => p.t === 'E').sort((a, b) => ordRol(a) - ordRol(b) || a.nombre.localeCompare(b.nombre));
+  const all = J.concat(E);
+  $('printArea').innerHTML = cabeceraPrint(`🚌 ${esc(DB.CONFIG.GIRA_NOMBRE || 'Gira')}<br>Listado de pasajeros · ${all.length}`) +
+    `<table class="ptab"><thead><tr><th>#</th><th>Apellido y Nombre</th><th>DNI/Pasaporte</th><th>Fecha de Nac.</th><th>Perfil</th></tr></thead><tbody>${all.map((p, i) => `<tr><td>${i + 1}</td><td>${esc(p.nombre.toUpperCase())}</td><td>${esc(p.dni)}</td><td>${fmtF(p.nac)}</td><td>${esc(p.rol_gira)}</td></tr>`).join('')}</tbody></table>
+    <p style="margin-top:10px;font-size:11px;color:#475569">Jugadores: ${J.length} · Adultos: ${E.length} · Generado ${fmtF(hoyISO())}</p>`;
+  setTimeout(() => window.print(), 150);
+}
+function copiarGira() {
+  const F = filasGira();
+  const vj = F.filter(p => p.t === 'J' && p.va === 'SI'), ve = F.filter(p => p.t === 'E' && p.va === 'SI'), nj = F.filter(p => p.t === 'J' && p.va === 'NO');
+  const t = `🚌 ${DB.CONFIG.GIRA_NOMBRE || 'Gira'}\n\n✈️ VIAJAN (${vj.length} jugadores)\n${vj.map((p, i) => `${i + 1}. ${p.nombre}`).join('\n')}\n\n🧢 ADULTOS (${ve.length})\n${ve.map(p => `• ${p.nombre} (${p.rol_gira})`).join('\n')}\n\n🏠 NO VIAJAN (${nj.length})\n${nj.map(p => `• ${p.nombre}`).join('\n')}`;
+  (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast('📋 Listas copiadas')).catch(() => prompt('Copiá el texto:', t));
+}
+
+/* =====================================================================
+   ESTADÍSTICAS (vista)
+   ===================================================================== */
+let ST = { anio: String(new Date().getFullYear()), mes: '', tipo: '', vista: 'J', orden: 'pct', desc: true, dest: 'todos' };
+function renderStats() {
+  const anios = [...new Set(DB.SESIONES.map(s => s.fecha.slice(0, 4)))].sort().reverse();
+  if (!anios.includes(ST.anio) && anios.length) ST.anio = anios[0];
+  const S = calcStats({ anio: ST.anio, mes: ST.mes, tipo: ST.tipo });
+  const pj = S.porSesion;
+  const promJ = pj.length ? Math.round(pj.reduce((s, x) => s + pct(x.jp, x.jt), 0) / pj.length) : 0;
+  const promPres = pj.length ? (pj.reduce((s, x) => s + x.jp, 0) / pj.length).toFixed(1) : 0;
+  const Ep = Object.values(S.per).filter(p => p.tipo === 'E'); const promE = Ep.length ? Math.round(Ep.reduce((s, p) => s + p.pct, 0) / Ep.length) : 0;
+  const up = S.recs.filter(a => a.calif > 0).length, dn = S.recs.filter(a => a.calif < 0).length;
+  // tabla
+  const filas = (ST.vista === 'J' ? DB.JUGADORES : DB.ENTRENADORES).map(x => {
+    const p = S.per[ST.vista + '-' + x.id] || { P: 0, A: 0, tot: 0, pct: 0, MIE: [0, 0], SAB: [0, 0], PAR: [0, 0], up: 0, dn: 0, hist: [], racha: null };
+    return { x, p, nombre: ST.vista === 'J' ? x.nombre : entNom(x) };
+  }).filter(r => r.p.tot > 0 || r.x.activo !== 'NO');
+  const key = { nombre: r => r.nombre, P: r => r.p.P, A: r => r.p.A, pct: r => r.p.tot ? r.p.pct : -1, MIE: r => r.p.MIE[1] ? pct(...r.p.MIE) : -1, SAB: r => r.p.SAB[1] ? pct(...r.p.SAB) : -1, up: r => r.p.up, dn: r => r.p.dn, nivel: r => ST.vista === 'J' ? nivelNum(r.x) + (r.x.nivel === 'G' ? 0 : 10) : 0 }[ST.orden] || (r => r.p.pct);
+  filas.sort((a, b) => { const va = key(a), vb = key(b); const c = typeof va === 'string' ? va.localeCompare(vb) : va - vb; return (ST.desc ? -c : c) || a.nombre.localeCompare(b.nombre); });
+  const th = (k, t, cls) => `<th class="${cls || ''}" onclick="ordenST('${k}')">${t}${ST.orden === k ? (ST.desc ? ' ↓' : ' ↑') : ''}</th>`;
+  // destacados
+  const dest = S.recs.filter(a => (a.calif !== 0 || a.comentario) && (ST.dest === 'todos' || (ST.dest === 'up' && a.calif > 0) || (ST.dest === 'dn' && a.calif < 0) || (ST.dest === 'cm' && a.comentario))).sort((a, b) => b.fecha.localeCompare(a.fecha));
+  // por colegio
+  const col = {};
+  Object.values(S.per).filter(p => p.tipo === 'J').forEach(p => { const j = jugById(p.id); if (!j) return; const c = j.colegio || 'N/A'; col[c] = col[c] || { P: 0, T: 0, n: 0 }; col[c].P += p.P; col[c].T += p.tot; col[c].n++; });
+  const cols = Object.entries(col).map(([c, v]) => ({ c, pc: pct(v.P, v.T), n: v.n })).sort((a, b) => b.pc - a.pc);
+  // mensual
+  const mes = {};
+  S.recs.filter(a => a.persona_tipo === 'J').forEach(a => { const m = a.fecha.slice(0, 7); mes[m] = mes[m] || [0, 0]; mes[m][1]++; if (a.estado === 'P') mes[m][0]++; });
+  const meses = Object.keys(mes).sort();
+
+  $('v-stats').innerHTML = `
+  <h2 class="sec">📊 Estadísticas <span class="sp"></span><button class="btn sm" onclick="exportarCSV()">⬇️ Exportar CSV</button></h2>
+  <div class="row" style="margin-bottom:12px">
+    <select style="max-width:110px" onchange="ST.anio=this.value;renderStats()">${(anios.length ? anios : [ST.anio]).map(a => `<option ${a === ST.anio ? 'selected' : ''}>${a}</option>`).join('')}</select>
+    <select style="max-width:150px" onchange="ST.mes=this.value;renderStats()"><option value="">Todo el año</option>${MESES.map((m, i) => `<option value="${i + 1}" ${String(ST.mes) === String(i + 1) ? 'selected' : ''}>${m}</option>`).join('')}</select>
+    <div class="seg">${[['', 'Todas'], ['MIE', 'Miércoles'], ['SAB', 'Sábados'], ['PAR', 'Partidos']].map(([k, t]) => `<button class="${ST.tipo === k ? 'on' : ''}" onclick="ST.tipo='${k}';renderStats()">${t}</button>`).join('')}</div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="l">Sesiones</div><div class="v">${S.ses.length}</div><div class="s">${S.ses.filter(s => s.tipo === 'MIE').length} mié · ${S.ses.filter(s => s.tipo === 'SAB').length} sáb · ${S.ses.filter(s => s.tipo === 'PAR').length} part.</div></div>
+    <div class="kpi"><div class="l">Asistencia jugadores</div><div class="v" style="color:${colorPct(promJ)}">${promJ}%</div><div class="s">${promPres} presentes por sesión</div></div>
+    <div class="kpi"><div class="l">Asistencia entrenadores</div><div class="v" style="color:${colorPct(promE)}">${promE}%</div><div class="s">promedio del staff</div></div>
+    <div class="kpi"><div class="l">Destacados</div><div class="v"><span class="up">▲${up}</span> <span class="dn">▼${dn}</span></div><div class="s">marcas del período</div></div>
+  </div>
+  <div class="grid g2">
+    <div class="card chart"><h3>👦 Presentes por sesión</h3>${chartSesiones(pj)}<div class="legend"><span><i style="background:#06b6d4"></i>Miércoles</span><span><i style="background:#8b5cf6"></i>Sábado</span><span><i style="background:#f59e0b"></i>Partido</span><span><i style="background:#94a3b8"></i>Otro</span></div></div>
+    <div class="card chart"><h3>📅 % asistencia por mes</h3>${chartMeses(meses, mes)}</div>
+  </div>
+  <div class="card">
+    <h3>🏅 Ranking de asistencia <span class="sp"></span><div class="seg"><button class="${ST.vista === 'J' ? 'on' : ''}" onclick="ST.vista='J';renderStats()">Jugadores</button><button class="${ST.vista === 'E' ? 'on' : ''}" onclick="ST.vista='E';renderStats()">Entrenadores</button></div></h3>
+    <div class="tbl-wrap"><table><thead><tr><th>#</th>${th('nombre', 'Nombre')}${ST.vista === 'J' ? th('nivel', 'Nivel') : '<th>Rol</th>'}${th('P', 'Pres.', 'num')}${th('A', 'Aus.', 'num')}${th('pct', '%', 'num')}<th></th>${th('MIE', '% Mié', 'num')}${th('SAB', '% Sáb', 'num')}${th('up', '▲', 'num')}${th('dn', '▼', 'num')}<th>Racha</th><th>Últimas 10</th></tr></thead><tbody>
+    ${filas.map((r, i) => { const p = r.p; const ult = p.hist.slice(-10); return `<tr class="clk" onclick="${ST.vista === 'J' ? `fichaJugador('${r.x.id}')` : `fichaEntrenador('${r.x.id}')`}"><td class="muted">${i + 1}</td><td><b>${esc(r.nombre)}</b>${r.x.activo === 'NO' ? ' <span class="pill" style="background:rgba(148,163,184,.2)">baja</span>' : ''}</td><td>${ST.vista === 'J' ? nivelBadge(r.x) : esc(r.x.rol || '')}</td><td class="num">${p.P}</td><td class="num">${p.A}</td><td class="num"><b style="color:${p.tot ? colorPct(p.pct) : 'var(--tx4)'}">${p.tot ? p.pct + '%' : '—'}</b></td><td><div class="bar"><i style="width:${p.pct}%;background:${colorPct(p.pct)}"></i></div></td><td class="num">${p.MIE[1] ? pct(...p.MIE) + '%' : '—'}</td><td class="num">${p.SAB[1] ? pct(...p.SAB) + '%' : '—'}</td><td class="num up">${p.up || ''}</td><td class="num dn">${p.dn || ''}</td><td>${p.racha ? `<span class="pill" style="background:${p.racha.e === 'P' ? 'rgba(34,197,94,.18);color:var(--gr2)' : 'rgba(239,68,68,.18);color:var(--rd2)'}">${p.racha.n} ${p.racha.e === 'P' ? 'pres.' : 'aus.'}</span>` : ''}</td><td><span class="dots">${ult.map(a => `<i class="d${a.estado}" title="${fmtF(a.fecha)}"></i>`).join('')}</span></td></tr>`; }).join('')}
+    </tbody></table></div>
+  </div>
+  <div class="grid g2">
+    <div class="card"><h3>⭐ Destacados y comentarios <span class="sp"></span><select style="width:auto" onchange="ST.dest=this.value;renderStats()">${[['todos', 'Todos'], ['up', '▲ Positivos'], ['dn', '▼ A mejorar'], ['cm', '💬 Con comentario']].map(([k, t]) => `<option value="${k}" ${ST.dest === k ? 'selected' : ''}>${t}</option>`).join('')}</select></h3>
+      <div style="max-height:420px;overflow-y:auto">${dest.length ? dest.map(a => `<div class="cmt-i clk" onclick="${a.persona_tipo === 'J' ? `fichaJugador('${a.persona_id}')` : `fichaEntrenador('${a.persona_id}')`}"><div class="h">${fmtFC(a.fecha)} · ${TIPOS[a.tipo] || a.tipo}</div>${a.calif > 0 ? '<b class="up">▲</b> ' : a.calif < 0 ? '<b class="dn">▼</b> ' : '💬 '}<b>${esc(a.nombre)}</b>${a.comentario ? ' — ' + esc(a.comentario) : ''}</div>`).join('') : '<div class="empty">Sin marcas en el período.</div>'}</div>
+    </div>
+    <div class="card"><h3>🏫 Asistencia por colegio</h3>
+      ${cols.length ? cols.map(c => `<div class="list-i"><span class="grow">${esc(c.c)} <span class="muted small">(${c.n})</span></span><div class="bar" style="width:120px"><i style="width:${c.pc}%;background:${colorPct(c.pc)}"></i></div><b style="width:44px;text-align:right">${c.pc}%</b></div>`).join('') : '<div class="empty">Sin datos.</div>'}
+    </div>
+  </div>`;
+}
+function ordenST(k) { if (ST.orden === k) ST.desc = !ST.desc; else { ST.orden = k; ST.desc = k !== 'nombre'; } renderStats(); }
+function chartSesiones(pj) {
+  if (!pj.length) return '<div class="empty">Sin sesiones en el período.</div>';
+  const W = 600, H = 200, pl = 28, pb = 22, max = Math.max(...pj.map(x => x.jt), 1);
+  const bw = (W - pl) / pj.length; const col = { MIE: '#06b6d4', SAB: '#8b5cf6', PAR: '#f59e0b', OTR: '#94a3b8' };
+  const y = v => H - pb - (v / max) * (H - pb - 10);
+  let g = '';
+  [0, .5, 1].forEach(t => { const v = Math.round(max * t); g += `<line x1="${pl}" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="rgba(255,255,255,.08)"/><text x="${pl - 4}" y="${y(v) + 3}" text-anchor="end">${v}</text>`; });
+  pj.forEach((x, i) => {
+    const bx = pl + i * bw + bw * .15, w = Math.max(bw * .7, 2);
+    g += `<rect x="${bx}" y="${y(x.jt)}" width="${w}" height="${H - pb - y(x.jt)}" rx="2" fill="rgba(255,255,255,.06)"/><rect x="${bx}" y="${y(x.jp)}" width="${w}" height="${H - pb - y(x.jp)}" rx="2" fill="${col[x.s.tipo] || '#94a3b8'}"><title>${fmtFC(x.s.fecha)}: ${x.jp}/${x.jt} (${pct(x.jp, x.jt)}%)</title></rect>`;
+    if (pj.length <= 16 || i % Math.ceil(pj.length / 12) === 0) g += `<text x="${bx + w / 2}" y="${H - 6}" text-anchor="middle">${x.s.fecha.slice(8, 10)}/${x.s.fecha.slice(5, 7)}</text>`;
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Presentes por sesión">${g}</svg>`;
+}
+function chartMeses(meses, mes) {
+  if (!meses.length) return '<div class="empty">Sin datos.</div>';
+  const W = 600, H = 200, pb = 22; const bw = W / meses.length;
+  let g = `<line x1="0" x2="${W}" y1="${H - pb - (H - pb - 14) * .8}" y2="${H - pb - (H - pb - 14) * .8}" stroke="rgba(34,197,94,.35)" stroke-dasharray="4 4"/><text x="${W - 2}" y="${H - pb - (H - pb - 14) * .8 - 4}" text-anchor="end">80%</text>`;
+  meses.forEach((m, i) => {
+    const p = pct(...mes[m]); const h = (H - pb - 14) * p / 100; const bx = i * bw + bw * .2, w = bw * .6;
+    g += `<rect x="${bx}" y="${H - pb - h}" width="${w}" height="${h}" rx="4" fill="${p >= 80 ? '#22c55e' : p >= 60 ? '#f59e0b' : '#ef4444'}"/><text x="${bx + w / 2}" y="${H - pb - h - 4}" text-anchor="middle" style="fill:#f1f5f9;font-weight:700">${p}%</text><text x="${bx + w / 2}" y="${H - 6}" text-anchor="middle">${MESES[Number(m.slice(5, 7)) - 1]}</text>`;
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Asistencia por mes">${g}</svg>`;
+}
+function fichaPersona(t, id) {
+  const x = t === 'J' ? jugById(id) : entById(id); if (!x) return;
+  const anio = new Date().getFullYear();
+  const S = calcStats({ anio }); const p = S.per[t + '-' + id] || { P: 0, A: 0, tot: 0, pct: 0, MIE: [0, 0], SAB: [0, 0], PAR: [0, 0], up: 0, dn: 0, hist: [], racha: null };
+  const coms = p.hist.filter(a => a.calif !== 0 || a.comentario).reverse();
+  const hijo = t === 'E' && jugById(x.hijo_id);
+  const padres = t === 'J' ? DB.ENTRENADORES.filter(e => e.hijo_id === id) : [];
+  abrirModal(`<h3>${t === 'J' ? '👦' : '🧢'} ${esc(t === 'J' ? x.nombre : entNom(x))}<span class="sp"></span><button class="x" onclick="cerrarModal()">×</button></h3>
+  <div class="row small muted" style="margin:-6px 0 12px">${t === 'J' ? `${nivelBadge(x)} ${esc(x.colegio)} · ${esc(x.grado)}${padres.length ? ' · 🧢 ' + padres.map(entNom).map(esc).join(', ') : ''}` : `${esc(x.rol || '')}${hijo ? ' · hijo: ' + esc(hijo.nombre) : ''}`} ${viaja(t, id) ? '· ✈️ viaja a la gira' : ''} ${x.activo === 'NO' ? '· <b>baja ' + fmtF(x.fecha_baja) + '</b>' : ''}</div>
+  <div class="kpis">
+    <div class="kpi"><div class="l">Asistencia ${anio}</div><div class="v" style="color:${colorPct(p.pct)}">${p.tot ? p.pct + '%' : '—'}</div><div class="s">${p.P} de ${p.tot}</div></div>
+    <div class="kpi"><div class="l">Mié / Sáb</div><div class="v" style="font-size:1.2rem">${p.MIE[1] ? pct(...p.MIE) + '%' : '—'} / ${p.SAB[1] ? pct(...p.SAB) + '%' : '—'}</div></div>
+    <div class="kpi"><div class="l">Marcas</div><div class="v" style="font-size:1.3rem"><span class="up">▲${p.up}</span> <span class="dn">▼${p.dn}</span></div></div>
+  </div>
+  <div class="card"><h3>🗓️ Sesión por sesión</h3><div class="timeline">${p.hist.map(a => `<span style="background:${a.estado === 'P' ? 'var(--gr)' : 'var(--rd)'}" title="${fmtFC(a.fecha)} ${TIPOS[a.tipo] || ''}${a.comentario ? ': ' + esc(a.comentario) : ''}">${a.calif > 0 ? '▲' : a.calif < 0 ? '▼' : a.fecha.slice(8, 10)}</span>`).join('') || '<span class="muted small" style="width:auto;color:var(--tx3)">Sin registros</span>'}</div></div>
+  <div class="card"><h3>⭐ Destacados y comentarios</h3>${coms.length ? coms.map(a => `<div class="cmt-i"><div class="h">${fmtFC(a.fecha)} · ${TIPOS[a.tipo] || ''}</div>${a.calif > 0 ? '<b class="up">▲</b> ' : a.calif < 0 ? '<b class="dn">▼</b> ' : '💬 '}${esc(a.comentario || '(sin comentario)')}</div>`).join('') : '<div class="empty">Nada marcado todavía.</div>'}</div>
+  ${x.observaciones ? `<div class="info">📝 ${esc(x.observaciones)}</div>` : ''}
+  <div class="mact"><button class="btn" onclick="cerrarModal();${t === 'J' ? `editarJugador('${id}')` : `editarEntrenador('${id}')`}">✏️ Editar datos</button></div>`);
+}
+const fichaJugador = id => fichaPersona('J', id), fichaEntrenador = id => fichaPersona('E', id);
+function exportarCSV() {
+  const S = calcStats({ anio: ST.anio, mes: ST.mes, tipo: ST.tipo });
+  const rows = [['tipo', 'id', 'nombre', 'nivel', 'colegio', 'presentes', 'ausentes', 'pct', 'pct_mie', 'pct_sab', 'positivos', 'a_mejorar', 'activo', 'viaja_gira']];
+  DB.JUGADORES.forEach(j => { const p = S.per['J-' + j.id] || { P: 0, A: 0, pct: 0, MIE: [0, 0], SAB: [0, 0], up: 0, dn: 0 }; rows.push(['Jugador', j.id, j.nombre, nivelTxt(j), j.colegio, p.P, p.A, p.pct, p.MIE[1] ? pct(...p.MIE) : '', p.SAB[1] ? pct(...p.SAB) : '', p.up, p.dn, j.activo, viaja('J', j.id) ? 'SI' : 'NO']); });
+  DB.ENTRENADORES.forEach(e => { const p = S.per['E-' + e.id] || { P: 0, A: 0, pct: 0, MIE: [0, 0], SAB: [0, 0], up: 0, dn: 0 }; rows.push(['Entrenador', e.id, entNom(e), e.rol, '', p.P, p.A, p.pct, p.MIE[1] ? pct(...p.MIE) : '', p.SAB[1] ? pct(...p.SAB) : '', p.up, p.dn, e.activo, viaja('E', e.id) ? 'SI' : 'NO']); });
+  const csv = '﻿' + rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(';')).join('\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' })); a.download = `M9_estadisticas_${ST.anio}${ST.mes ? '_' + pad(ST.mes) : ''}.csv`; a.click();
+}
+
+/* =====================================================================
+   AJUSTES / CONEXIÓN / PIN
+   ===================================================================== */
+function abrirAjustes(primeraVez, error) {
+  abrirModal(`<h3>${primeraVez ? '🏉 Bienvenido' : '⚙️ Ajustes y conexión'}<span class="sp"></span>${primeraVez ? '' : '<button class="x" onclick="cerrarModal()">×</button>'}</h3>
+  ${error ? `<div class="warn" style="margin:0 0 12px">⚠️ ${esc(error)}</div>` : ''}
+  <div class="fg"><label>URL de la planilla (Apps Script, termina en /exec)</label><input id="cfUrl" value="${esc(apiUrl())}" placeholder="https://script.google.com/macros/s/…/exec"></div>
+  <div class="fg"><label>PIN de acceso</label><input id="cfPin" type="password" inputmode="numeric" value="${esc(lsGet(LS.pin) || '')}" placeholder="PIN"></div>
+  <div class="mact"><button class="btn pri" onclick="conectar()">🔗 Conectar con Google Sheet</button></div>
+  <div class="mact"><button class="btn" onclick="entrarDemo()">🧪 ${MODE === 'demo' ? 'Seguir en' : 'Probar en'} modo demo (datos ficticios)</button></div>
+  ${MODE === 'demo' ? `<div class="mact"><button class="btn sm red" onclick="if(confirm('¿Reiniciar los datos demo?')){lsDel(LS.demo);location.reload()}">↺ Reiniciar datos demo</button></div>` : ''}
+  ${MODE === 'api' && !primeraVez ? `<div class="mact"><button class="btn sm" onclick="cerrarModal();recargar()">🔄 Recargar datos de la planilla</button><button class="btn sm red" onclick="lsDel(LS.pin);location.reload()">🔒 Cerrar sesión</button></div>` : ''}
+  <p class="small muted" style="margin-top:12px">Modo actual: <b>${MODE === 'demo' ? 'Demo (local, este navegador)' : MODE === 'api' ? 'Google Sheet' : 'sin configurar'}</b></p>`);
+}
+async function conectar() {
+  const u = $('cfUrl').value.trim(), p = $('cfPin').value.trim();
+  if (!/^https:\/\/script\.google(usercontent)?\.com\//.test(u)) return toast('La URL tiene que ser la del Apps Script (/exec)', true);
+  lsSet(LS.url, u); lsSet(LS.pin, p); lsSet(LS.mode, 'api'); cerrarModal(); iniciar();
+}
+function entrarDemo() { lsSet(LS.mode, 'demo'); cerrarModal(); iniciar(); }
+async function recargar() { try { await cargarBase(); renderTab(); toast('🔄 Datos actualizados'); } catch (e) { toast(e.message, true); } }
+
+async function iniciar() {
+  $('loading').classList.remove('hidden'); $('loadingMsg').textContent = 'Cargando base…';
+  try {
+    const ok = await cargarBase();
+    $('loading').classList.add('hidden');
+    if (!ok) { abrirAjustes(true); return; }
+    document.querySelectorAll('img.escudo').forEach(i => { if (DB.CONFIG.ESCUDO_URL) i.src = DB.CONFIG.ESCUDO_URL; });
+    renderNav(); ir(lsGet(LS.tab) || 'inicio');
+  } catch (e) {
+    $('loading').classList.add('hidden');
+    abrirAjustes(true, /PIN/i.test(e.message) ? 'PIN incorrecto. Probá de nuevo.' : 'No se pudo leer la planilla: ' + e.message);
+  }
+}
+window.addEventListener('beforeunload', e => { if ((AS && AS.sucio) || colaOps.length) { e.preventDefault(); e.returnValue = ''; } });
+iniciar();
+</script>
+</body>
+</html>
