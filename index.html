@@ -644,14 +644,17 @@ const hFin = h => String(h || '').split('-')[1] || '';
 const fmtHora = h => { const a = hIni(h), b = hFin(h); return a ? (b ? `${a} a ${b} h` : `${a} h`) : ''; };
 const horaSes = s => s.hora || horarioDef(s.fecha);
 // título del entrenamiento/partido (campo "Título", editable en Inicio y en Entrenamiento)
-const tituloSes = s => (s && s.detalle) ? s.detalle : (s && s.tipo === 'PAR' ? 'Partido' : 'Entrenamiento ' + (TIPOS_C[s && s.tipo] || '').toLowerCase());
+const tituloSes = s => (s && s.detalle) ? s.detalle : (s && s.tipo === 'PAR' ? 'Partido' : s && (s.tipo === 'MIE' || s.tipo === 'SAB') ? 'Entrenamiento ' + TIPOS_C[s.tipo].toLowerCase() : 'Entrenamiento');
 // próximo entrenamiento: el más cercano (desde hoy) entre los ya planificados y el próximo miércoles/sábado
+const yaTermino = s => { if (s.fecha !== hoyISO() || !conAsistencia().has(s.id)) return false; const fin = hFin(horaSes(s)) || hIni(horaSes(s)); return !!fin && horaAhora() > fin; };
 function proximaSesion() {
-  const hoy = hoyISO(), cA = conAsistencia();
-  const plan = DB.SESIONES.filter(s => s.fecha >= hoy && !cA.has(s.id)).sort((a, b) => a.fecha.localeCompare(b.fecha))[0];
-  const def = proximoEntreno();
+  const hoy = hoyISO();
+  const plan = DB.SESIONES.filter(s => s.fecha >= hoy && !yaTermino(s)).sort((a, b) => a.fecha.localeCompare(b.fecha))[0];
+  let def = proximoEntreno();
+  const sHoy = DB.SESIONES.find(x => x.fecha === def);
+  if (def === hoy && sHoy && yaTermino(sHoy)) { const d = parseISO(hoy); d.setDate(d.getDate() + 1); for (let i = 0; i < 8; i++) { if (d.getDay() === 3 || d.getDay() === 6) break; d.setDate(d.getDate() + 1); } def = isoDate(d); }
   if (plan && plan.fecha <= def) return { fecha: plan.fecha, tipo: plan.tipo, s: plan };
-  const s = DB.SESIONES.find(x => x.fecha === def && !cA.has(x.id)) || null;
+  const s = DB.SESIONES.find(x => x.fecha === def) || null;
   return { fecha: def, tipo: s ? s.tipo : tipoDeFecha(def), s };
 }
 const nombreEntreno = s => `${fmtFC(s.fecha)} · ${TIPOS_C[s.tipo] || s.tipo}${horaSes(s) ? ' · ' + hIni(horaSes(s)) : ''}`;
@@ -687,8 +690,10 @@ function renderNav() {
   $('navBottom').innerHTML = TABS.map(([k, i, n]) => `<button class="${TAB === k ? 'on' : ''}" onclick="ir('${k}')"><span>${i}</span>${n}</button>`).join('');
   $('tabsTop').innerHTML = TABS.map(([k, i, n]) => `<button class="${TAB === k ? 'on' : ''}" onclick="ir('${k}')">${i} ${n}</button>`).join('');
 }
+function puedeDejarAS() { return !(AS && AS.sucio && TAB === 'asistencia') || confirm('Hay cambios de asistencia sin guardar. ¿Salir igual y descartarlos?'); }
 function ir(tab) {
   if (!TABS.some(t => t[0] === tab)) tab = 'inicio';
+  if (tab !== TAB && !puedeDejarAS()) return;
   TAB = tab; lsSet(LS.tab, tab);
   TABS.forEach(([k]) => $('v-' + k).classList.toggle('hidden', k !== tab));
   renderNav(); renderTab(); window.scrollTo(0, 0);
@@ -805,7 +810,7 @@ function renderInicio() {
    ASISTENCIA + PLANIFICACIÓN
    ===================================================================== */
 let AS = null;
-function irAsistencia(fecha, tipo, plan) { AS = null; cargarSesionAS(fecha || hoyISO(), tipo); if (plan) AS.planOpen = true; ir('asistencia'); if (plan) setTimeout(() => { const e = $('asPlanCard'); if (e) e.scrollIntoView({ behavior: 'smooth' }); }, 80); }
+function irAsistencia(fecha, tipo, plan) { if (!puedeDejarAS()) return; if (AS) AS.sucio = false; AS = null; cargarSesionAS(fecha || hoyISO(), tipo); if (plan) AS.planOpen = true; ir('asistencia'); if (plan) setTimeout(() => { const e = $('asPlanCard'); if (e) e.scrollIntoView({ behavior: 'smooth' }); }, 80); }
 function cargarSesionAS(fecha, tipo) {
   // si ese día ya hay un entrenamiento/partido cargado, se abre ese (aunque el tipo sea distinto al del día)
   tipo = tipo || (sesionesOrd().find(x => x.fecha === fecha) || {}).tipo || tipoDeFecha(fecha);
@@ -833,22 +838,21 @@ function renderAsistencia() {
   const hist = sesionesOrd().map(s => { const r = DB.ASISTENCIA.filter(a => a.sesion_id === s.id); return { s, jp: r.filter(a => a.persona_tipo === 'J' && a.estado === 'P').length, jt: r.filter(a => a.persona_tipo === 'J').length, ep: r.filter(a => a.persona_tipo === 'E' && a.estado === 'P').length, tomada: cA.has(s.id) }; });
   $('v-asistencia').innerHTML = `
   <h2 class="sec">🏉 Entrenamiento</h2><div style="margin:-6px 0 10px">${AS.tomada ? '<span class="pill" style="background:rgba(34,197,94,.15);color:var(--gr2)">Asistencia guardada · editando</span>' : AS.existe ? '<span class="pill" style="background:rgba(6,182,212,.15);color:#67e8f9">Planificado · falta asistencia</span>' : '<span class="pill" style="background:rgba(245,158,11,.15);color:var(--am2)">Entrenamiento nuevo</span>'}</div>
-  <div class="step"><span>1</span>Datos del día</div>
+  <div class="step"><span>1</span>Datos del día <span class="small muted" style="font-weight:500">· se guardan solos</span></div>
   <div class="card">
     <div class="att-head" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
       <div><label class="tiny muted">Fecha</label><input type="date" id="asFecha" value="${AS.fecha}" onchange="cambiarSesionAS()"></div>
       <div><label class="tiny muted">Tipo</label><select id="asTipo" onchange="cambiarSesionAS()">${Object.entries(TIPOS).map(([k, v]) => `<option value="${k}" ${AS.tipo === k ? 'selected' : ''}>${v}</option>`).join('')}</select></div>
       <div><label class="tiny muted">Desde</label><input type="time" id="asHora" value="${esc(hIni(AS.hora))}" onchange="setHoraAS(0,this.value)"></div>
       <div><label class="tiny muted">Hasta</label><input type="time" id="asHoraFin" value="${esc(hFin(AS.hora))}" onchange="setHoraAS(1,this.value)"></div>
-      <div style="grid-column:1/-1"><label class="tiny muted">Título</label><input id="asDet" value="${esc(AS.detalle)}" placeholder="${AS.tipo === 'PAR' ? 'Ej: Partido vs CASI (local)' : 'Opcional · ej: Técnica de tackle'}" oninput="AS.detalle=this.value;AS.sucio=true"></div>
+      <div style="grid-column:1/-1"><label class="tiny muted">Título</label><input id="asDet" value="${esc(AS.detalle)}" placeholder="${AS.tipo === 'PAR' ? 'Ej: Partido vs CASI (local)' : 'Opcional · ej: Técnica de tackle'}" oninput="AS.detalle=this.value" onchange="guardarDatosAS()"></div>
     </div>
   </div>
   <div class="step"><span>2</span>Planificación</div>
   <div class="card" id="asPlanCard"><button class="plan-h" onclick="AS.planOpen=!AS.planOpen;renderAsistencia()"><span class="grow">📋 ${AS.planOpen ? 'Plan del día' : (AS.notas || AS.archivos.length ? 'Ver planificación del día' : 'Cargar planificación del día')}<div class="small muted" style="font-weight:500;margin-top:2px">Objetivos, ejercicios, foto o PDF</div></span>${AS.notas || AS.archivos.length ? `<span class="pill" style="background:rgba(6,182,212,.15);color:#67e8f9">${AS.notas ? '📝' : ''}${AS.archivos.length ? ' 📎' + AS.archivos.length : ''}</span>` : '<span class="pill" style="background:rgba(148,163,184,.15)">vacía</span>'}<span class="chev">${AS.planOpen ? '▲' : '▼'}</span></button>
-    ${AS.planOpen ? `<div style="margin-top:10px"><textarea id="asNotas" rows="3" placeholder="Objetivos, bloques, ejercicios, tiempos…" oninput="AS.notas=this.value;AS.sucio=true">${esc(AS.notas)}</textarea>
+    ${AS.planOpen ? `<div style="margin-top:10px"><textarea id="asNotas" rows="3" placeholder="Objetivos, bloques, ejercicios, tiempos…" oninput="AS.notas=this.value" onchange="guardarDatosAS()">${esc(AS.notas)}</textarea>
     <div class="files" id="asFiles">${filesHTML(AS.archivos, true)}<label class="upl" id="uplBtn"><span>📎</span>Foto o PDF<input type="file" accept="image/*,application/pdf" multiple class="hidden" onchange="subirArchivosAS(this.files);this.value=''"></label></div>
-    <button class="btn sm" style="width:100%;margin-top:10px" onclick="guardarPlanAS()">💾 Guardar solo la planificación</button>
-    <div class="small muted" style="margin-top:6px">Podés cargarla antes del entrenamiento.</div></div>` : ''}
+    <div class="small muted" style="margin-top:8px">Se guarda sola al salir del cuadro de texto. Podés cargarla días antes del entrenamiento.</div></div>` : ''}
   </div>
   <div class="step"><span>3</span>Asistencia</div>
   ${AS.tomada && !AS.listaOpen ? `<div class="card"><button class="plan-h" onclick="AS.listaOpen=true;renderAsistencia()"><span class="grow">✅ Asistencia tomada<div class="small muted" style="font-weight:500;margin-top:3px;line-height:1.5">👦 <b style="color:var(--gr2)">${cj.P}</b> presentes · <b style="color:var(--rd2)">${cj.A}</b> ausentes<br>🧢 <b style="color:var(--gr2)">${ce.P}</b> de ${ce.P + ce.A} entrenadores</div></span><span class="btn sm">✏️ Editar</span></button>${ausentesHTML(J, E)}</div>` : `
@@ -867,9 +871,9 @@ function renderAsistencia() {
   </div>`}
   <div class="step"><span>4</span>Equipos</div>
   <div id="eqBox">${AS.tomada && !AS.idViejo ? '' : '<div class="card"><div class="empty">🔒 Guardá la asistencia y los equipos se arman solos con los presentes.</div></div>'}</div>
-  <div class="acts" style="grid-template-columns:1fr">
+  ${AS.tomada ? '' : `<div class="acts" style="grid-template-columns:1fr">
     <button class="btn pri" onclick="fichaEntrenamiento('${AS.id}')" ${AS.existe ? '' : 'disabled'}>📄 Ficha del entrenamiento (PDF / imagen)</button>
-  </div>
+  </div>`}
   ${AS.existe ? `<div style="text-align:right"><button class="btn red sm" onclick="borrarSesionAS()">🗑 Borrar entrenamiento</button></div>` : ''}
   <div class="card" style="margin-top:14px"><h3>🗂️ Historial de entrenamientos</h3>
     ${tabla('hist', [
@@ -880,7 +884,7 @@ function renderAsistencia() {
       { k: 'jp', t: 'Jug.', num: 1, v: r => r.tomada ? r.jp : null, h: r => r.tomada ? `<b>${r.jp}</b>/${r.jt}` : '<span class="muted small">planificado</span>' },
       { k: 'ep', t: 'Ent.', num: 1, v: r => r.tomada ? r.ep : null, h: r => r.tomada ? r.ep : '' },
       { k: 'plan', t: 'Plan', num: 1, v: r => (r.s.notas ? 1 : 0) + r.s.archivos.length, h: r => (r.s.notas ? '📝' : '') + (r.s.archivos.length ? ' 📎' + r.s.archivos.length : '') }
-    ], hist, { k: 'fecha', desc: true }, r => `class="clk" onclick="cargarSesionAS('${r.s.fecha}','${r.s.tipo}');renderAsistencia();window.scrollTo(0,0)"`)}
+    ], hist, { k: 'fecha', desc: true }, r => `class="clk" onclick="if(puedeDejarAS()){cargarSesionAS('${r.s.fecha}','${r.s.tipo}');renderAsistencia();window.scrollTo(0,0)}"`)}
   </div>`;
   if ($('asLista')) renderListaAS();
   if (AS.tomada && !AS.idViejo) { if (EQ.fuente !== 'S:' + AS.id) setFuenteEQ('S:' + AS.id); renderEquipos(); }
@@ -952,7 +956,13 @@ function califAS(k, v) { const m = mk(k); m.calif = m.calif === v ? 0 : v; AS.su
 function toggleCmtAS(k) { AS.abiertos.has(k) ? AS.abiertos.delete(k) : AS.abiertos.add(k); reRow(k); }
 function cmtAS(k, v) { mk(k).comentario = v; AS.sucio = true; }
 function todosPresentesAS() { const { J, E } = personasAS(); (AS.vista === 'J' ? J : E).forEach(p => { const m = mk(p.k); m.estado = 'P'; m.motivo = ''; }); AS.sucio = true; renderListaAS(); }
-function setHoraAS(i, v) { const p = [hIni(AS.hora), hFin(AS.hora)]; p[i] = v; AS.hora = p[1] ? p[0] + '-' + p[1] : p[0]; AS.sucio = true; }
+function setHoraAS(i, v) { const p = [hIni(AS.hora), hFin(AS.hora)]; p[i] = v; AS.hora = p[1] ? p[0] + '-' + p[1] : p[0]; guardarDatosAS(); }
+// título y horario: se guardan solos al salir del campo (no hace falta tomar asistencia)
+async function guardarDatosAS() {
+  if (AS.idViejo && AS.tomada) { AS.sucio = true; return; } // con asistencia: se aplica al tocar Guardar
+  await guardar([...opsRenombre(), { op: 'upsert', sheet: 'SESIONES', key: 'id', rows: [filaSesionAS()] }], '✓ Guardado'); AS.idViejo = null;
+  AS.existe = true; const b = document.querySelector('#v-asistencia h2.sec + div'); if (b && !AS.tomada) b.innerHTML = '<span class="pill" style="background:rgba(6,182,212,.15);color:#67e8f9">Planificado · falta asistencia</span>';
+}
 function cambiarSesionAS() {
   const f = $('asFecha').value, t = $('asTipo').value;
   if (f === AS.fecha && t === AS.tipo) return;
@@ -960,7 +970,9 @@ function cambiarSesionAS() {
   if (f === AS.fecha && t !== AS.tipo && AS.existe) {
     // mismo día, cambia el tipo (ej. sábado → partido): se conserva todo y se renombra al guardar
     if (DB.SESIONES.some(x => x.id === f + '_' + t)) { toast('Ya hay un ' + TIPOS_C[t].toLowerCase() + ' cargado ese día', true); $('asTipo').value = AS.tipo; return; }
-    AS.idViejo = AS.idViejo || AS.id; AS.tipo = t; AS.id = f + '_' + t; AS.sucio = true; AS.listaOpen = true;
+    AS.idViejo = AS.idViejo || AS.id; AS.tipo = t; AS.id = f + '_' + t;
+    if (!AS.tomada) { guardarDatosAS().then(() => renderAsistencia()); return; }
+    AS.sucio = true; AS.listaOpen = true;
     renderAsistencia(); toast('Tipo cambiado: tocá Guardar para aplicarlo'); return;
   }
   cargarSesionAS(f, f !== AS.fecha && t === AS.tipo ? null : t); renderAsistencia();
@@ -973,17 +985,13 @@ function opsRenombre() {
 }
 function filaSesionAS() { return { id: AS.id, fecha: AS.fecha, tipo: AS.tipo, hora: AS.hora || '', detalle: AS.detalle, notas: AS.notas, archivos: AS.archivos, actualizado: hoyISO() + ' ' + horaAhora() }; }
 async function guardarAS() {
+  if (AS.fecha > hoyISO() && !AS.tomada && !confirm(`Vas a guardar la asistencia del ${fmtFC(AS.fecha)}, que todavía no pasó.\n\nSi solo querías poner el título o la planificación, eso ya se guardó solo.\n\n¿Guardar la asistencia igual?`)) return;
   const { J, E } = personasAS(); const todos = J.concat(E);
   const rows = todos.map(p => { const m = AS.marcas[p.k] || {}; const est = m.estado === 'A' ? 'A' : 'P'; return { sesion_id: AS.id, fecha: AS.fecha, tipo: AS.tipo, persona_tipo: p.t, persona_id: p.id, nombre: p.nombre, estado: est, calif: m.calif || 0, comentario: m.comentario || '', motivo: est === 'A' ? (m.motivo || 'Sin aviso') : '' }; });
   await guardar([...opsRenombre(), { op: 'upsert', sheet: 'SESIONES', key: 'id', rows: [filaSesionAS()] }, { op: 'replace', sheet: 'ASISTENCIA', field: 'sesion_id', value: AS.id, rows }], '✅ Asistencia guardada');
   const f = AS.fecha, t = AS.tipo, nuevo = !AS.tomada; cargarSesionAS(f, t); renderAsistencia();
   setTimeout(() => { const e = $('eqBox'); if (e) e.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150);
   if (nuevo) toast('✅ Asistencia guardada · equipos armados');
-}
-async function guardarPlanAS() {
-  if (AS.idViejo && AS.tomada) return guardarAS();
-  await guardar([...opsRenombre(), { op: 'upsert', sheet: 'SESIONES', key: 'id', rows: [filaSesionAS()] }], '📋 Planificación guardada'); AS.idViejo = null;
-  const marcas = AS.marcas, tomada = AS.tomada; AS.existe = true; AS.sucio = tomada ? AS.sucio : false; AS.marcas = marcas; renderAsistencia();
 }
 async function borrarSesionAS() {
   if (!confirm(`¿Borrar el entrenamiento del ${fmtF(AS.fecha)} (${TIPOS_C[AS.tipo]}) con su asistencia y planificación?`)) return;
@@ -1174,6 +1182,7 @@ function armarEquipos(J, E, presJ, presE, modo, n) {
   return equipos;
 }
 async function generarEQ() {
+  EQ.n = Math.max(2, Math.min(EQ.n, Math.max(2, [...EQ.presentesJ].length)));
   const presJ = [...EQ.presentesJ].filter(id => (jugById(id) || {}).activo !== 'NO'), presE = [...EQ.presentesE];
   if (isAdmin()) { EQ.equipos = armarEquipos(jugActivos(), entActivos(), presJ, presE, EQ.modo, EQ.n); EQ.sel = null; EQ.confirmados = false; guardarBorradorEQ(); return; }
   EQ.cargando = true; renderEquipos();
@@ -1187,7 +1196,7 @@ function promEQ(eq) { const js = eq.jugadores.map(jugById).filter(Boolean); retu
 function renderEquipos() { const box = $('eqBox'); if (box) box.innerHTML = equiposHTML(); }
 function equiposHTML() {
   const J = jugActivos(), E = entActivos();
-  const nPres = J.filter(j => EQ.presentesJ.has(j.id)).length, nPresE = E.filter(e => EQ.presentesE.has(e.id)).length;
+  const nPres = J.filter(j => EQ.presentesJ.has(j.id)).length, nPresE = E.filter(e => EQ.presentesE.has(e.id) && e.asigna_equipos !== 'NO').length;
   const adm = isAdmin(), verN = adm && EQ.verNiveles;
   const proms = EQ.equipos.map(promEQ); const dif = proms.length ? Math.max(...proms) - Math.min(...proms) : 0;
   const asigJ = new Set(EQ.equipos.flatMap(e => e.jugadores)), asigE = new Set(EQ.equipos.flatMap(e => e.entrenadores));
@@ -1196,14 +1205,15 @@ function equiposHTML() {
   const hayGuardado = DB.EQUIPOS.some(x => x.grupo_id === grupoIdEQ());
   const sid = EQ.fuente.startsWith('S:') ? EQ.fuente.slice(2) : '';
   const origen = sid ? 'presentes de la asistencia' : 'que viajan a la gira';
+  const okConf = EQ.confirmados && !libresJ.length && !libresE.length;
   if (!nPres) return `<div class="empty">${sid ? 'No hay jugadores presentes en este entrenamiento.' : 'Todavía no hay jugadores marcados para viajar.'}</div>`;
   return `
-    <div class="row" style="margin-bottom:10px"><span class="grow small">Se arman solos con los <b>${nPres} jugadores</b> y <b>${nPresE} entrenadores</b> ${origen}.</span>${EQ.cargando ? '<span class="spin"></span>' : EQ.confirmados ? '<span class="pill" style="background:rgba(34,197,94,.15);color:var(--gr2)">✓ Confirmados</span>' : '<span class="pill" style="background:rgba(245,158,11,.15);color:var(--am2)">Sin confirmar</span>'}</div>
+    <div class="row" style="margin-bottom:10px"><span class="grow small">Se arman solos con los <b>${nPres} jugadores</b> y <b>${nPresE} entrenadores</b> ${origen}.</span>${EQ.cargando ? '<span class="spin"></span>' : okConf ? '<span class="pill" style="background:rgba(34,197,94,.15);color:var(--gr2)">✓ Confirmados</span>' : '<span class="pill" style="background:rgba(245,158,11,.15);color:var(--am2)">Sin confirmar</span>'}</div>
     <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0 16px">
       <div><label class="lbl t0">Tipo de equipos</label>
       <div class="seg full"><button class="${EQ.modo === 'mixtos' ? 'on' : ''}" onclick="EQ.modo='mixtos';regenerarEQ()">🔀 Mixtos</button><button class="${EQ.modo === 'por-nivel' ? 'on' : ''}" onclick="EQ.modo='por-nivel';if(EQ.n<3)EQ.n=3;regenerarEQ()">📊 Por nivel</button></div></div>
       <div><label class="lbl">Cantidad de equipos</label>
-      <div class="stepper"><button onclick="if(EQ.n>2){EQ.n--;regenerarEQ()}" aria-label="Menos equipos">−</button><div class="v"><b>${EQ.n}</b>~${Math.ceil(nPres / EQ.n)} por equipo</div><button onclick="if(EQ.n<12){EQ.n++;regenerarEQ()}" aria-label="Más equipos">+</button></div></div>
+      <div class="stepper"><button onclick="if(EQ.n>2){EQ.n--;regenerarEQ()}" aria-label="Menos equipos" ${EQ.n <= 2 ? 'disabled style="opacity:.4"' : ''}>−</button><div class="v"><b>${EQ.n}</b>~${Math.ceil(nPres / EQ.n)} por equipo</div><button onclick="if(EQ.n<Math.min(12,${nPres})){EQ.n++;regenerarEQ()}" aria-label="Más equipos" ${EQ.n >= Math.min(12, nPres) ? 'disabled style="opacity:.4"' : ''}>+</button></div></div>
     </div>
     <div class="acts">
       <button class="btn vio" onclick="regenerarEQ()" ${EQ.cargando ? 'disabled' : ''}>🔄 Mezclar</button>
@@ -1347,6 +1357,9 @@ function editarJugador(id) {
 async function guardarJugador(id) {
   const nombre = $('fNom').value.trim(); if (!nombre) return toast('Falta el nombre', true);
   const nuevo = !id;
+  const norm = x => x.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim();
+  const dup = DB.JUGADORES.find(j => j.id !== id && norm(j.nombre) === norm(nombre));
+  if (dup && !confirm(`Ya existe "${dup.nombre}"${dup.activo === 'NO' ? ' (en "No vienen más": podés reactivarlo desde ahí)' : ''}. ¿Guardar igual?`)) return;
   if (nuevo) id = String(Math.max(0, ...DB.JUGADORES.map(j => Number(j.id) || 0)) + 1);
   const row = { id, nombre, colegio: $('fCol').value.trim() || 'N/A', grado: $('fGra').value, dni: $('fDni').value.trim(), fecha_nac: $('fNac').value, observaciones: $('fObs').value.trim() };
   if (isAdmin()) { row.nivel = $('fNiv').value; row.nivel2 = row.nivel === 'G' ? (parseFloat($('fN2').value) || '') : ''; }
@@ -1383,16 +1396,19 @@ async function guardarEntrenador(id) {
 function darBaja(t, id) {
   const p = t === 'J' ? jugById(id) : entById(id);
   abrirModal(`<h3>🚶 ${esc(t === 'J' ? p.nombre : entNom(p))} no viene más<span class="sp"></span><button class="x" onclick="cerrarModal()">×</button></h3>
-  <div class="info" style="margin-bottom:10px">No se borra: queda en la base con todo su historial y lo podés reactivar cuando quieras.</div>
+  <div class="info" style="margin-bottom:10px">No se borra: queda en la base con todo su historial y lo podés reactivar cuando quieras.${viaja(t, id) ? ' También se quita de la lista de la gira.' : ''}</div>
   <div class="fg"><label>Desde</label><input type="date" id="fBajaF" value="${hoyISO()}"></div>
   <div class="fg"><label>Motivo (opcional)</label><input id="fBajaM" placeholder="Ej: cambió de deporte, se mudó…"></div>
   <div class="mact"><button class="btn" onclick="cerrarModal()">Cancelar</button><button class="btn red" onclick="confirmarBaja('${t}','${id}')">Confirmar baja</button></div>`);
 }
 async function confirmarBaja(t, id) {
   const row = { id, activo: 'NO', fecha_baja: $('fBajaF').value, motivo_baja: $('fBajaM').value.trim() };
+  const enGira = viaja(t, id);
   cerrarModal();
   EQ.equipos.forEach(e => { e.jugadores = e.jugadores.filter(x => !(t === 'J' && x === id)); e.entrenadores = e.entrenadores.filter(x => !(t === 'E' && x === id)); });
-  await guardar([{ op: 'upsert', sheet: t === 'J' ? 'JUGADORES' : 'ENTRENADORES', key: 'id', rows: [row] }], 'Movido a "No vienen más"'); renderTab();
+  const ops = [{ op: 'upsert', sheet: t === 'J' ? 'JUGADORES' : 'ENTRENADORES', key: 'id', rows: [row] }];
+  if (enGira) ops.push({ op: 'upsert', sheet: 'GIRA', key: 'clave', rows: [{ clave: t + '-' + id, va: 'NO' }] });
+  await guardar(ops, enGira ? 'Movido a "No vienen más" y quitado de la gira' : 'Movido a "No vienen más"'); renderTab();
 }
 async function reactivar(t, id) { await guardar([{ op: 'upsert', sheet: t === 'J' ? 'JUGADORES' : 'ENTRENADORES', key: 'id', rows: [{ id, activo: 'SI', fecha_baja: '', motivo_baja: '' }] }], '↩︎ Reactivado'); renderTab(); }
 
@@ -1513,7 +1529,7 @@ function renderStats() {
   $('v-stats').innerHTML = `
   <h2 class="sec">📊 Estadísticas</h2>
   <div class="grid" style="grid-template-columns:88px minmax(0,1fr) auto;gap:8px;margin-bottom:8px">
-    <select style=" onchange="ST.anio=this.value;renderStats()">${(anios.length ? anios : [ST.anio]).map(a => `<option ${a === ST.anio ? 'selected' : ''}>${a}</option>`).join('')}</select>
+    <select onchange="ST.anio=this.value;renderStats()">${(anios.length ? anios : [ST.anio]).map(a => `<option ${a === ST.anio ? 'selected' : ''}>${a}</option>`).join('')}</select>
     <select onchange="ST.mes=this.value;renderStats()"><option value="">Mes: todos</option>${MESES.map((m, i) => `<option value="${i + 1}" ${String(ST.mes) === String(i + 1) ? 'selected' : ''}>${m}</option>`).join('')}</select>
     <button class="btn sm" onclick="exportarCSV()" title="Exportar a Excel (CSV)">⬇️ CSV</button>
   </div>
