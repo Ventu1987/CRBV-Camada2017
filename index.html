@@ -291,6 +291,7 @@ th .ar{color:var(--cy);font-size:.8em}
 .pl .nm{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.2}
 .pl{border-left:none;margin-bottom:3px;border-radius:9px}
 .pl.pc:hover{filter:brightness(1.08)}
+.pl .nm .cs{display:block;font-size:.74rem;font-weight:500;color:var(--tx3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pl.pc .lv{background:rgba(0,0,0,.28);color:#fff}
 .pl.sel{outline:3px solid var(--am);outline-offset:-3px}
 .leyenda2{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px 12px;margin:4px 0 10px;padding:.6rem .7rem;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.03)}
@@ -706,6 +707,7 @@ function colorFila(j) {
   const cuarto = String(j.grado || '').replace(/[^0-9]/g, '') === '4';
   return cuarto ? { bg: `hsl(${h} 65% 36%)`, fg: '#fff', sub: 'rgba(255,255,255,.75)' } : { bg: `hsl(${h} 80% 76%)`, fg: '#0b1222', sub: 'rgba(11,18,34,.65)' };
 }
+const subFila = j => { const c = String(j.colegio || '').trim(), g = String(j.grado || '').trim(); const t = [c && c !== 'N/A' ? c : '', g && g !== 'N/A' ? g : ''].filter(Boolean).join(' · '); const cf = colorFila(j); return t ? `<small class="cs" style="${cf ? 'color:' + cf.sub : ''}">${esc(t)}</small>` : ''; };
 const estiloFila = j => { const c = colorFila(j); return c ? `background:${c.bg};color:${c.fg};border-color:transparent` : ''; };
 
 /* ---------- tablas ordenables (todas las columnas) ---------- */
@@ -1322,7 +1324,7 @@ function libresHTML(LJ, LE) {
   const sel = EQ.sel && EQ.sel.from;
   return `<div class="team libres"><div class="th"><h4>🪑 Sin equipo</h4><div class="ts"><span>👥 ${LJ.length}</span></div>${sel ? `<button class="moveto" onclick="moverEQ(0)">⇢ Sacar acá</button>` : ''}</div><div class="tb">
     ${LE.length ? `<div class="coaches"><strong>Entrenadores</strong>${LE.map(e => `<span class="chip ${EQ.sel && EQ.sel.id === e.id ? 'sel' : ''}" onclick="selEQ('E','${e.id}',0)">${esc(entNom(e))}</span>`).join('')}</div>` : ''}
-    ${LJ.map(j => `<div class="pl ${colorFila(j) ? 'pc' : ''} ${EQ.sel && EQ.sel.id === j.id ? 'sel' : ''}" style="${estiloFila(j)}" onclick="selEQ('J','${j.id}',0)"><span class="nm">${esc(j.nombre)}</span>${isAdmin() && EQ.verNiveles ? nivelBadge(j) : ''}</div>`).join('') || '<div class="small muted">Nadie. Tocá a alguien de un equipo y "Sacar acá".</div>'}
+    ${LJ.map(j => `<div class="pl ${colorFila(j) ? 'pc' : ''} ${EQ.sel && EQ.sel.id === j.id ? 'sel' : ''}" style="${estiloFila(j)}" onclick="selEQ('J','${j.id}',0)"><span class="nm">${esc(j.nombre)}${subFila(j)}</span>${isAdmin() && EQ.verNiveles ? nivelBadge(j) : ''}</div>`).join('') || '<div class="small muted">Nadie. Tocá a alguien de un equipo y "Sacar acá".</div>'}
     <div class="small muted" style="margin-top:6px">Están presentes pero no juegan en ningún equipo.</div></div></div>`;
 }
 function compasDe(eq) {
@@ -1336,7 +1338,7 @@ function teamHTML(eq, verN) {
     <div class="th"><h4 contenteditable="true" onblur="renombrarEQ(${eq.id},this.textContent)">${esc(eq.nombre)}</h4><div class="ts"><span>👥 ${eq.jugadores.length}</span>${verN ? `<span>📊 ${promEQ(eq).toFixed(1)}</span>` : ''}</div>${exceso.length ? `<span class="pill wn" title="Muchos compañeros del mismo colegio y grado juntos">⚠ ${esc(exceso.join(' · '))}</span>` : ''}${EQ.sel && EQ.sel.from !== eq.id ? `<button class="moveto" onclick="moverEQ(${eq.id})">⇢ Mover acá</button>` : ''}</div>
     <div class="tb">
       <div class="coaches"><strong>Entrenadores</strong>${eq.entrenadores.length ? eq.entrenadores.map(id => `<span class="chip ${EQ.sel && EQ.sel.t === 'E' && EQ.sel.id === id ? 'sel' : ''}" draggable="true" ondragstart="dragEQ(event,'E','${id}',${eq.id})" onclick="selEQ('E','${id}',${eq.id})">${esc(entNom(entById(id)))}</span>`).join('') : '<span class="small muted">Sin asignar</span>'}</div>
-      ${eq.jugadores.map((id, i) => { const j = jugById(id); if (!j) return ''; const cf = colorFila(j); return `<div class="pl ${cf ? 'pc' : ''} ${EQ.sel && EQ.sel.t === 'J' && EQ.sel.id === id ? 'sel' : ''}" style="${estiloFila(j)}" draggable="true" ondragstart="dragEQ(event,'J','${id}',${eq.id})" onclick="selEQ('J','${id}',${eq.id})"><span class="n" style="${cf ? 'color:' + cf.sub : ''}">${i + 1}.</span><span class="nm">${esc(j.nombre)}</span>${verN ? nivelBadge(j) : ''}</div>`; }).join('')}
+      ${eq.jugadores.map((id, i) => { const j = jugById(id); if (!j) return ''; const cf = colorFila(j); return `<div class="pl ${cf ? 'pc' : ''} ${EQ.sel && EQ.sel.t === 'J' && EQ.sel.id === id ? 'sel' : ''}" style="${estiloFila(j)}" draggable="true" ondragstart="dragEQ(event,'J','${id}',${eq.id})" onclick="selEQ('J','${id}',${eq.id})"><span class="n" style="${cf ? 'color:' + cf.sub : ''}">${i + 1}.</span><span class="nm">${esc(j.nombre)}${subFila(j)}</span>${verN ? nivelBadge(j) : ''}</div>`; }).join('')}
     </div></div>`;
 }
 let DRAG = null;
