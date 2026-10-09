@@ -151,7 +151,9 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .pl .n{color:#a78bfa;font-weight:800;min-width:20px;font-size:.8rem}
 .pl .nm{flex:1;min-width:0;font-weight:600;font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pl .nm small{display:block;color:var(--tx4);font-size:.7rem;font-weight:500}
-.sel{border-color:var(--am)!important;background:rgba(245,158,11,.14)!important}
+.sel{border-color:var(--am)!important}
+.chip.sel{background:rgba(245,158,11,.25)!important}
+.pl.sel:not(.pc){background:rgba(245,158,11,.14)!important}
 .moveto{width:100%;margin-top:.5rem;padding:.5rem;border-radius:8px;border:1px dashed var(--am);background:rgba(245,158,11,.08);color:var(--am2);font-weight:800}
 .warn{padding:.6rem .75rem;border-radius:10px;background:rgba(251,146,60,.1);color:#fb923c;font-size:.85rem;margin-top:8px}
 .info{padding:.6rem .75rem;border-radius:10px;background:rgba(129,230,217,.08);color:#81e6d9;font-size:.85rem}
@@ -287,6 +289,14 @@ th .ar{color:var(--cy);font-size:.8em}
 .leyenda .cg b{margin-left:.3rem;opacity:.85}
 .pl{border-left:5px solid transparent}
 .pl .nm{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.2}
+.pl{border-left:none;margin-bottom:3px;border-radius:9px}
+.pl.pc:hover{filter:brightness(1.08)}
+.pl.pc .lv{background:rgba(0,0,0,.28);color:#fff}
+.pl.sel{outline:3px solid var(--am);outline-offset:-3px}
+.leyenda2{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px 12px;margin:4px 0 10px;padding:.6rem .7rem;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.03)}
+.leyenda2 .lg{display:flex;align-items:center;gap:6px;min-width:0}
+.leyenda2 .lgn{flex:1;min-width:0;font-size:.8rem;font-weight:700;color:var(--tx2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.leyenda2 .sw{display:inline-flex;gap:.25rem;align-items:center;padding:.15rem .45rem;border-radius:6px;font-size:.74rem;font-weight:800;flex-shrink:0}
 .team.libres{border-style:dashed;border-color:rgba(245,158,11,.45);background:rgba(245,158,11,.05)}
 .team.libres .th h4{color:var(--am2)}
 .pill.wn{background:rgba(239,68,68,.18);color:var(--rd2)}
@@ -680,6 +690,23 @@ function colorCole(j) {
   return { k: k + '|' + g, ab: ab + (g ? ' ' + g + '°' : ''), nombre: c + (g ? ' ' + g + '°' : ''), bg: cuarto ? `hsl(${h} 72% 42%)` : `hsl(${h} 85% 74%)`, fg: cuarto ? '#fff' : '#0b1222' };
 }
 const chipCole = j => { const c = colorCole(j); return c ? `<span class="cg" style="background:${c.bg};color:${c.fg}">${esc(c.ab)}</span>` : ''; };
+// En el armado de equipos solo se pintan los 4 colegios con más chicos presentes (4° tono fuerte, 3° tono claro)
+const PALETA4 = [215, 135, 275, 28]; // azul, verde, violeta, naranja
+let TOP4 = {};
+function calcTop4() {
+  const n = {}; jugActivos().filter(j => EQ.presentesJ.has(j.id)).forEach(j => { const c = String(j.colegio || '').trim(); if (c && c !== 'N/A') { const k = normTxt(c); n[k] = n[k] || { c, n: 0 }; n[k].n++; } });
+  const top = Object.entries(n).sort((a, b) => b[1].n - a[1].n).slice(0, 4);
+  const pref = { 'sagrada familia': 215, 'santos padres': 135, 'santa ethnea': 275 }, usados = new Set(); TOP4 = {};
+  top.forEach(([k]) => { if (pref[k] != null) { TOP4[k] = pref[k]; usados.add(pref[k]); } });
+  top.forEach(([k]) => { if (TOP4[k] == null) { const h = PALETA4.find(x => !usados.has(x)); TOP4[k] = h; usados.add(h); } });
+  return top.map(([k, v]) => ({ k, c: v.c, n: v.n, h: TOP4[k] }));
+}
+function colorFila(j) {
+  const h = TOP4[normTxt(j.colegio)]; if (h == null) return null;
+  const cuarto = String(j.grado || '').replace(/[^0-9]/g, '') === '4';
+  return cuarto ? { bg: `hsl(${h} 65% 36%)`, fg: '#fff', sub: 'rgba(255,255,255,.75)' } : { bg: `hsl(${h} 80% 76%)`, fg: '#0b1222', sub: 'rgba(11,18,34,.65)' };
+}
+const estiloFila = j => { const c = colorFila(j); return c ? `background:${c.bg};color:${c.fg};border-color:transparent` : ''; };
 
 /* ---------- tablas ordenables (todas las columnas) ---------- */
 const SORTS = {};
@@ -1247,8 +1274,9 @@ async function generarEQ() {
 async function regenerarEQ() { await generarEQ(); renderEquipos(); }
 function guardarBorradorEQ() { lsSet(LS.draft, JSON.stringify({ fuente: EQ.fuente, equipos: EQ.equipos, modo: EQ.modo, n: EQ.n })); }
 function promEQ(eq) { const js = eq.jugadores.map(jugById).filter(Boolean); return js.length ? js.reduce((s, j) => s + nivelNum(j), 0) / js.length : 0; }
-function renderEquipos() { const box = TAB === 'gira' ? $('eqBoxG') : TAB === 'asistencia' ? $('eqBox') : null; if (box) box.innerHTML = equiposHTML(); }
+function renderEquipos() { calcTop4(); const box = TAB === 'gira' ? $('eqBoxG') : TAB === 'asistencia' ? $('eqBox') : null; if (box) box.innerHTML = equiposHTML(); }
 function equiposHTML() {
+  calcTop4();
   const J = jugActivos(), E = entActivos();
   const nPres = J.filter(j => EQ.presentesJ.has(j.id)).length, nPresE = E.filter(e => EQ.presentesE.has(e.id) && e.asigna_equipos !== 'NO').length;
   const adm = isAdmin(), verN = adm && EQ.verNiveles;
@@ -1284,15 +1312,17 @@ function equiposHTML() {
     ${EQ.sel ? `<div class="selbar"><span class="grow">👉 <b>${esc(EQ.sel.t === 'J' ? (jugById(EQ.sel.id) || {}).nombre : entNom(entById(EQ.sel.id)))}</b><br><span class="small">Tocá "⇢ Mover acá" en otro equipo</span></span>${EQ.sel.from ? `<button class="btn sm" onclick="moverEQ(0)">🚫 Sacar del equipo</button>` : ''}<button class="btn sm" onclick="EQ.sel=null;renderEquipos()">Cancelar</button></div>` : ''}`;
 }
 function leyendaHTML() {
-  const c = {}; jugActivos().filter(j => EQ.presentesJ.has(j.id)).forEach(j => { const x = colorCole(j); if (x) { c[x.k] = c[x.k] || { x, n: 0 }; c[x.k].n++; } });
-  const L = Object.values(c).sort((a, b) => b.n - a.n || a.x.nombre.localeCompare(b.x.nombre));
-  return L.length ? `<div class="leyenda" title="Colegio y grado">${L.map(({ x, n }) => `<span class="cg" style="background:${x.bg};color:${x.fg}">${esc(x.ab)}<b>${n}</b></span>`).join('')}</div>` : '';
+  const top = calcTop4(); if (!top.length) return '';
+  const pres = jugActivos().filter(j => EQ.presentesJ.has(j.id));
+  const n = (k, g) => pres.filter(j => normTxt(j.colegio) === k && String(j.grado || '').replace(/[^0-9]/g, '') === g).length;
+  const sw = (k, h, g, c) => { const cf = colorFila({ colegio: c, grado: g }); const cant = n(k, g); return cant ? `<span class="sw" style="background:${cf.bg};color:${cf.fg}">${g}° <b>${cant}</b></span>` : ''; };
+  return `<div class="leyenda2">${top.map(t => `<div class="lg"><span class="lgn">${esc(t.c)}</span>${sw(t.k, t.h, '4', t.c)}${sw(t.k, t.h, '3', t.c)}</div>`).join('')}<div class="lg muted small">Resto de los colegios: sin color</div></div>`;
 }
 function libresHTML(LJ, LE) {
   const sel = EQ.sel && EQ.sel.from;
   return `<div class="team libres"><div class="th"><h4>🪑 Sin equipo</h4><div class="ts"><span>👥 ${LJ.length}</span></div>${sel ? `<button class="moveto" onclick="moverEQ(0)">⇢ Sacar acá</button>` : ''}</div><div class="tb">
     ${LE.length ? `<div class="coaches"><strong>Entrenadores</strong>${LE.map(e => `<span class="chip ${EQ.sel && EQ.sel.id === e.id ? 'sel' : ''}" onclick="selEQ('E','${e.id}',0)">${esc(entNom(e))}</span>`).join('')}</div>` : ''}
-    ${LJ.map(j => { const cc = colorCole(j); return `<div class="pl ${EQ.sel && EQ.sel.id === j.id ? 'sel' : ''}" style="${cc ? 'border-left-color:' + cc.bg : ''}" onclick="selEQ('J','${j.id}',0)"><span class="nm">${esc(j.nombre)}</span>${chipCole(j)}${isAdmin() && EQ.verNiveles ? nivelBadge(j) : ''}</div>`; }).join('') || '<div class="small muted">Nadie. Tocá a alguien de un equipo y "Sacar acá".</div>'}
+    ${LJ.map(j => `<div class="pl ${colorFila(j) ? 'pc' : ''} ${EQ.sel && EQ.sel.id === j.id ? 'sel' : ''}" style="${estiloFila(j)}" onclick="selEQ('J','${j.id}',0)"><span class="nm">${esc(j.nombre)}</span>${isAdmin() && EQ.verNiveles ? nivelBadge(j) : ''}</div>`).join('') || '<div class="small muted">Nadie. Tocá a alguien de un equipo y "Sacar acá".</div>'}
     <div class="small muted" style="margin-top:6px">Están presentes pero no juegan en ningún equipo.</div></div></div>`;
 }
 function compasDe(eq) {
@@ -1306,7 +1336,7 @@ function teamHTML(eq, verN) {
     <div class="th"><h4 contenteditable="true" onblur="renombrarEQ(${eq.id},this.textContent)">${esc(eq.nombre)}</h4><div class="ts"><span>👥 ${eq.jugadores.length}</span>${verN ? `<span>📊 ${promEQ(eq).toFixed(1)}</span>` : ''}</div>${exceso.length ? `<span class="pill wn" title="Muchos compañeros del mismo colegio y grado juntos">⚠ ${esc(exceso.join(' · '))}</span>` : ''}${EQ.sel && EQ.sel.from !== eq.id ? `<button class="moveto" onclick="moverEQ(${eq.id})">⇢ Mover acá</button>` : ''}</div>
     <div class="tb">
       <div class="coaches"><strong>Entrenadores</strong>${eq.entrenadores.length ? eq.entrenadores.map(id => `<span class="chip ${EQ.sel && EQ.sel.t === 'E' && EQ.sel.id === id ? 'sel' : ''}" draggable="true" ondragstart="dragEQ(event,'E','${id}',${eq.id})" onclick="selEQ('E','${id}',${eq.id})">${esc(entNom(entById(id)))}</span>`).join('') : '<span class="small muted">Sin asignar</span>'}</div>
-      ${eq.jugadores.map((id, i) => { const j = jugById(id); if (!j) return ''; const cc = colorCole(j); return `<div class="pl ${EQ.sel && EQ.sel.t === 'J' && EQ.sel.id === id ? 'sel' : ''}" style="${cc ? 'border-left-color:' + cc.bg : ''}" draggable="true" ondragstart="dragEQ(event,'J','${id}',${eq.id})" onclick="selEQ('J','${id}',${eq.id})"><span class="n">${i + 1}.</span><span class="nm">${esc(j.nombre)}</span>${chipCole(j)}${verN ? nivelBadge(j) : ''}</div>`; }).join('')}
+      ${eq.jugadores.map((id, i) => { const j = jugById(id); if (!j) return ''; const cf = colorFila(j); return `<div class="pl ${cf ? 'pc' : ''} ${EQ.sel && EQ.sel.t === 'J' && EQ.sel.id === id ? 'sel' : ''}" style="${estiloFila(j)}" draggable="true" ondragstart="dragEQ(event,'J','${id}',${eq.id})" onclick="selEQ('J','${id}',${eq.id})"><span class="n" style="${cf ? 'color:' + cf.sub : ''}">${i + 1}.</span><span class="nm">${esc(j.nombre)}</span>${verN ? nivelBadge(j) : ''}</div>`; }).join('')}
     </div></div>`;
 }
 let DRAG = null;
