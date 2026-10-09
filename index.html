@@ -281,6 +281,15 @@ th .ar{color:var(--cy);font-size:.8em}
 @media print{.ficha{border-radius:0;padding:0}.ficha .pg{grid-template-columns:repeat(2,1fr)!important}}
 
 /* ===== v3 · sistema móvil unificado ===== */
+.cg{display:inline-flex;align-items:center;padding:.12rem .45rem;border-radius:6px;font-size:.72rem;font-weight:800;white-space:nowrap;flex-shrink:0;letter-spacing:.01em}
+.leyenda{display:flex;flex-wrap:wrap;gap:5px;margin:4px 0 10px}
+.leyenda .cg{font-size:.72rem}
+.leyenda .cg b{margin-left:.3rem;opacity:.85}
+.pl{border-left:5px solid transparent}
+.pl .nm{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.2}
+.team.libres{border-style:dashed;border-color:rgba(245,158,11,.45);background:rgba(245,158,11,.05)}
+.team.libres .th h4{color:var(--am2)}
+.pill.wn{background:rgba(239,68,68,.18);color:var(--rd2)}
 .aus-box{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
 .aus-chip{display:inline-flex;align-items:baseline;gap:.3rem;margin:3px 4px 3px 0;padding:.3rem .6rem;border-radius:8px;background:rgba(239,68,68,.14);border:1px solid rgba(239,68,68,.3);color:#fecaca;font-size:.85rem;font-weight:700}
 .aus-chip small{font-size:.72rem;font-weight:600;color:var(--am2)}
@@ -659,6 +668,18 @@ function proximaSesion() {
 }
 const nombreEntreno = s => `${fmtFC(s.fecha)} · ${TIPOS_C[s.tipo] || s.tipo}${horaSes(s) ? ' · ' + hIni(horaSes(s)) : ''}`;
 function proximoEntreno() { const d = new Date(); d.setHours(0, 0, 0, 0); for (let i = 0; i < 8; i++) { const w = d.getDay(); if (w === 3 || w === 6) return isoDate(d); d.setDate(d.getDate() + 1); } return hoyISO(); }
+
+/* ---------- colores por colegio (mismo colegio = mismo color; 4° fuerte, 3° claro) ---------- */
+const COLEGIOS = { 'sagrada familia': [215, 'SF'], 'santos padres': [135, 'SP'], 'santa ethnea': [275, 'SE'], 'ateneo': [28, 'ATE'], 'aberdare': [330, 'ABE'], 'jesus maria': [48, 'JM'], 'la providencia': [2, 'LP'], 'san tarsicio': [175, 'ST'], 'san pablo': [18, 'SPa'], 'san gabriel': [245, 'SG'], 'club san miguel': [90, 'CSM'], 'luigi pirandelo': [300, 'LPi'], 'las marias': [195, 'LM'], 'dominicanes': [350, 'DOM'] };
+const normTxt = x => String(x || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim();
+function colorCole(j) {
+  const c = String(j.colegio || '').trim(); if (!c || c === 'N/A') return null;
+  const k = normTxt(c);
+  let [h, ab] = COLEGIOS[k] || [[...k].reduce((a, ch) => (a * 31 + ch.charCodeAt(0)) % 360, 7), c.split(' ').filter(w => w.length > 2).map(w => w[0].toUpperCase()).join('').slice(0, 3) || c.slice(0, 3)];
+  const g = String(j.grado || '').replace(/[^0-9]/g, ''), cuarto = g === '4';
+  return { k: k + '|' + g, ab: ab + (g ? ' ' + g + '°' : ''), nombre: c + (g ? ' ' + g + '°' : ''), bg: cuarto ? `hsl(${h} 72% 42%)` : `hsl(${h} 85% 74%)`, fg: cuarto ? '#fff' : '#0b1222' };
+}
+const chipCole = j => { const c = colorCole(j); return c ? `<span class="cg" style="background:${c.bg};color:${c.fg}">${esc(c.ab)}</span>` : ''; };
 
 /* ---------- tablas ordenables (todas las columnas) ---------- */
 const SORTS = {};
@@ -1090,6 +1111,7 @@ function fichaHTML(s, imgs) {
     ${jt ? `<div class="kp"><div>Jugadores presentes<b>${jp} / ${jt}</b></div><div>Entrenadores<b>${ep} / ${et}</b></div><div>Asistencia<b>${pct(jp, jt)}%</b></div>${eqs ? `<div>Equipos<b>${eqs.length}</b></div>` : ''}</div>` : ''}
     ${s.notas || imgs.length ? `<h4>📋 Planificación</h4>${s.notas ? `<div class="plan">${esc(s.notas)}</div>` : ''}${imgs.length ? `<div class="pimgs" style="margin-top:8px">${imgs.map(u => `<img src="${u}">`).join('')}</div>` : ''}${s.archivos.some(a => a.mime === 'application/pdf') ? `<div class="aus" style="margin-top:6px">📎 PDF adjunto: ${s.archivos.filter(a => a.mime === 'application/pdf').map(a => esc(a.nombre)).join(', ')}</div>` : ''}` : ''}
     ${eqs ? `<h4>🧩 Equipos ${borrador ? '(borrador, sin guardar)' : 'confirmados'}</h4><div class="pg">${eqs.map(e => `<div class="pt"><h5>${esc(e.nombre)} · ${e.J.length}</h5><div class="pc">Entrenadores: ${esc(e.E.join(', ') || 'Sin asignar')}</div><ol>${e.J.map(n => `<li>${esc(n)}</li>`).join('')}</ol></div>`).join('')}</div>` : (jt ? '<h4>🧩 Equipos</h4><div class="aus">Todavía no hay equipos guardados para este entrenamiento.</div>' : '')}
+    ${(() => { if (!eqs) return ''; const enEq = new Set(eqs.flatMap(e => e.J)); const sin = r.filter(a => a.persona_tipo === 'J' && a.estado === 'P' && !enEq.has(a.nombre)).map(a => a.nombre); return sin.length ? `<h4>🪑 Presentes sin equipo (${sin.length})</h4><div class="aus">${sin.map(esc).join(' · ')}</div>` : ''; })()}
     ${aus.length ? `<h4>🚫 Ausentes (${aus.length})</h4><div class="aus">${aus.map(a => `${a.persona_tipo === 'E' ? '🧢 ' : ''}${esc(a.nombre)}${a.motivo && a.motivo !== 'Sin aviso' ? ' <i>(' + esc(a.motivo.toLowerCase()) + ')</i>' : ''}`).join(' · ')}</div>` : ''}
     <div class="ft">Regatas Bella Vista · M9 Camada 2017 · generado ${fmtF(hoyISO())} ${horaAhora()}</div>
   </div>`;
@@ -1118,7 +1140,7 @@ async function fichaImagen(sid) {
 let EQ = { fuente: '', modo: 'mixtos', n: 6, presentesJ: new Set(), presentesE: new Set(), equipos: [], sel: null, verNiveles: true, fecha: '', cargando: false, confirmados: false };
 // Los equipos se arman SIEMPRE desde lo ya cargado: presentes del entrenamiento o los que viajan a la gira.
 function equiposDesdeSesion(sid) { const s = DB.SESIONES.find(x => x.id === sid); if (s) irAsistencia(s.fecha, s.tipo); setTimeout(() => { const e = $('eqBox'); if (e) e.scrollIntoView({ behavior: 'smooth' }); }, 120); }
-function equiposDesdeGira() { GI.eqOpen = true; ir('gira'); setTimeout(() => { const e = $('eqBox'); if (e) e.scrollIntoView({ behavior: 'smooth' }); }, 120); }
+function equiposDesdeGira() { GI.sec = 'equipos'; ir('gira'); setTimeout(() => { const e = $('eqBoxG'); if (e) e.scrollIntoView({ behavior: 'smooth' }); }, 120); }
 function setFuenteEQ(f) {
   EQ.fuente = f; EQ.equipos = []; EQ.sel = null;
   const E = entActivos().filter(e => e.asigna_equipos !== 'NO');
@@ -1149,13 +1171,43 @@ function armarEquipos(J, E, presJ, presE, modo, n) {
   if (!pres.length) return [];
   var shuffle = function (a) { for (var i = a.length - 1; i > 0; i--) { var k = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[k]; a[k] = t; } return a; };
   var ord = { G: 0, '1': 1, '2': 2, '3': 3 };
+  var nk = function (j) { return j.nivel === 'G' ? 'G' + (j.nivel2 || 9) : (j.nivel || '2'); };
   var porNivel = function (arr) {
     var g = {};
-    arr.forEach(function (j) { var k = j.nivel === 'G' ? 'G' + (j.nivel2 || 9) : (j.nivel || '2'); (g[k] = g[k] || []).push(j); });
+    arr.forEach(function (j) { var k = nk(j); (g[k] = g[k] || []).push(j); });
     return Object.keys(g).sort(function (a, b) { return ((ord[a[0]] || 2) - (ord[b[0]] || 2)) || (a < b ? -1 : a > b ? 1 : 0); })
       .reduce(function (acc, k) { return acc.concat(shuffle(g[k])); }, []);
   };
   var snake = function (lista, eqs) { var i = 0, dir = 1; lista.forEach(function (j) { eqs[i].jugadores.push(j); i += dir; if (i === eqs.length) { i = eqs.length - 1; dir = -1; } else if (i < 0) { i = 0; dir = 1; } }); };
+  // compañeros = mismo colegio y mismo grado: se separan para que no queden más de 2 juntos
+  var grp = function (j) { var c = String(j.colegio || '').trim(); return !c || c === 'N/A' ? '' : c.toLowerCase() + '|' + String(j.grado || ''); };
+  var separar = function (eqs) {
+    if (eqs.length < 2) return;
+    var tot = {}; eqs.forEach(function (e) { e.jugadores.forEach(function (j) { var g = grp(j); if (g) tot[g] = (tot[g] || 0) + 1; }); });
+    var lim = function (g) { return Math.max(2, Math.ceil(tot[g] / eqs.length)); };
+    var cnt = function (e, g) { var c = 0; e.jugadores.forEach(function (x) { if (grp(x) === g) c++; }); return c; };
+    [nk, function (j) { return j.nivel || '2'; }].forEach(function (key) {
+      for (var it = 0; it < 400; it++) {
+        var hecho = false;
+        for (var a = 0; a < eqs.length && !hecho; a++) {
+          var A = eqs[a];
+          for (var pi = 0; pi < A.jugadores.length && !hecho; pi++) {
+            var p = A.jugadores[pi], g = grp(p);
+            if (!g || cnt(A, g) <= lim(g)) continue;
+            for (var b = 0; b < eqs.length && !hecho; b++) {
+              var B = eqs[b]; if (b === a || cnt(B, g) >= lim(g)) continue;
+              for (var qi = 0; qi < B.jugadores.length; qi++) {
+                var q = B.jugadores[qi], h = grp(q);
+                if (key(q) !== key(p) || h === g || (h && cnt(A, h) >= lim(h))) continue;
+                A.jugadores[pi] = q; B.jugadores[qi] = p; hecho = true; break;
+              }
+            }
+          }
+        }
+        if (!hecho) break;
+      }
+    });
+  };
   var equipos = [], i;
   var hayG = pres.some(function (j) { return j.nivel === 'G'; });
   if (modo === 'por-nivel' && hayG) {
@@ -1165,10 +1217,12 @@ function armarEquipos(J, E, presJ, presE, modo, n) {
     var resto = [];
     for (i = 0; i < n - 2; i++) resto.push({ id: i + 3, nombre: 'Equipo ' + (i + 3), jugadores: [], entrenadores: [] });
     snake(porNivel(pres.filter(function (j) { return j.nivel !== 'G'; })), resto);
+    separar(equipos.slice(0, 2)); separar(resto);
     equipos = equipos.concat(resto);
   } else {
     for (i = 0; i < n; i++) equipos.push({ id: i + 1, nombre: 'Equipo ' + (i + 1), jugadores: [], entrenadores: [] });
     snake(porNivel(pres), equipos);
+    separar(equipos);
   }
   var ents = shuffle(E.filter(function (e) { return e.asigna_equipos !== 'NO' && pe[e.id]; }));
   var sinHijo = [];
@@ -1193,7 +1247,7 @@ async function generarEQ() {
 async function regenerarEQ() { await generarEQ(); renderEquipos(); }
 function guardarBorradorEQ() { lsSet(LS.draft, JSON.stringify({ fuente: EQ.fuente, equipos: EQ.equipos, modo: EQ.modo, n: EQ.n })); }
 function promEQ(eq) { const js = eq.jugadores.map(jugById).filter(Boolean); return js.length ? js.reduce((s, j) => s + nivelNum(j), 0) / js.length : 0; }
-function renderEquipos() { const box = $('eqBox'); if (box) box.innerHTML = equiposHTML(); }
+function renderEquipos() { const box = TAB === 'gira' ? $('eqBoxG') : TAB === 'asistencia' ? $('eqBox') : null; if (box) box.innerHTML = equiposHTML(); }
 function equiposHTML() {
   const J = jugActivos(), E = entActivos();
   const nPres = J.filter(j => EQ.presentesJ.has(j.id)).length, nPresE = E.filter(e => EQ.presentesE.has(e.id) && e.asigna_equipos !== 'NO').length;
@@ -1204,8 +1258,9 @@ function equiposHTML() {
   const libresE = E.filter(e => EQ.presentesE.has(e.id) && e.asigna_equipos !== 'NO' && !asigE.has(e.id));
   const hayGuardado = DB.EQUIPOS.some(x => x.grupo_id === grupoIdEQ());
   const sid = EQ.fuente.startsWith('S:') ? EQ.fuente.slice(2) : '';
+  if (EQ.sel && EQ.sel.from === 0 && !(EQ.sel.t === 'J' ? libresJ : libresE).some(x => x.id === EQ.sel.id)) EQ.sel = null;
   const origen = sid ? 'presentes de la asistencia' : 'que viajan a la gira';
-  const okConf = EQ.confirmados && !libresJ.length && !libresE.length;
+  const okConf = EQ.confirmados;
   if (!nPres) return `<div class="empty">${sid ? 'No hay jugadores presentes en este entrenamiento.' : 'Todavía no hay jugadores marcados para viajar.'}</div>`;
   return `
     <div class="row" style="margin-bottom:10px"><span class="grow small">Se arman solos con los <b>${nPres} jugadores</b> y <b>${nPresE} entrenadores</b> ${origen}.</span>${EQ.cargando ? '<span class="spin"></span>' : okConf ? '<span class="pill" style="background:rgba(34,197,94,.15);color:var(--gr2)">✓ Confirmados</span>' : '<span class="pill" style="background:rgba(245,158,11,.15);color:var(--am2)">Sin confirmar</span>'}</div>
@@ -1223,18 +1278,35 @@ function equiposHTML() {
     </div>
     ${hayGuardado && !EQ.confirmados || adm ? `<div class="row" style="margin-bottom:6px">${hayGuardado && !EQ.confirmados ? `<button class="btn sm" onclick="cargarGuardadoEQ();renderEquipos()">↩︎ Volver a los confirmados</button>` : ''}${adm ? `<label class="small row" style="gap:.4rem;margin-left:auto;min-height:36px"><input type="checkbox" style="width:20px;height:20px;min-height:0" ${EQ.verNiveles ? 'checked' : ''} onchange="EQ.verNiveles=this.checked;renderEquipos()"> ver niveles</label>` : ''}</div>` : ''}
     ${verN && dif >= .5 ? `<div class="warn">⚠️ Diferencia de nivel entre equipos: ${dif.toFixed(2)}. Mezclá de nuevo o mové jugadores.</div>` : ''}
-    ${libresJ.length ? `<div class="warn">👦 Presentes sin equipo (tocá uno y después "Mover acá"): ${libresJ.map(j => `<span class="chip ${EQ.sel && EQ.sel.id === j.id ? 'sel' : ''}" style="background:rgba(6,182,212,.18)" onclick="selEQ('J','${j.id}',0)">${esc(j.nombre)}</span>`).join('')}</div>` : ''}
-    ${libresE.length ? `<div class="warn">🧢 Entrenadores sin equipo: ${libresE.map(e => `<span class="chip ${EQ.sel && EQ.sel.id === e.id ? 'sel' : ''}" onclick="selEQ('E','${e.id}',0)">${esc(entNom(e))}</span>`).join('')}</div>` : ''}
-    <div class="small muted" style="margin:8px 0">Para mover: tocá un jugador o entrenador y después <b>⇢ Mover acá</b> en el equipo destino. Tocá el nombre del equipo para cambiarlo.</div>
-    <div class="teams">${EQ.equipos.map(eq => teamHTML(eq, verN)).join('')}</div>
-    ${EQ.sel ? `<div class="selbar"><span class="grow">👉 <b>${esc(EQ.sel.t === 'J' ? (jugById(EQ.sel.id) || {}).nombre : entNom(entById(EQ.sel.id)))}</b><br><span class="small">Tocá "⇢ Mover acá" en el equipo destino</span></span><button class="btn sm" onclick="EQ.sel=null;renderEquipos()">Cancelar</button></div>` : ''}`;
+    ${leyendaHTML()}
+    <div class="small muted" style="margin:8px 0">Tocá un jugador o entrenador y después <b>⇢ Mover acá</b> en otro equipo, o <b>Sacar del equipo</b> (sigue presente, queda en "Sin equipo"). Tocá el nombre del equipo para cambiarlo.</div>
+    <div class="teams">${libresJ.length || libresE.length || (EQ.sel && EQ.sel.from) ? libresHTML(libresJ, libresE) : ''}${EQ.equipos.map(eq => teamHTML(eq, verN)).join('')}</div>
+    ${EQ.sel ? `<div class="selbar"><span class="grow">👉 <b>${esc(EQ.sel.t === 'J' ? (jugById(EQ.sel.id) || {}).nombre : entNom(entById(EQ.sel.id)))}</b><br><span class="small">Tocá "⇢ Mover acá" en otro equipo</span></span>${EQ.sel.from ? `<button class="btn sm" onclick="moverEQ(0)">🚫 Sacar del equipo</button>` : ''}<button class="btn sm" onclick="EQ.sel=null;renderEquipos()">Cancelar</button></div>` : ''}`;
+}
+function leyendaHTML() {
+  const c = {}; jugActivos().filter(j => EQ.presentesJ.has(j.id)).forEach(j => { const x = colorCole(j); if (x) { c[x.k] = c[x.k] || { x, n: 0 }; c[x.k].n++; } });
+  const L = Object.values(c).sort((a, b) => b.n - a.n || a.x.nombre.localeCompare(b.x.nombre));
+  return L.length ? `<div class="leyenda" title="Colegio y grado">${L.map(({ x, n }) => `<span class="cg" style="background:${x.bg};color:${x.fg}">${esc(x.ab)}<b>${n}</b></span>`).join('')}</div>` : '';
+}
+function libresHTML(LJ, LE) {
+  const sel = EQ.sel && EQ.sel.from;
+  return `<div class="team libres"><div class="th"><h4>🪑 Sin equipo</h4><div class="ts"><span>👥 ${LJ.length}</span></div>${sel ? `<button class="moveto" onclick="moverEQ(0)">⇢ Sacar acá</button>` : ''}</div><div class="tb">
+    ${LE.length ? `<div class="coaches"><strong>Entrenadores</strong>${LE.map(e => `<span class="chip ${EQ.sel && EQ.sel.id === e.id ? 'sel' : ''}" onclick="selEQ('E','${e.id}',0)">${esc(entNom(e))}</span>`).join('')}</div>` : ''}
+    ${LJ.map(j => { const cc = colorCole(j); return `<div class="pl ${EQ.sel && EQ.sel.id === j.id ? 'sel' : ''}" style="${cc ? 'border-left-color:' + cc.bg : ''}" onclick="selEQ('J','${j.id}',0)"><span class="nm">${esc(j.nombre)}</span>${chipCole(j)}${isAdmin() && EQ.verNiveles ? nivelBadge(j) : ''}</div>`; }).join('') || '<div class="small muted">Nadie. Tocá a alguien de un equipo y "Sacar acá".</div>'}
+    <div class="small muted" style="margin-top:6px">Están presentes pero no juegan en ningún equipo.</div></div></div>`;
+}
+function compasDe(eq) {
+  const tot = {}; EQ.equipos.forEach(e => e.jugadores.forEach(id => { const c = colorCole(jugById(id) || {}); if (c) tot[c.k] = (tot[c.k] || 0) + 1; }));
+  const c = {}, nom = {}; eq.jugadores.forEach(id => { const x = colorCole(jugById(id) || {}); if (x) { c[x.k] = (c[x.k] || 0) + 1; nom[x.k] = x.ab; } });
+  return Object.keys(c).filter(k => c[k] > Math.max(2, Math.ceil(tot[k] / Math.max(1, EQ.equipos.length)))).map(k => `${c[k]} ${nom[k]}`);
 }
 function teamHTML(eq, verN) {
+  const exceso = compasDe(eq);
   return `<div class="team" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="dropEQ(event,${eq.id})">
-    <div class="th"><h4 contenteditable="true" onblur="renombrarEQ(${eq.id},this.textContent)">${esc(eq.nombre)}</h4><div class="ts"><span>👥 ${eq.jugadores.length}</span>${verN ? `<span>📊 ${promEQ(eq).toFixed(1)}</span>` : ''}</div>${EQ.sel && EQ.sel.from !== eq.id ? `<button class="moveto" onclick="moverEQ(${eq.id})">⇢ Mover acá</button>` : ''}</div>
+    <div class="th"><h4 contenteditable="true" onblur="renombrarEQ(${eq.id},this.textContent)">${esc(eq.nombre)}</h4><div class="ts"><span>👥 ${eq.jugadores.length}</span>${verN ? `<span>📊 ${promEQ(eq).toFixed(1)}</span>` : ''}</div>${exceso.length ? `<span class="pill wn" title="Muchos compañeros del mismo colegio y grado juntos">⚠ ${esc(exceso.join(' · '))}</span>` : ''}${EQ.sel && EQ.sel.from !== eq.id ? `<button class="moveto" onclick="moverEQ(${eq.id})">⇢ Mover acá</button>` : ''}</div>
     <div class="tb">
       <div class="coaches"><strong>Entrenadores</strong>${eq.entrenadores.length ? eq.entrenadores.map(id => `<span class="chip ${EQ.sel && EQ.sel.t === 'E' && EQ.sel.id === id ? 'sel' : ''}" draggable="true" ondragstart="dragEQ(event,'E','${id}',${eq.id})" onclick="selEQ('E','${id}',${eq.id})">${esc(entNom(entById(id)))}</span>`).join('') : '<span class="small muted">Sin asignar</span>'}</div>
-      ${eq.jugadores.map((id, i) => { const j = jugById(id); if (!j) return ''; return `<div class="pl ${EQ.sel && EQ.sel.t === 'J' && EQ.sel.id === id ? 'sel' : ''}" draggable="true" ondragstart="dragEQ(event,'J','${id}',${eq.id})" onclick="selEQ('J','${id}',${eq.id})"><span class="n">${i + 1}.</span><span class="nm">${esc(j.nombre)}<small>${esc(j.colegio && j.colegio !== 'N/A' ? j.colegio : '')}${j.grado && j.grado !== 'N/A' ? ', ' + esc(j.grado) : ''}</small></span>${verN ? nivelBadge(j) : ''}</div>`; }).join('')}
+      ${eq.jugadores.map((id, i) => { const j = jugById(id); if (!j) return ''; const cc = colorCole(j); return `<div class="pl ${EQ.sel && EQ.sel.t === 'J' && EQ.sel.id === id ? 'sel' : ''}" style="${cc ? 'border-left-color:' + cc.bg : ''}" draggable="true" ondragstart="dragEQ(event,'J','${id}',${eq.id})" onclick="selEQ('J','${id}',${eq.id})"><span class="n">${i + 1}.</span><span class="nm">${esc(j.nombre)}</span>${chipCole(j)}${verN ? nivelBadge(j) : ''}</div>`; }).join('')}
     </div></div>`;
 }
 let DRAG = null;
@@ -1245,8 +1317,8 @@ function moverEQ(to) {
   const s = EQ.sel; if (!s) return;
   const dest = EQ.equipos.find(e => e.id === to), orig = EQ.equipos.find(e => e.id === s.from), campo = s.t === 'J' ? 'jugadores' : 'entrenadores';
   if (orig) orig[campo] = orig[campo].filter(x => x !== s.id);
-  if (!dest[campo].includes(s.id)) dest[campo].push(s.id);
-  EQ.sel = null; EQ.confirmados = false; guardarBorradorEQ(); renderEquipos(); toast('✓ Movido a ' + dest.nombre);
+  if (dest && !dest[campo].includes(s.id)) dest[campo].push(s.id);
+  EQ.sel = null; EQ.confirmados = false; guardarBorradorEQ(); renderEquipos(); toast(dest ? '✓ Movido a ' + dest.nombre : '🪑 Quedó sin equipo (sigue presente)');
 }
 function renombrarEQ(id, txt) { const e = EQ.equipos.find(x => x.id === id); if (e && txt.trim() && e.nombre !== txt.trim()) { e.nombre = txt.trim(); EQ.confirmados = false; guardarBorradorEQ(); renderEquipos(); } }
 function textoEQ() {
@@ -1415,7 +1487,7 @@ async function reactivar(t, id) { await guardar([{ op: 'upsert', sheet: t === 'J
 /* =====================================================================
    GIRA (jugadores y entrenadores en planillas separadas)
    ===================================================================== */
-let GI = { vista: 'SI', filtro: '', eqOpen: false };
+let GI = { vista: 'SI', filtro: '', sec: 'lista' };
 function filasGira() {
   const J = DB.JUGADORES.map(j => ({ t: 'J', id: j.id, nombre: j.nombre, rol: 'Jugador', dni: j.dni, nac: j.fecha_nac, activo: j.activo }));
   const E = DB.ENTRENADORES.map(e => ({ t: 'E', id: e.id, nombre: e.nombre || e.apodo, rol: e.rol, dni: e.dni, nac: e.fecha_nac, activo: e.activo }));
@@ -1453,6 +1525,8 @@ function renderGira() {
     ${C.GIRA_DESDE ? `<div><div class="big">${cuenta}</div><div class="small muted">${sub}</div></div>` : ''}
     <div class="grow"><div style="font-weight:800;font-size:1.05rem">${C.GIRA_DESDE ? '📅 ' + fmtF(C.GIRA_DESDE) + (C.GIRA_HASTA ? ' → ' + fmtF(C.GIRA_HASTA) : '') : '📅 Fechas a definir'}</div><div class="small muted" style="margin-top:2px">${vJ.length + vE.length} pasajeros: ${vJ.length} jugadores y ${vE.length} adultos</div>${C.GIRA_DESDE ? '' : `<button class="btn sm" style="margin-top:8px" onclick="configGira()">Cargar fechas</button>`}</div>
   </div>
+  <div class="seg full" style="margin-bottom:12px"><button class="${GI.sec === 'lista' ? 'on' : ''}" onclick="GI.sec='lista';renderGira()">📋 Lista de viaje</button><button class="${GI.sec === 'equipos' ? 'on' : ''}" onclick="GI.sec='equipos';renderGira()">🧩 Equipos de la gira${DB.EQUIPOS.some(x => x.grupo_id === 'GIRA') ? ' ✓' : ''}</button></div>
+  ${GI.sec === 'equipos' ? `<div class="small muted" style="margin-bottom:8px">Se arman igual que en Entrenamiento (parejos por nivel, separando compañeros y con cada entrenador junto a su hijo), pero solo con los que tienen <b>Sí</b> en la lista de viaje. Todo se puede cambiar a mano.</div><div id="eqBoxG"></div>` : `
   <div class="kpis">
     <div class="kpi"><div class="l">Jugadores que viajan</div><div class="v" style="color:var(--gr)">${vJ.length}</div><div class="s">de ${vJ.length + nJ.length} activos (${pct(vJ.length, vJ.length + nJ.length)}%)</div></div>
     <div class="kpi"><div class="l">Staff que viaja</div><div class="v" style="color:var(--vi2)">${vE.length}</div><div class="s">${vE.filter(p => !/manager/i.test(p.rol_gira)).length} entrenadores · ${vE.filter(p => /manager/i.test(p.rol_gira)).length} managers</div></div>
@@ -1463,12 +1537,11 @@ function renderGira() {
   <div class="seg full" style="margin-bottom:8px"><button class="${GI.vista === 'SI' ? 'on' : ''}" onclick="GI.vista='SI';renderGira()">✈️ Viajan<span class="c">${vJ.length + vE.length}</span></button><button class="${GI.vista === 'NO' ? 'on' : ''}" onclick="GI.vista='NO';renderGira()">🏠 No viajan<span class="c">${nJ.length + nE.length}</span></button></div>
   <input id="giBuscar" style="margin-bottom:10px" placeholder="🔎 Buscar…" value="${esc(GI.filtro)}" oninput="GI.filtro=this.value;clearTimeout(window._gf);window._gf=setTimeout(()=>{renderGira();const i=$('giBuscar');i.focus();i.setSelectionRange(i.value.length,i.value.length)},250)">
   ${true ? `<div class="small muted" style="margin-bottom:6px">Tocá <b>Sí/No</b> para cambiar si viaja y <b>Aut. / Ficha / Pago</b> para marcar lo entregado (se guarda solo). Deslizá la tabla para ver DNI y nacimiento.</div>` : ''}
-  <div class="card" style="margin-bottom:14px"><button class="plan-h" onclick="GI.eqOpen=!GI.eqOpen;renderGira()"><span class="grow">🧩 Equipos de la gira</span>${DB.EQUIPOS.some(x => x.grupo_id === 'GIRA') ? '<span class="pill" style="background:rgba(34,197,94,.15);color:var(--gr2)">✓ Confirmados</span>' : ''}<span class="chev">${GI.eqOpen ? '▲' : '▼'}</span></button>${GI.eqOpen ? '<div id="eqBox" style="margin-top:10px"></div>' : ''}</div>
   <h3 class="sub-h">👦 Jugadores <span class="pill" style="background:rgba(34,197,94,.15);color:var(--gr2)">${LJ.length}</span></h3>
   ${tablaGira('giJ', LJ, true)}
   <h3 class="sub-h" style="margin-top:18px">🧢 Entrenadores y staff <span class="pill" style="background:rgba(139,92,246,.18);color:#ddd6fe">${LE.length}</span></h3>
-  ${tablaGira('giE', LE, false)}`;
-  if (GI.eqOpen) { if (EQ.fuente !== 'GIRA') setFuenteEQ('GIRA'); else { const v = new Set(jugActivos().filter(j => viaja('J', j.id)).map(j => j.id)); EQ.presentesJ = v; EQ.presentesE = new Set(entActivos().filter(e => e.asigna_equipos !== 'NO' && viaja('E', e.id)).map(e => e.id)); sincronizarEQ(); } renderEquipos(); }
+  ${tablaGira('giE', LE, false)}`}`;
+  if (GI.sec === 'equipos') { if (EQ.fuente !== 'GIRA') setFuenteEQ('GIRA'); else { const v = new Set(jugActivos().filter(j => viaja('J', j.id)).map(j => j.id)); EQ.presentesJ = v; EQ.presentesE = new Set(entActivos().filter(e => e.asigna_equipos !== 'NO' && viaja('E', e.id)).map(e => e.id)); sincronizarEQ(); } renderEquipos(); }
 }
 function filaGiraBase(t, id) {
   const g = giraDe(t, id); if (g) return { clave: g.clave };
