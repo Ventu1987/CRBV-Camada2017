@@ -283,6 +283,32 @@ th .ar{color:var(--cy);font-size:.8em}
 @media print{.ficha{border-radius:0;padding:0}.ficha .pg{grid-template-columns:repeat(2,1fr)!important}}
 
 /* ===== v3 · sistema móvil unificado ===== */
+.pr-head{display:flex;align-items:center;gap:10px;margin:2px 0 10px}
+.pr-t{font-size:1.15rem;font-weight:900}
+.pr-prog{padding:.8rem .9rem}
+.pr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:10px}
+.pr-card{background:linear-gradient(160deg,rgba(245,158,11,.10),rgba(139,92,246,.08));border:1px solid rgba(245,158,11,.3);border-radius:14px;padding:.85rem}
+.pr-n{font-weight:900;font-size:1rem;color:#fde68a}
+.pr-cnt{min-width:30px;height:30px;border-radius:50%;background:rgba(245,158,11,.22);color:var(--am2);font-weight:900;display:inline-flex;align-items:center;justify-content:center;font-size:.9rem}
+.pr-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.pr-chip{display:inline-flex;align-items:center;gap:2px;padding:.2rem .2rem .2rem .55rem;border-radius:8px;background:rgba(255,255,255,.08);font-size:.82rem;font-weight:700}
+.pr-chip button{border:none;background:none;color:var(--tx3);font-size:1.05rem;width:32px;height:32px;border-radius:7px}
+.pr-chip button:hover{background:rgba(239,68,68,.2);color:var(--rd2)}
+.pr-list{display:flex;flex-direction:column;gap:6px}
+.pr-row{display:flex;align-items:center;gap:8px;padding:.55rem .7rem;border-radius:12px;border:1px solid var(--line);background:var(--card);cursor:pointer;min-height:48px}
+.pr-row:hover{border-color:var(--line2)}
+.pr-row.sin{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.05)}
+.pr-tag{flex-shrink:0;max-width:44%;padding:.25rem .55rem;border-radius:8px;background:rgba(245,158,11,.2);color:#fde68a;font-size:.76rem;font-weight:800;line-height:1.2;text-align:center}
+.pr-tag.no{background:transparent;border:1px dashed rgba(245,158,11,.5);color:var(--am2)}
+.ptag{flex-shrink:0;font-size:.74rem;font-weight:800;padding:.15rem .4rem;border-radius:6px;background:rgba(255,255,255,.07);color:var(--tx2)}
+.ptag.up{color:var(--gr2);background:rgba(34,197,94,.12)}
+.pr-opts{display:flex;flex-direction:column;gap:6px}
+.pr-opt{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:.75rem .8rem;border-radius:12px;border:1px solid var(--line2);background:transparent;font-weight:700;min-height:48px}
+.pr-opt.on{border-color:var(--am);background:rgba(245,158,11,.14);color:#fde68a}
+.pr-pick{display:flex;flex-direction:column;gap:5px;max-height:52vh;overflow-y:auto}
+.pr-pk{display:flex;align-items:center;gap:8px;padding:.5rem .6rem;border-radius:10px;border:1px solid var(--line);cursor:pointer;min-height:46px}
+.pr-pk.on{border-color:var(--vi);background:rgba(139,92,246,.14)}
+.pr-pk input{width:20px;height:20px;min-height:0;flex-shrink:0}
 .cg{display:inline-flex;align-items:center;padding:.12rem .45rem;border-radius:6px;font-size:.72rem;font-weight:800;white-space:nowrap;flex-shrink:0;letter-spacing:.01em}
 .leyenda{display:flex;flex-wrap:wrap;gap:5px;margin:4px 0 10px}
 .leyenda .cg{font-size:.72rem}
@@ -506,7 +532,9 @@ async function llamar(params, body, intentos = 3) {
 }
 
 function normalizar() {
-  ['JUGADORES', 'ENTRENADORES', 'SESIONES', 'ASISTENCIA', 'EQUIPOS', 'GIRA'].forEach(k => DB[k] = DB[k] || []);
+  ['JUGADORES', 'ENTRENADORES', 'SESIONES', 'ASISTENCIA', 'EQUIPOS', 'GIRA', 'PREMIOS', 'PREMIOS_ASIG'].forEach(k => DB[k] = DB[k] || []);
+  DB.PREMIOS.forEach(x => { x.id = String(x.id); x.anio = String(x.anio); x.orden = Number(x.orden || 0); });
+  DB.PREMIOS_ASIG.forEach(x => { x.clave = String(x.clave); x.anio = String(x.anio); x.jugador_id = String(x.jugador_id); x.premio_id = String(x.premio_id); });
   DB.CONFIG = DB.CONFIG || {};
   DB.JUGADORES.forEach(j => {
     j.id = String(j.id); j.nivel = String(j.nivel || '').toUpperCase();
@@ -1390,6 +1418,7 @@ function imprimirEQ() {
 let PL = { vista: 'J', filtro: '', nivel: '' };
 function renderPlantel() {
   const adm = isAdmin();
+  if (PL.vista === 'P' && !adm) PL.vista = 'J';
   const st = calcStats({ anio: new Date().getFullYear() });
   const f = PL.filtro.toLowerCase();
   const J = jugActivos().filter(j => (!f || (j.nombre + ' ' + j.colegio).toLowerCase().includes(f)) && (!adm || !PL.nivel || j.nivel === PL.nivel));
@@ -1421,6 +1450,7 @@ function renderPlantel() {
       { k: 'gira', t: 'Gira', v: r => viaja('E', r.id) ? 1 : 0, h: r => viaja('E', r.id) ? '✈️' : '' },
       { t: '', h: r => `<button class="btn sm" onclick="fichaEntrenador('${r.id}')">📊 Ficha</button>` }
     ], E, { k: 'apodo', desc: false });
+  else if (PL.vista === 'P' && adm) body = premiosHTML();
   else body = `<div class="info" style="margin-bottom:10px">Siguen guardados en la base con todo su historial, pero no aparecen en la asistencia ni en el armado de equipos. Si vuelven, tocá "Vuelve".</div>` + tabla('plB', [
       { k: 'nombre', t: 'Nombre', h: r => `<b class="clk" onclick="${r.t === 'J' ? 'fichaJugador' : 'fichaEntrenador'}('${r.id}')">${esc(r.nombre)}</b>` },
       { k: 'tipo', t: 'Tipo', h: r => r.tipo },
@@ -1431,11 +1461,119 @@ function renderPlantel() {
   $('v-plantel').innerHTML = `
   <h2 class="sec">👥 Plantel</h2>
   <div class="head-acts"><button class="btn sm pri" onclick="editarJugador()">➕ Jugador</button><button class="btn sm vio" onclick="editarEntrenador()">➕ Entrenador</button></div>
-  <div class="seg full" style="margin-bottom:8px"><button class="${PL.vista === 'J' ? 'on' : ''}" onclick="PL.vista='J';renderPlantel()">Jugadores<span class="c">${jugActivos().length}</span></button><button class="${PL.vista === 'E' ? 'on' : ''}" onclick="PL.vista='E';renderPlantel()">Entrenadores<span class="c">${entActivos().length}</span></button><button class="${PL.vista === 'B' ? 'on' : ''}" onclick="PL.vista='B';renderPlantel()">No vienen más<span class="c">${bajas.length}</span></button></div>
+  <div class="seg full" style="margin-bottom:8px"><button class="${PL.vista === 'J' ? 'on' : ''}" onclick="PL.vista='J';renderPlantel()">Jugadores<span class="c">${jugActivos().length}</span></button><button class="${PL.vista === 'E' ? 'on' : ''}" onclick="PL.vista='E';renderPlantel()">Entrenadores<span class="c">${entActivos().length}</span></button><button class="${PL.vista === 'B' ? 'on' : ''}" onclick="PL.vista='B';renderPlantel()">No vienen más<span class="c">${bajas.length}</span></button>${adm ? `<button class="${PL.vista === 'P' ? 'on' : ''}" onclick="PL.vista='P';renderPlantel()">🏆 Premios<span class="c">${PR.anio}</span></button>` : ''}</div>
   <div style="margin-bottom:10px">
-    ${PL.vista !== 'B' ? `<input id="plBuscar" placeholder="🔎 Buscar nombre o colegio…" value="${esc(PL.filtro)}" oninput="PL.filtro=this.value;clearTimeout(window._pf);window._pf=setTimeout(()=>{renderPlantel();const i=$('plBuscar');i.focus();i.setSelectionRange(i.value.length,i.value.length)},250)">` : ''}
+    ${PL.vista === 'J' || PL.vista === 'E' ? `<input id="plBuscar" placeholder="🔎 Buscar nombre o colegio…" value="${esc(PL.filtro)}" oninput="PL.filtro=this.value;clearTimeout(window._pf);window._pf=setTimeout(()=>{renderPlantel();const i=$('plBuscar');i.focus();i.setSelectionRange(i.value.length,i.value.length)},250)">` : ''}
   </div>${body}`;
 }
+/* =====================================================================
+   PREMIOS DE FIN DE AÑO (solo administradores) — un premio por jugador y por año
+   ===================================================================== */
+let PR = { anio: String(new Date().getFullYear()), filtro: 'sin', busca: '' };
+const premiosAnio = () => DB.PREMIOS.filter(p => p.anio === PR.anio).sort((a, b) => a.orden - b.orden || a.titulo.localeCompare(b.titulo));
+const asigAnio = () => DB.PREMIOS_ASIG.filter(a => a.anio === PR.anio && DB.PREMIOS.some(p => p.id === a.premio_id));
+const premioDe = jid => { const a = asigAnio().find(x => x.jugador_id === jid); return a ? DB.PREMIOS.find(p => p.id === a.premio_id) : null; };
+function statsPremio() { const st = calcStats({ anio: PR.anio }); return id => st.per['J-' + id] || vacioStat(); }
+const datoTemp = p => `<span class="ptag" title="Asistencia ${PR.anio}">${p.tot ? p.pct + '%' : '—'}</span>${p.up ? `<span class="ptag up" title="Destacados ▲">▲${p.up}</span>` : ''}`;
+function premiosHTML() {
+  const P = premiosAnio(), J = jugActivos(), A = asigAnio(), st = statsPremio();
+  const con = new Set(A.map(a => a.jugador_id)), conAct = J.filter(j => con.has(j.id)).length, falta = J.length - conAct;
+  const anios = [...new Set(DB.PREMIOS.map(p => p.anio).concat([String(new Date().getFullYear()), PR.anio]))].sort().reverse();
+  const f = normTxt(PR.busca);
+  const lista = J.filter(j => (PR.filtro === 'todos' || (PR.filtro === 'sin' ? !con.has(j.id) : con.has(j.id))) && (!f || normTxt(j.nombre).includes(f)));
+  return `
+  <div class="pr-head">
+    <div class="grow"><div class="pr-t">🏆 Entrega de premios</div><div class="small muted">Un premio por jugador · solo lo ven los administradores</div></div>
+    <select style="width:96px" onchange="PR.anio=this.value;renderPlantel()">${anios.map(a => `<option ${a === PR.anio ? 'selected' : ''}>${a}</option>`).join('')}</select>
+  </div>
+  <div class="card pr-prog">
+    <div class="row"><b class="grow">${conAct} de ${J.length} jugadores con premio</b><span class="pill" style="background:${falta ? 'rgba(245,158,11,.18);color:var(--am2)' : 'rgba(34,197,94,.18);color:var(--gr2)'}">${falta ? falta + ' sin asignar' : '✓ Todos asignados'}</span></div>
+    <div class="bar" style="height:10px;margin-top:8px"><i style="width:${pct(conAct, J.length)}%;background:${falta ? 'var(--am)' : 'var(--gr)'}"></i></div>
+  </div>
+  <div class="acts" style="grid-template-columns:1fr 1fr"><button class="btn pri" style="grid-column:1/-1" onclick="editarPremio()">＋ Nuevo premio</button><button class="btn sm" onclick="imprimirPremios()" ${P.length ? '' : 'disabled'}>🖨️ PDF para la entrega</button><button class="btn sm" onclick="copiarPremios()" ${P.length ? '' : 'disabled'}>📋 WhatsApp</button></div>
+  <h3 class="sub-h">🎖️ Premios <span class="pill" style="background:rgba(139,92,246,.18);color:#ddd6fe">${P.length}</span></h3>
+  ${P.length ? `<div class="pr-grid">${P.map(p => { const js = A.filter(a => a.premio_id === p.id).map(a => jugById(a.jugador_id)).filter(Boolean).sort((a, b) => a.nombre.localeCompare(b.nombre)); return `<div class="pr-card">
+      <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><div class="grow"><div class="pr-n">${esc(p.titulo)}</div>${p.descripcion ? `<div class="small muted">${esc(p.descripcion)}</div>` : ''}</div><span class="pr-cnt">${js.length}</span></div>
+      <div class="pr-chips">${js.map(j => `<span class="pr-chip">${esc(apellido(j.nombre, J.map(x => x.nombre)))}<button onclick="asignarPremio('${j.id}','')" title="Quitar" aria-label="Quitar">×</button></span>`).join('') || '<span class="small muted">Todavía sin jugadores</span>'}</div>
+      <div class="row" style="margin-top:10px;gap:6px"><button class="btn sm vio grow" onclick="sumarAPremio('${p.id}')">＋ Sumar jugadores</button><button class="btn sm" onclick="editarPremio('${p.id}')" aria-label="Editar">✏️</button><button class="btn sm red" onclick="borrarPremio('${p.id}')" aria-label="Borrar">🗑</button></div>
+    </div>`; }).join('')}</div>` : `<div class="card"><div class="empty">Todavía no hay premios para ${esc(PR.anio)}.<br><br><button class="btn pri" onclick="editarPremio()">＋ Crear el primer premio</button></div></div>`}
+  <h3 class="sub-h" style="margin-top:18px">👦 Jugadores</h3>
+  <div class="seg full" style="margin-bottom:8px">${[['sin', 'Sin premio', falta], ['con', 'Con premio', conAct], ['todos', 'Todos', J.length]].map(([k, t, n]) => `<button class="${PR.filtro === k ? 'on' : ''}" onclick="PR.filtro='${k}';renderPlantel()">${t}<span class="c">${n}</span></button>`).join('')}</div>
+  <input id="prBuscar" style="margin-bottom:8px" placeholder="🔎 Buscar jugador…" value="${esc(PR.busca)}" oninput="PR.busca=this.value;clearTimeout(window._prf);window._prf=setTimeout(()=>{renderPlantel();const i=$('prBuscar');i.focus();i.setSelectionRange(i.value.length,i.value.length)},250)">
+  <div class="small muted" style="margin-bottom:6px">% = asistencia ${esc(PR.anio)} · ▲ = destacados del año. Tocá un jugador para elegirle el premio.</div>
+  <div class="pr-list">${lista.map(j => { const pr = premioDe(j.id), sp = st(j.id); return `<div class="pr-row ${pr ? '' : 'sin'}" onclick="elegirPremio('${j.id}')">
+      <div class="grow" style="min-width:0"><b>${esc(j.nombre)}</b><div class="tiny muted">${esc([j.colegio !== 'N/A' ? j.colegio : '', j.grado !== 'N/A' ? j.grado : ''].filter(Boolean).join(' · '))}</div></div>
+      ${datoTemp(sp)}
+      ${pr ? `<span class="pr-tag">🏆 ${esc(pr.titulo)}</span>` : '<span class="pr-tag no">Sin premio</span>'}
+    </div>`; }).join('') || `<div class="empty">${PR.filtro === 'sin' ? '🎉 Todos los jugadores tienen premio' : 'Nadie en esta lista'}</div>`}</div>`;
+}
+function editarPremio(id) {
+  const p = id ? DB.PREMIOS.find(x => x.id === id) : { titulo: '', descripcion: '' };
+  abrirModal(`<h3>${id ? '✏️ Editar premio' : '🏆 Nuevo premio'}<span class="sp"></span><button class="x" onclick="cerrarModal()">×</button></h3>
+  <div class="fg"><label>Título</label><input id="prTit" value="${esc(p.titulo)}" placeholder="Ej: Mejor compañero"></div>
+  <div class="fg"><label>Descripción (opcional)</label><input id="prDes" value="${esc(p.descripcion || '')}" placeholder="Ej: para quien siempre ayudó al grupo"></div>
+  <div class="mact"><button class="btn" onclick="cerrarModal()">Cancelar</button><button class="btn vio" onclick="guardarPremio('${id || ''}')">💾 Guardar</button></div>`);
+  setTimeout(() => $('prTit').focus(), 60);
+}
+async function guardarPremio(id) {
+  const titulo = $('prTit').value.trim(); if (!titulo) return toast('Poné un título', true);
+  const nuevo = !id; if (nuevo) id = 'P' + Date.now().toString(36);
+  const row = { id, anio: PR.anio, titulo, descripcion: $('prDes').value.trim() };
+  if (nuevo) row.orden = Math.max(0, ...premiosAnio().map(p => p.orden)) + 1;
+  cerrarModal(); await guardar([{ op: 'upsert', sheet: 'PREMIOS', key: 'id', rows: [row] }], nuevo ? '🏆 Premio creado' : '💾 Premio actualizado');
+  renderPlantel(); if (nuevo) sumarAPremio(id);
+}
+async function borrarPremio(id) {
+  const p = DB.PREMIOS.find(x => x.id === id), n = asigAnio().filter(a => a.premio_id === id).length;
+  if (!confirm(`¿Borrar el premio "${p.titulo}"?${n ? `\n\nLos ${n} jugadores asignados quedan sin premio.` : ''}`)) return;
+  await guardar([{ op: 'remove', sheet: 'PREMIOS', field: 'id', value: id }, { op: 'remove', sheet: 'PREMIOS_ASIG', field: 'premio_id', value: id }], 'Premio borrado'); renderPlantel();
+}
+// asigna (o quita, con premioId vacío) el premio de un jugador para el año elegido
+async function asignarPremio(jid, premioId, silencio) {
+  const clave = PR.anio + '-' + jid, j = jugById(jid);
+  const op = premioId ? { op: 'upsert', sheet: 'PREMIOS_ASIG', key: 'clave', rows: [{ clave, anio: PR.anio, jugador_id: jid, premio_id: premioId, nombre: j ? j.nombre : '' }] } : { op: 'remove', sheet: 'PREMIOS_ASIG', field: 'clave', value: clave };
+  await guardar([op], silencio ? null : (premioId ? '🏆 Premio asignado' : 'Premio quitado'), silencio ? 600 : 0); renderPlantel();
+}
+function elegirPremio(jid) {
+  const j = jugById(jid), P = premiosAnio(), act = premioDe(jid), sp = statsPremio()(jid), A = asigAnio();
+  abrirModal(`<h3>🏆 ${esc(j.nombre)}<span class="sp"></span><button class="x" onclick="cerrarModal()">×</button></h3>
+  <div class="row small muted" style="margin:-6px 0 12px">${datoTemp(sp)}<span>${sp.tot ? `vino a ${sp.P} de ${sp.tot} entrenamientos` : 'sin asistencias cargadas'}</span></div>
+  ${P.length ? `<div class="pr-opts">${P.map(p => `<button class="pr-opt ${act && act.id === p.id ? 'on' : ''}" onclick="cerrarModal();asignarPremio('${jid}','${p.id}')"><span class="grow">${esc(p.titulo)}</span><span class="tiny muted">${A.filter(a => a.premio_id === p.id).length} chicos</span>${act && act.id === p.id ? ' ✓' : ''}</button>`).join('')}
+    <button class="pr-opt ${act ? '' : 'on'}" onclick="cerrarModal();asignarPremio('${jid}','')"><span class="grow">Sin premio</span>${act ? '' : ' ✓'}</button></div>` : '<div class="empty">Primero creá algún premio.</div>'}
+  <div class="mact"><button class="btn sm" onclick="cerrarModal();editarPremio()">＋ Nuevo premio</button></div>`);
+}
+let PRSEL = null;
+function sumarAPremio(pid) {
+  PRSEL = { pid, sel: new Set(asigAnio().filter(a => a.premio_id === pid).map(a => a.jugador_id)), solo: true, busca: '' };
+  dibujarSumar();
+}
+function dibujarSumar() {
+  const p = DB.PREMIOS.find(x => x.id === PRSEL.pid), st = statsPremio(), f = normTxt(PRSEL.busca);
+  const J = jugActivos().filter(j => (!PRSEL.solo || !premioDe(j.id) || PRSEL.sel.has(j.id)) && (!f || normTxt(j.nombre).includes(f)));
+  abrirModal(`<h3>＋ ${esc(p.titulo)}<span class="sp"></span><button class="x" onclick="cerrarModal()">×</button></h3>
+  <input id="psBuscar" placeholder="🔎 Buscar…" value="${esc(PRSEL.busca)}" oninput="PRSEL.busca=this.value;clearTimeout(window._psf);window._psf=setTimeout(()=>{dibujarSumar();const i=$('psBuscar');i.focus();i.setSelectionRange(i.value.length,i.value.length)},200)">
+  <label class="small row" style="gap:.45rem;margin:8px 0;min-height:36px"><input type="checkbox" style="width:20px;height:20px;min-height:0" ${PRSEL.solo ? 'checked' : ''} onchange="PRSEL.solo=this.checked;dibujarSumar()"> Mostrar solo los que no tienen premio</label>
+  <div class="pr-pick">${J.map(j => { const otro = premioDe(j.id), on = PRSEL.sel.has(j.id), sp = st(j.id); return `<label class="pr-pk ${on ? 'on' : ''}"><input type="checkbox" ${on ? 'checked' : ''} onchange="this.checked?PRSEL.sel.add('${j.id}'):PRSEL.sel.delete('${j.id}');this.parentNode.classList.toggle('on',this.checked)"><span class="grow" style="min-width:0"><b>${esc(j.nombre)}</b>${otro && otro.id !== p.id ? `<span class="tiny" style="display:block;color:var(--am2)">Hoy tiene: ${esc(otro.titulo)} (se cambia)</span>` : ''}</span>${datoTemp(sp)}</label>`; }).join('') || '<div class="empty">Nadie para mostrar</div>'}</div>
+  <div class="mact"><button class="btn" onclick="cerrarModal()">Cancelar</button><button class="btn vio" onclick="guardarSumar()">💾 Guardar</button></div>`);
+}
+async function guardarSumar() {
+  const pid = PRSEL.pid, antes = new Set(asigAnio().filter(a => a.premio_id === pid).map(a => a.jugador_id)), ops = [];
+  const filas = [...PRSEL.sel].filter(id => !antes.has(id)).map(id => ({ clave: PR.anio + '-' + id, anio: PR.anio, jugador_id: id, premio_id: pid, nombre: (jugById(id) || {}).nombre || '' }));
+  if (filas.length) ops.push({ op: 'upsert', sheet: 'PREMIOS_ASIG', key: 'clave', rows: filas });
+  [...antes].filter(id => !PRSEL.sel.has(id)).forEach(id => ops.push({ op: 'remove', sheet: 'PREMIOS_ASIG', field: 'clave', value: PR.anio + '-' + id }));
+  cerrarModal(); if (ops.length) await guardar(ops, '🏆 Premio actualizado'); renderPlantel();
+}
+function textoPremios() {
+  const A = asigAnio();
+  return `🏆 *REGATAS M9 · Camada 2017*\nEntrega de premios ${PR.anio}\n\n` + premiosAnio().map(p => { const js = A.filter(a => a.premio_id === p.id).map(a => (jugById(a.jugador_id) || {}).nombre).filter(Boolean).sort(); return `*${p.titulo}* (${js.length})\n${js.map(n => '• ' + n).join('\n') || '—'}`; }).join('\n\n');
+}
+function copiarPremios() { copiarTexto(textoPremios(), '📋 Copiado: pegalo en WhatsApp'); }
+function imprimirPremios() {
+  const A = asigAnio();
+  $('printArea').innerHTML = cabeceraPrint(`🏆 Entrega de premios ${esc(PR.anio)}`) + `<div class="pg">${premiosAnio().map(p => { const js = A.filter(a => a.premio_id === p.id).map(a => (jugById(a.jugador_id) || {}).nombre).filter(Boolean).sort(); return `<div class="pt"><h5>${esc(p.titulo)} · ${js.length}</h5>${p.descripcion ? `<div class="pc">${esc(p.descripcion)}</div>` : ''}<ol>${js.map(n => `<li>${esc(n)}</li>`).join('')}</ol></div>`; }).join('')}</div>`;
+  setTimeout(() => window.print(), 150);
+}
+
 function abrirModal(html) { $('mbox').innerHTML = html; $('modal').classList.add('on'); }
 function cerrarModal() { $('modal').classList.remove('on'); }
 $('modal').addEventListener('click', e => { if (e.target.id === 'modal') cerrarModal(); });
@@ -1727,7 +1865,7 @@ function exportarCSV() {
   const fila = (tipo, x, nom, extra, k) => { const p = S.per[k] || vacioStat(); return [tipo, x.id, nom, ...(adm ? [tipo === 'Jugador' ? nivelTxt(x) : ''] : []), extra, p.P, p.A, p.aviso, p.pct, p.MIE[1] ? pct(...p.MIE) : '', p.SAB[1] ? pct(...p.SAB) : '', p.up, p.dn, x.activo, viaja(k[0], x.id) ? 'SI' : 'NO']; };
   DB.JUGADORES.forEach(j => rows.push(fila('Jugador', j, j.nombre, j.colegio, 'J-' + j.id)));
   DB.ENTRENADORES.forEach(e => rows.push(fila('Entrenador', e, entNom(e), e.rol, 'E-' + e.id)));
-  const csv = '﻿' + rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(';')).join('\n');
+  const csv = '\ufeff' + rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(';')).join('\n');
   const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' })); a.download = `M9_estadisticas_${ST.anio}${ST.mes ? '_' + pad(ST.mes) : ''}.csv`; a.click();
 }
 
