@@ -695,7 +695,8 @@ const entById = id => DB.ENTRENADORES.find(e => e.id === String(id));
 const entNom = e => e ? (e.apodo || e.nombre) : '';
 const nivelTxt = j => !j.nivel ? 'S/C' : j.nivel === 'G' ? 'G' + (j.nivel2 ? ' ' + Number(j.nivel2).toFixed(1) : '') : j.nivel;
 const nivelBadge = j => isAdmin() ? `<span class="lv lv-${esc(j.nivel || '2')}">${esc(nivelTxt(j))}</span>` : '';
-const nivelNum = j => j.nivel === 'G' ? (j.nivel2 || 0) : (parseInt(j.nivel) || 2);
+// escala única (más bajo = más fuerte): Nivel 1=1, 2=2, 3=3; Gloriosa 1.0=4 … 3.0=6 (sin sub-nivel cuenta como Gloriosa 2)
+const nivelNum = j => j.nivel === 'G' ? 3 + (Number(j.nivel2) || 2) : (parseInt(j.nivel) || 2);
 const giraDe = (t, id) => DB.GIRA.find(g => g.clave === t + '-' + id);
 const viaja = (t, id) => { const g = giraDe(t, id); return !!g && String(g.va).toUpperCase() === 'SI'; };
 const conAsistencia = () => new Set(DB.ASISTENCIA.map(a => a.sesion_id));
@@ -1267,8 +1268,9 @@ function armarEquipos(J, E, presJ, presE, modo, n) {
   var pres = J.filter(function (j) { return pj[j.id]; });
   if (!pres.length) return [];
   var shuffle = function (a) { for (var i = a.length - 1; i > 0; i--) { var k = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[k]; a[k] = t; } return a; };
-  var ord = { G: 0, '1': 1, '2': 2, '3': 3 };
-  var nk = function (j) { return j.nivel === 'G' ? 'G' + (j.nivel2 || 9) : (j.nivel || '2'); };
+  // de mejor a peor: Nivel 1 > Nivel 2 > Nivel 3 > Gloriosa 1 > Gloriosa 2 > Gloriosa 3
+  var ord = { '1': 1, '2': 2, '3': 3, G: 4 };
+  var nk = function (j) { return j.nivel === 'G' ? 'G' + Number(j.nivel2 || 2).toFixed(1) : (j.nivel || '2'); };
   var porNivel = function (arr) {
     var g = {};
     arr.forEach(function (j) { var k = nk(j); (g[k] = g[k] || []).push(j); });
@@ -1375,6 +1377,7 @@ function equiposHTML() {
       ${sid ? `<button class="btn" onclick="fichaEntrenamiento('${sid}')">📄 Ficha</button>` : `<button class="btn" onclick="imprimirEQ()">📄 PDF / Imagen</button>`}
     </div>
     ${hayGuardado && !EQ.confirmados || adm ? `<div class="row" style="margin-bottom:6px">${hayGuardado && !EQ.confirmados ? `<button class="btn sm" onclick="cargarGuardadoEQ();renderEquipos()">↩︎ Volver a los confirmados</button>` : ''}${adm ? `<label class="small row" style="gap:.4rem;margin-left:auto;min-height:36px"><input type="checkbox" style="width:20px;height:20px;min-height:0" ${EQ.verNiveles ? 'checked' : ''} onchange="EQ.verNiveles=this.checked;renderEquipos()"> ver niveles</label>` : ''}</div>` : ''}
+    ${verN ? `<div class="tiny muted" style="margin:-2px 0 6px">📊 = promedio de nivel del equipo: 1 más fuerte → 6 más flojo (Nivel 1-2-3 = 1-2-3 · Gloriosa 1-2-3 = 4-5-6). Lo ideal es que todos den parecido.</div>` : ''}
     ${verN && dif >= .5 ? `<div class="warn">⚠️ Diferencia de nivel entre equipos: ${dif.toFixed(2)}. Mezclá de nuevo o mové jugadores.</div>` : ''}
     ${leyendaHTML()}
     <div class="small muted" style="margin:8px 0">Tocá un jugador o entrenador y después <b>⇢ Mover acá</b> en otro equipo, o <b>Sacar del equipo</b> (sigue presente, queda en "Sin equipo"). Tocá el nombre del equipo para cambiarlo.</div>
@@ -1403,7 +1406,7 @@ function compasDe(eq) {
 function teamHTML(eq, verN) {
   const exceso = compasDe(eq);
   return `<div class="team" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="dropEQ(event,${eq.id})">
-    <div class="th"><h4 contenteditable="true" onblur="renombrarEQ(${eq.id},this.textContent)">${esc(eq.nombre)}</h4><div class="ts"><span>👥 ${eq.jugadores.length}</span>${verN ? `<span>📊 ${promEQ(eq).toFixed(1)}</span>` : ''}</div>${exceso.length ? `<span class="pill wn" title="Muchos compañeros del mismo colegio y grado juntos">⚠ ${esc(exceso.join(' · '))}</span>` : ''}${EQ.sel && EQ.sel.from !== eq.id ? `<button class="moveto" onclick="moverEQ(${eq.id})">⇢ Mover acá</button>` : ''}</div>
+    <div class="th"><h4 contenteditable="true" onblur="renombrarEQ(${eq.id},this.textContent)">${esc(eq.nombre)}</h4><div class="ts"><span>👥 ${eq.jugadores.length}</span>${verN ? `<span title="Promedio de nivel: 1 = más fuerte · 6 = más flojo (Gloriosa 1-3 = 4-6)">📊 ${promEQ(eq).toFixed(1)}</span>` : ''}</div>${exceso.length ? `<span class="pill wn" title="Muchos compañeros del mismo colegio y grado juntos">⚠ ${esc(exceso.join(' · '))}</span>` : ''}${EQ.sel && EQ.sel.from !== eq.id ? `<button class="moveto" onclick="moverEQ(${eq.id})">⇢ Mover acá</button>` : ''}</div>
     <div class="tb">
       <div class="coaches"><strong>Entrenadores</strong>${eq.entrenadores.length ? eq.entrenadores.map(id => `<span class="chip ${EQ.sel && EQ.sel.t === 'E' && EQ.sel.id === id ? 'sel' : ''}" draggable="true" ondragstart="dragEQ(event,'E','${id}',${eq.id})" onclick="selEQ('E','${id}',${eq.id})">${esc(entNom(entById(id)))}</span>`).join('') : '<span class="small muted">Sin asignar</span>'}</div>
       ${eq.jugadores.map((id, i) => { const j = jugById(id); if (!j) return ''; const cf = colorFila(j); return `<div class="pl ${cf ? 'pc' : ''} ${EQ.sel && EQ.sel.t === 'J' && EQ.sel.id === id ? 'sel' : ''}" style="${estiloFila(j)}" draggable="true" ondragstart="dragEQ(event,'J','${id}',${eq.id})" onclick="selEQ('J','${id}',${eq.id})"><span class="n" style="${cf ? 'color:' + cf.sub : ''}">${i + 1}.</span><span class="nm">${esc(j.nombre)}${subFila(j)}</span>${verN ? nivelBadge(j) : ''}</div>`; }).join('')}
@@ -1474,7 +1477,7 @@ function renderPlantel() {
     ${tabla('plJ', [
       { t: '#', h: () => '' },
       { k: 'nombre', t: 'Jugador', h: r => `<b class="clk" onclick="editarJugador('${r.id}')">${esc(r.nombre)}</b>${r.observaciones ? ' <span title="' + esc(r.observaciones) + '">📝</span>' : ''}` },
-      ...(adm ? [{ k: 'nivel', t: 'Nivel', v: r => r.nivel === 'G' ? (r.nivel2 || 0) / 10 : nivelNum(r), h: r => nivelBadge(r) }] : []),
+      ...(adm ? [{ k: 'nivel', t: 'Nivel', v: r => nivelNum(r), h: r => nivelBadge(r) }] : []),
       { k: 'colegio', t: 'Colegio', h: r => esc(r.colegio) },
       { k: 'grado', t: 'Grado', h: r => esc(r.grado) },
       { k: 'nac', t: 'Edad', num: 1, v: r => edad(r.fecha_nac), h: r => edad(r.fecha_nac) == null ? '' : edad(r.fecha_nac) },
@@ -1627,7 +1630,7 @@ function editarJugador(id) {
   <div class="fgrid">
     <div class="fg full"><label>Apellido, Nombre</label><input id="fNom" value="${esc(j.nombre)}" placeholder="Apellido, Nombre"></div>
     ${adm ? `<div class="fg"><label>Calificación (nivel) · solo admin</label><select id="fNiv" onchange="$('fN2w').classList.toggle('hidden',this.value!=='G')">${[['G', 'Gloriosa'], ['1', 'Nivel 1'], ['2', 'Nivel 2'], ['3', 'Nivel 3']].map(([v, t]) => `<option value="${v}" ${(j.nivel || '2') === v ? 'selected' : ''}>${t}</option>`).join('')}</select></div>
-    <div class="fg ${j.nivel === 'G' ? '' : 'hidden'}" id="fN2w"><label>Sub-nivel Gloriosa (1.0–3.0)</label><input id="fN2" type="number" min="1" max="3" step="0.1" value="${j.nivel2 == null ? '' : j.nivel2}"></div>` : ''}
+    <div class="fg ${j.nivel === 'G' ? '' : 'hidden'}" id="fN2w"><label>Sub-nivel Gloriosa (1.0 mejor – 3.0 más flojo)</label><input id="fN2" type="number" min="1" max="3" step="0.1" value="${j.nivel2 == null ? '' : j.nivel2}"></div>` : ''}
     <div class="fg"><label>Colegio</label><input id="fCol" value="${esc(j.colegio === 'N/A' ? '' : j.colegio)}" list="colegios"><datalist id="colegios">${[...new Set(DB.JUGADORES.map(x => x.colegio).filter(c => c && c !== 'N/A'))].sort().map(c => `<option value="${esc(c)}">`).join('')}</datalist></div>
     <div class="fg"><label>Grado</label><select id="fGra">${['3ro', '4to', 'N/A'].map(g => `<option ${j.grado === g ? 'selected' : ''}>${g}</option>`).join('')}</select></div>
     <div class="fg"><label>DNI / Pasaporte</label><input id="fDni" value="${esc(j.dni)}"></div>
@@ -1996,7 +1999,7 @@ function renderStats() {
       { t: '#', h: () => '' },
       { k: 'nombre', t: 'Nombre', h: r => `<b>${esc(r.nombre)}</b>${r.x.activo === 'NO' ? ' <span class="pill" style="background:rgba(148,163,184,.2)">baja</span>' : ''}` },
       { k: 'pct', t: '%', num: 1, v: r => r.p.tot ? r.p.pct : null, h: r => `<b style="color:${r.p.tot ? colorPct(r.p.pct) : 'var(--tx4)'}">${r.p.tot ? r.p.pct + '%' : '—'}</b>` },
-      ...(ST.vista === 'J' ? (adm ? [{ k: 'nivel', t: 'Nivel', v: r => r.x.nivel === 'G' ? (r.x.nivel2 || 0) / 10 : nivelNum(r.x), h: r => nivelBadge(r.x) }] : []) : [{ k: 'rol', t: 'Rol', v: r => r.x.rol, h: r => esc(r.x.rol || '') }]),
+      ...(ST.vista === 'J' ? (adm ? [{ k: 'nivel', t: 'Nivel', v: r => nivelNum(r.x), h: r => nivelBadge(r.x) }] : []) : [{ k: 'rol', t: 'Rol', v: r => r.x.rol, h: r => esc(r.x.rol || '') }]),
       { k: 'pm', t: 'Pres. Mié', num: 1, v: r => r.p.dMIE[1] ? pct(...r.p.dMIE) : null, h: r => fraccion(r.p.dMIE) },
       { k: 'ps', t: 'Pres. Sáb', num: 1, v: r => r.p.dSAB[1] ? pct(...r.p.dSAB) : null, h: r => fraccion(r.p.dSAB) },
       { k: 'perfil', t: 'Viene', v: r => (perfilAsis(r.p) || { k: 9 }).k, h: r => { const f = perfilAsis(r.p); return f ? `<span class="pill" style="background:${f.bg};color:${f.c}">${f.t}</span>` : ''; } },
