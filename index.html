@@ -334,6 +334,21 @@ th .ar{color:var(--cy);font-size:.8em}
 .step span{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--cy),var(--cy2));color:#04131a;display:inline-flex;align-items:center;justify-content:center;font-size:.85rem}
 #eqBox .teams{margin-top:4px}
 .plan-h{width:100%;display:flex;align-items:center;gap:.5rem;background:none;border:none;text-align:left;font-weight:800;font-size:.95rem;min-height:var(--tap-sm);padding:0}
+.hs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:10px}
+.hs-card{background:linear-gradient(160deg,rgba(6,182,212,.09),rgba(139,92,246,.06));border:1px solid rgba(6,182,212,.28);border-radius:14px;padding:.85rem}
+.hs-card.full{border-color:rgba(34,197,94,.45)}.hs-card.over{border-color:rgba(239,68,68,.6)}
+.hs-n{font-weight:900;font-size:1rem;color:#a5f3fc}
+.hs-cnt{display:flex;flex-direction:column;gap:3px;align-items:flex-end;flex-shrink:0}
+.hs-cnt span{font-size:.78rem;font-weight:800;padding:.15rem .45rem;border-radius:7px;background:rgba(255,255,255,.07);white-space:nowrap}
+.hs-cnt .full{background:rgba(34,197,94,.18);color:var(--gr2)}.hs-cnt .over{background:rgba(239,68,68,.22);color:var(--rd2)}
+.pr-chip.hs-e{background:rgba(139,92,246,.2);color:#ddd6fe}
+.hs-sin{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.hs-p{border:1px dashed rgba(245,158,11,.55);background:rgba(245,158,11,.06);color:var(--tx);border-radius:9px;padding:.4rem .65rem;font-size:.85rem;font-weight:700;min-height:40px}
+.hs-p.E{border-color:rgba(139,92,246,.6);background:rgba(139,92,246,.1)}
+.perf{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));gap:6px;margin-bottom:8px}
+.perf-i{display:flex;align-items:center;gap:8px;text-align:left;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:.5rem .6rem;min-height:44px;font-size:.8rem;color:var(--tx2)}
+.perf-i.on{border-color:var(--cy);background:rgba(6,182,212,.12)}
+.perf-i b{font-size:1.3rem;font-variant-numeric:tabular-nums}
 .plan-h .chev{color:var(--tx3);font-size:.8rem;width:20px;text-align:center}
 .lbl.t0{margin-top:0}
 .g2{grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr))}
@@ -532,7 +547,9 @@ async function llamar(params, body, intentos = 3) {
 }
 
 function normalizar() {
-  ['JUGADORES', 'ENTRENADORES', 'SESIONES', 'ASISTENCIA', 'EQUIPOS', 'GIRA', 'PREMIOS', 'PREMIOS_ASIG'].forEach(k => DB[k] = DB[k] || []);
+  ['JUGADORES', 'ENTRENADORES', 'SESIONES', 'ASISTENCIA', 'EQUIPOS', 'GIRA', 'PREMIOS', 'PREMIOS_ASIG', 'HOSPEDAJE', 'HOSPEDAJE_ASIG'].forEach(k => DB[k] = DB[k] || []);
+  DB.HOSPEDAJE.forEach(x => { x.id = String(x.id); x.nombre = String(x.nombre || ''); x.cap_j = Math.max(0, Number(x.cap_j) || 0); x.cap_e = Math.max(0, Number(x.cap_e) || 0); x.orden = Number(x.orden || 0); });
+  DB.HOSPEDAJE_ASIG.forEach(x => { x.clave = String(x.clave); x.persona_tipo = String(x.persona_tipo); x.persona_id = String(x.persona_id); x.hosp_id = String(x.hosp_id); });
   DB.PREMIOS.forEach(x => { x.id = String(x.id); x.anio = String(x.anio); x.orden = Number(x.orden || 0); });
   DB.PREMIOS_ASIG.forEach(x => { x.clave = String(x.clave); x.anio = String(x.anio); x.jugador_id = String(x.jugador_id); x.premio_id = String(x.premio_id); });
   DB.CONFIG = DB.CONFIG || {};
@@ -790,11 +807,13 @@ function calcStats(f) {
   const per = {};
   recs.forEach(a => {
     const k = a.persona_tipo + '-' + a.persona_id;
-    const p = per[k] || (per[k] = { k, tipo: a.persona_tipo, id: a.persona_id, P: 0, A: 0, aviso: 0, MIE: [0, 0], SAB: [0, 0], PAR: [0, 0], OTR: [0, 0], up: 0, dn: 0, hist: [] });
+    const p = per[k] || (per[k] = { k, tipo: a.persona_tipo, id: a.persona_id, P: 0, A: 0, aviso: 0, MIE: [0, 0], SAB: [0, 0], PAR: [0, 0], OTR: [0, 0], dMIE: [0, 0], dSAB: [0, 0], up: 0, dn: 0, hist: [] });
     const pr = a.estado === 'P';
     pr ? p.P++ : p.A++;
     if (!pr && a.motivo && a.motivo !== 'Sin aviso') p.aviso++;
     if (p[a.tipo]) { p[a.tipo][1]++; if (pr) p[a.tipo][0]++; }
+    const wd = parseISO(a.fecha).getDay(), dg = wd === 3 ? 'dMIE' : wd === 6 ? 'dSAB' : null; // miércoles / sábado (entrenamiento o partido)
+    if (dg) { p[dg][1]++; if (pr) p[dg][0]++; }
     if (a.calif > 0) p.up++; if (a.calif < 0) p.dn++;
     p.hist.push(a);
   });
@@ -810,7 +829,17 @@ function calcStats(f) {
   }).sort((a, b) => a.s.fecha.localeCompare(b.s.fecha));
   return { ses, recs, per, porSesion };
 }
-const vacioStat = () => ({ P: 0, A: 0, aviso: 0, tot: 0, pct: 0, MIE: [0, 0], SAB: [0, 0], PAR: [0, 0], up: 0, dn: 0, hist: [], racha: null });
+const vacioStat = () => ({ P: 0, A: 0, aviso: 0, tot: 0, pct: 0, MIE: [0, 0], SAB: [0, 0], PAR: [0, 0], dMIE: [0, 0], dSAB: [0, 0], up: 0, dn: 0, hist: [], racha: null });
+// perfil de asistencia según miércoles y sábados
+function perfilAsis(p) {
+  const [mp, mt] = p.dMIE, [sp, st] = p.dSAB; if (!mt && !st) return null;
+  const m = mt ? pct(mp, mt) : null, s = st ? pct(sp, st) : null;
+  if ((m == null || m >= 60) && (s == null || s >= 60)) return { k: 1, t: 'Mié y sáb', c: 'var(--gr2)', bg: 'rgba(34,197,94,.16)' };
+  if (s != null && s >= 50 && (m == null || m < 35)) return { k: 2, t: 'Solo sáb', c: 'var(--am2)', bg: 'rgba(245,158,11,.16)' };
+  if (m != null && m >= 50 && (s == null || s < 35)) return { k: 3, t: 'Solo mié', c: '#93c5fd', bg: 'rgba(59,130,246,.16)' };
+  return { k: 4, t: 'Irregular', c: 'var(--rd2)', bg: 'rgba(239,68,68,.16)' };
+}
+const fraccion = (pt) => pt[1] ? `<b style="color:${colorPct(pct(pt[0], pt[1]))}">${pt[0]}</b><span class="muted">/${pt[1]}</span>` : '<span class="muted">—</span>';
 function alertas() {
   const out = []; const st = calcStats({ anio: new Date().getFullYear() });
   jugActivos().forEach(j => {
@@ -1173,6 +1202,17 @@ function fichaHTML(s, imgs) {
     <div class="ft">Regatas Bella Vista · M9 Camada 2017 · generado ${fmtF(hoyISO())} ${horaAhora()}</div>
   </div>`;
 }
+// documento blanco genérico: se ve en pantalla, se imprime en PDF o se comparte como imagen
+function docCompartir(titulo, derecha, cuerpo, archivo, textoFn) {
+  const C = DB.CONFIG; window.DOCNOM = archivo; window.DOCTXT = textoFn || null;
+  abrirModal(`<h3>${titulo}<span class="sp"></span><button class="x" onclick="cerrarModal()">×</button></h3>
+    <div class="mact" style="margin:0 0 12px;flex-wrap:wrap"><button class="btn pri" onclick="fichaPDF()">🖨️ PDF</button><button class="btn vio" id="btnImg" onclick="fichaImagen()">🖼️ Imagen (WhatsApp)</button>${textoFn ? '<button class="btn" onclick="copiarTexto(window.DOCTXT(),\'📋 Copiado: pegalo en WhatsApp\')">📋 Texto</button>' : ''}</div>
+    <div id="fichaDoc"><div class="ficha">
+      <div class="fh"><img src="${esc(C.ESCUDO_URL || 'escudo.png')}" onerror="this.src=ESCUDO_FALLBACK"><div><div class="a">${esc(C.CLUB || 'Regatas Bella Vista')}</div><div class="b">${esc(C.DIVISION || 'M9')} · Camada ${esc(C.CAMADA || '2017')}</div></div><div class="c">${derecha}</div></div>
+      ${cuerpo}
+      <div class="ft">Regatas Bella Vista · M9 Camada 2017 · generado ${fmtF(hoyISO())} ${horaAhora()}</div>
+    </div></div>`);
+}
 function fichaPDF() { $('printArea').innerHTML = $('fichaDoc').innerHTML; setTimeout(() => window.print(), 200); }
 function cargarScript(src) { return new Promise((res, rej) => { if (document.querySelector(`script[src="${src}"]`)) return res(); const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); }); }
 async function fichaImagen(sid) {
@@ -1184,8 +1224,8 @@ async function fichaImagen(sid) {
     const canvas = await html2canvas(tmp.firstElementChild, { scale: 2, backgroundColor: '#ffffff', useCORS: true });
     tmp.remove();
     const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
-    const nombre = `M9_entrenamiento_${sid}.png`, file = new File([blob], nombre, { type: 'image/png' });
-    if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'Entrenamiento M9' }).catch(() => {}); }
+    const nombre = (sid ? `M9_entrenamiento_${sid}` : (window.DOCNOM || 'M9')) + '.png', file = new File([blob], nombre, { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: sid ? 'Entrenamiento M9' : 'Regatas M9' }).catch(() => {}); }
     else { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = nombre; a.click(); toast('🖼️ Imagen descargada'); }
   } catch (e) { toast('No se pudo generar la imagen', true); }
   b.disabled = false; b.innerHTML = '🖼️ Imagen (WhatsApp)';
@@ -1332,7 +1372,7 @@ function equiposHTML() {
       <button class="btn vio" onclick="regenerarEQ()" ${EQ.cargando ? 'disabled' : ''}>🔄 Mezclar</button>
       <button class="btn grn" onclick="guardarEQ()">💾 Confirmar</button>
       <button class="btn pri" onclick="copiarEQ()">📋 WhatsApp</button>
-      ${sid ? `<button class="btn" onclick="fichaEntrenamiento('${sid}')">📄 Ficha</button>` : `<button class="btn" onclick="imprimirEQ()">🖨️ PDF</button>`}
+      ${sid ? `<button class="btn" onclick="fichaEntrenamiento('${sid}')">📄 Ficha</button>` : `<button class="btn" onclick="imprimirEQ()">📄 PDF / Imagen</button>`}
     </div>
     ${hayGuardado && !EQ.confirmados || adm ? `<div class="row" style="margin-bottom:6px">${hayGuardado && !EQ.confirmados ? `<button class="btn sm" onclick="cargarGuardadoEQ();renderEquipos()">↩︎ Volver a los confirmados</button>` : ''}${adm ? `<label class="small row" style="gap:.4rem;margin-left:auto;min-height:36px"><input type="checkbox" style="width:20px;height:20px;min-height:0" ${EQ.verNiveles ? 'checked' : ''} onchange="EQ.verNiveles=this.checked;renderEquipos()"> ver niveles</label>` : ''}</div>` : ''}
     ${verN && dif >= .5 ? `<div class="warn">⚠️ Diferencia de nivel entre equipos: ${dif.toFixed(2)}. Mezclá de nuevo o mové jugadores.</div>` : ''}
@@ -1408,8 +1448,10 @@ function cargarGuardadoEQ(silencioso) {
 function cabeceraPrint(derecha) { const C = DB.CONFIG; return `<div class="ph"><img src="${esc(C.ESCUDO_URL || 'escudo.png')}" onerror="this.src=ESCUDO_FALLBACK"><div><div class="a">${esc(C.CLUB || 'Regatas Bella Vista')}</div><div class="b">${esc(C.DIVISION || 'M9')} · Camada ${esc(C.CAMADA || '2017')}</div></div><div class="c">${derecha}</div></div>`; }
 function imprimirEQ() {
   if (!EQ.equipos.length) return toast('No hay equipos armados', true);
-  $('printArea').innerHTML = cabeceraPrint(`🚌 ${esc(DB.CONFIG.GIRA_NOMBRE || 'Gira')}<br>Equipos de la gira`) + `<div class="pg">${EQ.equipos.map(eq => `<div class="pt"><h5>${esc(eq.nombre)} · ${eq.jugadores.length}</h5><div class="pc">Entrenadores: ${esc(eq.entrenadores.map(id => entNom(entById(id))).join(', ') || 'Sin asignar')}</div><ol>${eq.jugadores.map(id => `<li>${esc((jugById(id) || {}).nombre || '')}</li>`).join('')}</ol></div>`).join('')}</div>`;
-  setTimeout(() => window.print(), 150);
+  const nJ = EQ.equipos.reduce((a, e) => a + e.jugadores.length, 0);
+  docCompartir('🧩 Equipos de la gira', `🚌 ${esc(DB.CONFIG.GIRA_NOMBRE || 'Gira')}<br>Equipos de la gira`,
+    `${EQ.confirmados ? '' : '<div class="aus" style="margin-bottom:8px;color:#b45309;font-weight:700">⚠️ Borrador: todavía sin confirmar</div>'}<div class="kp"><div><b>${EQ.equipos.length}</b>equipos</div><div><b>${nJ}</b>jugadores</div></div><div class="pg">${EQ.equipos.map(eq => `<div class="pt"><h5>${esc(eq.nombre)} · ${eq.jugadores.length}</h5><div class="pc">Entrenadores: ${esc(eq.entrenadores.map(id => entNom(entById(id))).join(', ') || 'Sin asignar')}</div><ol>${eq.jugadores.map(id => `<li>${esc((jugById(id) || {}).nombre || '')}</li>`).join('')}</ol></div>`).join('')}</div>`,
+    'M9_gira_equipos', textoEQ);
 }
 
 /* =====================================================================
@@ -1650,6 +1692,7 @@ async function confirmarBaja(t, id) {
   EQ.equipos.forEach(e => { e.jugadores = e.jugadores.filter(x => !(t === 'J' && x === id)); e.entrenadores = e.entrenadores.filter(x => !(t === 'E' && x === id)); });
   const ops = [{ op: 'upsert', sheet: t === 'J' ? 'JUGADORES' : 'ENTRENADORES', key: 'id', rows: [row] }];
   if (enGira) ops.push({ op: 'upsert', sheet: 'GIRA', key: 'clave', rows: [{ clave: t + '-' + id, va: 'NO' }] });
+  if (DB.HOSPEDAJE_ASIG.some(a => a.clave === t + '-' + id)) ops.push({ op: 'remove', sheet: 'HOSPEDAJE_ASIG', field: 'clave', value: t + '-' + id });
   await guardar(ops, enGira ? 'Movido a "No vienen más" y quitado de la gira' : 'Movido a "No vienen más"'); renderTab();
 }
 async function reactivar(t, id) { await guardar([{ op: 'upsert', sheet: t === 'J' ? 'JUGADORES' : 'ENTRENADORES', key: 'id', rows: [{ id, activo: 'SI', fecha_baja: '', motivo_baja: '' }] }], '↩︎ Reactivado'); renderTab(); }
@@ -1695,8 +1738,8 @@ function renderGira() {
     ${C.GIRA_DESDE ? `<div><div class="big">${cuenta}</div><div class="small muted">${sub}</div></div>` : ''}
     <div class="grow"><div style="font-weight:800;font-size:1.05rem">${C.GIRA_DESDE ? '📅 ' + fmtF(C.GIRA_DESDE) + (C.GIRA_HASTA ? ' → ' + fmtF(C.GIRA_HASTA) : '') : '📅 Fechas a definir'}</div><div class="small muted" style="margin-top:2px">${vJ.length + vE.length} pasajeros: ${vJ.length} jugadores y ${vE.length} adultos</div>${C.GIRA_DESDE ? '' : `<button class="btn sm" style="margin-top:8px" onclick="configGira()">Cargar fechas</button>`}</div>
   </div>
-  <div class="seg full" style="margin-bottom:12px"><button class="${GI.sec === 'lista' ? 'on' : ''}" onclick="GI.sec='lista';renderGira()">📋 Lista de viaje</button><button class="${GI.sec === 'equipos' ? 'on' : ''}" onclick="GI.sec='equipos';renderGira()">🧩 Equipos de la gira${DB.EQUIPOS.some(x => x.grupo_id === 'GIRA') ? ' ✓' : ''}</button></div>
-  ${GI.sec === 'equipos' ? `<div class="small muted" style="margin-bottom:8px">Se arman igual que en Entrenamiento (parejos por nivel, separando compañeros y con cada entrenador junto a su hijo), pero solo con los que tienen <b>Sí</b> en la lista de viaje. Todo se puede cambiar a mano.</div><div id="eqBoxG"></div>` : `
+  <div class="seg full gseg" style="margin-bottom:12px"><button class="${GI.sec === 'lista' ? 'on' : ''}" onclick="GI.sec='lista';renderGira()">📋 Viaje</button><button class="${GI.sec === 'equipos' ? 'on' : ''}" onclick="GI.sec='equipos';renderGira()">🧩 Equipos${DB.EQUIPOS.some(x => x.grupo_id === 'GIRA') ? ' ✓' : ''}</button><button class="${GI.sec === 'hospedaje' ? 'on' : ''}" onclick="GI.sec='hospedaje';renderGira()">🛏️ Hospedaje</button></div>
+  ${GI.sec === 'hospedaje' ? hospedajeHTML() : GI.sec === 'equipos' ? `<div class="small muted" style="margin-bottom:8px">Se arman igual que en Entrenamiento (parejos por nivel, separando compañeros y con cada entrenador junto a su hijo), pero solo con los que tienen <b>Sí</b> en la lista de viaje. Todo se puede cambiar a mano.</div><div id="eqBoxG"></div>` : `
   <div class="kpis">
     <div class="kpi"><div class="l">Jugadores que viajan</div><div class="v" style="color:var(--gr)">${vJ.length}</div><div class="s">de ${vJ.length + nJ.length} activos (${pct(vJ.length, vJ.length + nJ.length)}%)</div></div>
     <div class="kpi"><div class="l">Staff que viaja</div><div class="v" style="color:var(--vi2)">${vE.length}</div><div class="s">${vE.filter(p => !/manager/i.test(p.rol_gira)).length} entrenadores · ${vE.filter(p => /manager/i.test(p.rol_gira)).length} managers</div></div>
@@ -1718,7 +1761,7 @@ function filaGiraBase(t, id) {
   const p = t === 'J' ? jugById(id) : entById(id);
   return { clave: t + '-' + id, persona_tipo: t, persona_id: id, nombre: t === 'J' ? p.nombre : (p.nombre || p.apodo), va: 'NO', rol_gira: t === 'J' ? 'Jugador' : p.rol, autorizacion: 'NO', ficha_medica: 'NO', pago: 'NO', observaciones: '' };
 }
-function setVa(t, id, v) { guardar([{ op: 'upsert', sheet: 'GIRA', key: 'clave', rows: [Object.assign(filaGiraBase(t, id), { va: v })] }], null, 900); renderGira(); toast(v === 'SI' ? '✈️ Agregado a la gira' : '🏠 Pasado a "No viajan"'); }
+function setVa(t, id, v) { const ops = [{ op: 'upsert', sheet: 'GIRA', key: 'clave', rows: [Object.assign(filaGiraBase(t, id), { va: v })] }]; if (v === 'NO' && DB.HOSPEDAJE_ASIG.some(a => a.clave === t + '-' + id)) ops.push({ op: 'remove', sheet: 'HOSPEDAJE_ASIG', field: 'clave', value: t + '-' + id }); guardar(ops, null, 900); renderGira(); toast(v === 'SI' ? '✈️ Agregado a la gira' : '🏠 Pasado a "No viajan"'); }
 function toggleGira(t, id, campo) { const g = giraDe(t, id); const val = g && g[campo] === 'SI' ? 'NO' : 'SI'; guardar([{ op: 'upsert', sheet: 'GIRA', key: 'clave', rows: [Object.assign(filaGiraBase(t, id), { [campo]: val })] }], null, 900); renderGira(); }
 function obsGira(t, id) { const g = giraDe(t, id) || {}; const v = prompt('Observación para la gira (habitación, contacto, comida, etc.):', g.observaciones || ''); if (v === null) return; guardar([{ op: 'upsert', sheet: 'GIRA', key: 'clave', rows: [Object.assign(filaGiraBase(t, id), { observaciones: v })] }], null, 900); renderGira(); }
 function configGira() {
@@ -1745,10 +1788,168 @@ function copiarGira() {
   copiarTexto(`🚌 ${DB.CONFIG.GIRA_NOMBRE || 'Gira'}\n\n✈️ JUGADORES QUE VIAJAN (${vj.length})\n${vj.map((p, i) => `${i + 1}. ${p.nombre}`).join('\n')}\n\n🧢 ENTRENADORES Y STAFF (${ve.length})\n${ve.map(p => `• ${p.nombre} (${p.rol_gira})`).join('\n')}\n\n🏠 NO VIAJAN (${nj.length})\n${nj.map(p => `• ${p.nombre}`).join('\n')}`, '📋 Listas copiadas');
 }
 
+
+/* ---------- HOSPEDAJE de la gira ---------- */
+const HOSP_BASE = [['Apart A', 5, 1], ['Apart B', 5, 1], ['Apart C', 3, 1], ['Apart 1', 6, 1], ['Apart 2', 3, 1], ['Apart 3', 6, 1], ['Apart 4', 3, 1], ['Apart 5', 6, 1], ['Apart 6', 5, 1], ['Apart 7', 5, 1], ['Apart 8', 5, 1], ['La Rueda', 0, 2]];
+let HS = { busca: '', sel: null };
+const lugares = () => DB.HOSPEDAJE.slice().sort((a, b) => a.orden - b.orden || a.nombre.localeCompare(b.nombre, 'es', { numeric: true }));
+const viajeros = () => filasGira().filter(p => p.va === 'SI');
+function hospOcup() { // clave -> hosp_id (solo de los que viajan y de lugares existentes)
+  const v = new Set(viajeros().map(p => p.t + '-' + p.id)), L = new Set(DB.HOSPEDAJE.map(h => h.id)), m = {};
+  DB.HOSPEDAJE_ASIG.forEach(a => { if (v.has(a.clave) && L.has(a.hosp_id)) m[a.clave] = a.hosp_id; });
+  return m;
+}
+const capTxt = h => `${h.cap_j}${h.cap_e ? '+' + h.cap_e : ''}`;
+const nomHosp = p => p.t === 'E' ? (entNom(entById(p.id)) || p.nombre) : p.nombre;
+function hospedajeHTML() {
+  const L = lugares(), V = viajeros(), oc = hospOcup();
+  const VJ = V.filter(p => p.t === 'J'), VE = V.filter(p => p.t === 'E');
+  const capJ = L.reduce((a, h) => a + h.cap_j, 0), capE = L.reduce((a, h) => a + h.cap_e, 0);
+  const ubJ = VJ.filter(p => oc[p.t + '-' + p.id]).length, ubE = VE.filter(p => oc[p.t + '-' + p.id]).length;
+  const sin = V.filter(p => !oc[p.t + '-' + p.id]).sort((a, b) => a.t.localeCompare(b.t) * -1 || a.nombre.localeCompare(b.nombre));
+  if (!L.length) return `<div class="card"><div class="empty">🛏️ Todavía no hay lugares cargados.<br><span class="small">Podés cargar los 12 departamentos de Tandil (A, B, C, 1 al 8 y La Rueda) y después ajustarlos.</span><br><br><button class="btn pri" onclick="cargarHospBase()">🏨 Cargar los 12 departamentos</button><br><br><button class="btn" onclick="editarHosp()">＋ Crear uno a mano</button></div></div>`;
+  const aviso = [capJ < VJ.length ? `faltan ${VJ.length - capJ} camas para chicos` : '', capE < VE.length ? `faltan ${VE.length - capE} camas para adultos` : ''].filter(Boolean).join(' y ');
+  return `
+  <div class="kpis">
+    <div class="kpi"><div class="l">Chicos ubicados</div><div class="v" style="color:${ubJ === VJ.length ? 'var(--gr)' : 'var(--am)'}">${ubJ}<span class="small muted">/${VJ.length}</span></div><div class="s">${capJ} camas para chicos</div></div>
+    <div class="kpi"><div class="l">Adultos ubicados</div><div class="v" style="color:${ubE === VE.length ? 'var(--gr)' : 'var(--am)'}">${ubE}<span class="small muted">/${VE.length}</span></div><div class="s">${capE} camas para adultos</div></div>
+  </div>
+  ${aviso ? `<div class="banner" style="margin:0 0 10px">⚠️ Viajan más de los que entran: ${aviso}. Sumá vacantes con ✏️.</div>` : ''}
+  <div class="acts" style="grid-template-columns:1fr 1fr"><button class="btn vio" onclick="autoHosp()" ${sin.length ? '' : 'disabled'}>✨ Ubicar automático</button><button class="btn" onclick="editarHosp()">＋ Nuevo lugar</button><button class="btn pri" onclick="docHosp()">📄 PDF / Imagen</button><button class="btn" onclick="copiarTexto(textoHosp(),'📋 Copiado: pegalo en WhatsApp')">📋 WhatsApp</button></div>
+  ${sin.length ? `<h3 class="sub-h">🧳 Sin ubicar <span class="pill" style="background:rgba(245,158,11,.18);color:var(--am2)">${sin.length}</span></h3>
+  <div class="small muted" style="margin-bottom:6px">Tocá a alguien para elegirle el lugar, o usá <b>✨ Ubicar automático</b> (pone a cada entrenador con su hijo y junta a los compañeros de grado).</div>
+  <div class="hs-sin">${sin.map(p => `<button class="hs-p ${p.t}" onclick="moverHosp('${p.t}','${p.id}')">${p.t === 'E' ? '🧢 ' : ''}${esc(nomHosp(p))}</button>`).join('')}</div>` : `<div class="card" style="text-align:center;color:var(--gr2);font-weight:800;margin-bottom:10px">✅ Todos los que viajan tienen lugar</div>`}
+  <h3 class="sub-h" style="margin-top:16px">🏨 Lugares <span class="pill" style="background:rgba(6,182,212,.15);color:#67e8f9">${L.length}</span></h3>
+  <div class="hs-grid">${L.map(h => { const P = V.filter(p => oc[p.t + '-' + p.id] === h.id), J = P.filter(p => p.t === 'J').sort((a, b) => a.nombre.localeCompare(b.nombre)), E = P.filter(p => p.t === 'E');
+    const est = (n, c) => n > c ? 'over' : n === c ? 'full' : '';
+    return `<div class="hs-card ${J.length > h.cap_j || E.length > h.cap_e ? 'over' : J.length >= h.cap_j && E.length >= h.cap_e ? 'full' : ''}">
+      <div class="row" style="flex-wrap:nowrap;align-items:flex-start;gap:8px"><div class="grow" style="min-width:0"><div class="hs-n">${esc(h.nombre)}</div><div class="tiny muted">${h.cap_j ? h.cap_j + (h.cap_j === 1 ? ' chico' : ' chicos') : ''}${h.cap_j && h.cap_e ? ' + ' : ''}${h.cap_e ? h.cap_e + (h.cap_e === 1 ? ' adulto' : ' adultos') : ''}${!h.cap_j && !h.cap_e ? 'sin vacantes' : ''}</div></div>
+        <div class="hs-cnt">${h.cap_j || J.length ? `<span class="${est(J.length, h.cap_j)}">👦 ${J.length}/${h.cap_j}</span>` : ''}${h.cap_e || E.length ? `<span class="${est(E.length, h.cap_e)}">🧢 ${E.length}/${h.cap_e}</span>` : ''}</div></div>
+      <div class="pr-chips">${E.map(p => chipHosp(p)).join('')}${J.map(p => chipHosp(p)).join('')}${!P.length ? '<span class="small muted">Vacío</span>' : ''}</div>
+      <div class="row" style="margin-top:10px;gap:6px"><button class="btn sm vio grow" onclick="ubicarEn('${h.id}')">＋ Ubicar</button><button class="btn sm" onclick="editarHosp('${h.id}')" aria-label="Editar">✏️</button><button class="btn sm red" onclick="borrarHosp('${h.id}')" aria-label="Borrar">🗑</button></div>
+    </div>`; }).join('')}</div>`;
+}
+const chipHosp = p => `<span class="pr-chip ${p.t === 'E' ? 'hs-e' : ''}"><span onclick="moverHosp('${p.t}','${p.id}')" style="cursor:pointer">${p.t === 'E' ? '🧢 ' : ''}${esc(p.t === 'J' ? apellido(p.nombre, jugActivos().map(x => x.nombre)) : nomHosp(p))}</span><button onclick="asignarHosp('${p.t}','${p.id}','')" title="Quitar" aria-label="Quitar">×</button></span>`;
+async function cargarHospBase() {
+  const t = Date.now().toString(36);
+  await guardar([{ op: 'upsert', sheet: 'HOSPEDAJE', key: 'id', rows: HOSP_BASE.map(([nombre, cap_j, cap_e], i) => ({ id: 'H' + t + i, nombre, cap_j, cap_e, orden: i + 1 })) }], '🏨 Departamentos cargados');
+  renderGira();
+}
+function editarHosp(id) {
+  const h = id ? DB.HOSPEDAJE.find(x => x.id === id) : { nombre: '', cap_j: 5, cap_e: 1 };
+  const step = (k, v) => `<div class="stepper"><button type="button" onclick="const i=$('${k}');i.value=Math.max(0,+i.value-1)" aria-label="Menos">−</button><input id="${k}" type="number" min="0" max="30" value="${v}" style="text-align:center;font-weight:800"><button type="button" onclick="const i=$('${k}');i.value=Math.min(30,+i.value+1)" aria-label="Más">+</button></div>`;
+  abrirModal(`<h3>${id ? '✏️ Editar lugar' : '🏨 Nuevo lugar'}<span class="sp"></span><button class="x" onclick="cerrarModal()">×</button></h3>
+  <div class="fg"><label>Nombre</label><input id="hsNom" value="${esc(h.nombre)}" placeholder="Ej: Apart 9"></div>
+  <div class="fgrid"><div class="fg"><label>Vacantes chicos 👦</label>${step('hsJ', h.cap_j)}</div><div class="fg"><label>Vacantes adultos 🧢</label>${step('hsE', h.cap_e)}</div></div>
+  <div class="mact"><button class="btn" onclick="cerrarModal()">Cancelar</button><button class="btn vio" onclick="guardarHosp('${id || ''}')">💾 Guardar</button></div>`);
+  if (!id) setTimeout(() => $('hsNom').focus(), 60);
+}
+async function guardarHosp(id) {
+  const nombre = $('hsNom').value.trim(); if (!nombre) return toast('Poné un nombre', true);
+  if (DB.HOSPEDAJE.some(h => h.id !== id && normTxt(h.nombre) === normTxt(nombre))) return toast('Ya hay un lugar con ese nombre', true);
+  const nuevo = !id; if (nuevo) id = 'H' + Date.now().toString(36);
+  const row = { id, nombre, cap_j: Math.max(0, parseInt($('hsJ').value) || 0), cap_e: Math.max(0, parseInt($('hsE').value) || 0) };
+  if (nuevo) row.orden = Math.max(0, ...DB.HOSPEDAJE.map(h => h.orden)) + 1;
+  cerrarModal(); await guardar([{ op: 'upsert', sheet: 'HOSPEDAJE', key: 'id', rows: [row] }], nuevo ? '🏨 Lugar creado' : '💾 Lugar actualizado');
+  renderGira();
+}
+async function borrarHosp(id) {
+  const h = DB.HOSPEDAJE.find(x => x.id === id), oc = hospOcup(), n = Object.values(oc).filter(x => x === id).length;
+  if (!confirm(`¿Borrar "${h.nombre}"?${n ? `\n${n} ${n === 1 ? 'persona queda' : 'personas quedan'} sin ubicar.` : ''}`)) return;
+  await guardar([{ op: 'remove', sheet: 'HOSPEDAJE', field: 'id', value: id }, { op: 'remove', sheet: 'HOSPEDAJE_ASIG', field: 'hosp_id', value: id }], '🗑 Lugar borrado');
+  renderGira();
+}
+async function asignarHosp(t, id, hid, silencio) {
+  const clave = t + '-' + id, p = viajeros().find(x => x.t === t && x.id === id);
+  const op = hid ? { op: 'upsert', sheet: 'HOSPEDAJE_ASIG', key: 'clave', rows: [{ clave, persona_tipo: t, persona_id: id, hosp_id: hid, nombre: p ? p.nombre : '' }] } : { op: 'remove', sheet: 'HOSPEDAJE_ASIG', field: 'clave', value: clave };
+  guardar([op], null, 900); if (!silencio) cerrarModal(); renderGira();
+}
+function libres(h, oc) { const V = viajeros(), en = V.filter(p => oc[p.t + '-' + p.id] === h.id); return { J: h.cap_j - en.filter(p => p.t === 'J').length, E: h.cap_e - en.filter(p => p.t === 'E').length }; }
+function moverHosp(t, id) {
+  const p = viajeros().find(x => x.t === t && x.id === id); if (!p) return;
+  const oc = hospOcup(), act = oc[t + '-' + id], k = t === 'J' ? 'J' : 'E';
+  abrirModal(`<h3>🛏️ ${esc(nomHosp(p))}<span class="sp"></span><button class="x" onclick="cerrarModal()">×</button></h3>
+  <div class="small muted" style="margin-bottom:8px">Elegí dónde duerme${t === 'E' ? ' (cama de adulto)' : ''}.</div>
+  <div class="pr-opts">${lugares().map(h => { const l = libres(h, oc), on = act === h.id, lleno = l[k] <= 0 && !on; return `<button class="pr-opt ${on ? 'on' : ''}" onclick="${lleno ? `if(confirm('${esc(h.nombre)} ya está completo. ¿Ubicarlo igual?'))` : ''}asignarHosp('${t}','${id}','${h.id}')"><span class="grow">${on ? '✓ ' : ''}${esc(h.nombre)}</span><span class="small" style="color:${l[k] > 0 ? 'var(--gr2)' : 'var(--rd2)'}">${on ? 'acá' : l[k] > 0 ? l[k] + (l[k] === 1 ? ' libre' : ' libres') : 'completo'}</span></button>`; }).join('')}
+  ${act ? `<button class="pr-opt" style="color:var(--rd2)" onclick="asignarHosp('${t}','${id}','')">✕ Sacar del lugar (queda sin ubicar)</button>` : ''}</div>`);
+}
+function ubicarEn(hid) { HS = { busca: '', sel: null, hid, todos: false }; const oc = hospOcup(); HS.sel = new Set(Object.keys(oc).filter(c => oc[c] === hid)); dibujarUbicar(); }
+function dibujarUbicar() {
+  const h = DB.HOSPEDAJE.find(x => x.id === HS.hid), oc = hospOcup(), f = normTxt(HS.busca);
+  const V = viajeros().filter(p => (HS.todos || !oc[p.t + '-' + p.id] || HS.sel.has(p.t + '-' + p.id)) && (!f || normTxt(nomHosp(p) + ' ' + p.nombre).includes(f)));
+  const cnt = t => [...HS.sel].filter(c => c[0] === t).length;
+  const fila = p => { const c = p.t + '-' + p.id, on = HS.sel.has(c), otro = oc[c] && oc[c] !== h.id ? DB.HOSPEDAJE.find(x => x.id === oc[c]) : null, j = p.t === 'J' ? jugById(p.id) : null;
+    return `<label class="pr-pk ${on ? 'on' : ''}"><input type="checkbox" ${on ? 'checked' : ''} onchange="this.checked?HS.sel.add('${c}'):HS.sel.delete('${c}');dibujarUbicar()"><span class="grow" style="min-width:0"><b>${esc(nomHosp(p))}</b>${j ? `<span class="tiny muted" style="display:block">${esc([j.colegio !== 'N/A' ? j.colegio : '', j.grado !== 'N/A' ? j.grado : ''].filter(Boolean).join(' · '))}</span>` : ''}${otro ? `<span class="tiny" style="display:block;color:var(--am2)">Hoy en: ${esc(otro.nombre)} (se cambia)</span>` : ''}</span></label>`; };
+  const nJ = cnt('J'), nE = cnt('E'), VJ = V.filter(p => p.t === 'J').sort((a, b) => a.nombre.localeCompare(b.nombre)), VE = V.filter(p => p.t === 'E');
+  abrirModal(`<h3>＋ ${esc(h.nombre)}<span class="sp"></span><button class="x" onclick="cerrarModal()">×</button></h3>
+  <div class="row" style="gap:6px;margin-bottom:8px"><span class="pill" style="background:${nJ > h.cap_j ? 'rgba(239,68,68,.2);color:var(--rd2)' : 'rgba(34,197,94,.15);color:var(--gr2)'}">👦 ${nJ}/${h.cap_j}</span><span class="pill" style="background:${nE > h.cap_e ? 'rgba(239,68,68,.2);color:var(--rd2)' : 'rgba(34,197,94,.15);color:var(--gr2)'}">🧢 ${nE}/${h.cap_e}</span>${nJ > h.cap_j || nE > h.cap_e ? '<span class="small" style="color:var(--rd2)">supera las vacantes</span>' : ''}</div>
+  <input id="hsBuscar" placeholder="🔎 Buscar…" value="${esc(HS.busca)}" oninput="HS.busca=this.value;clearTimeout(window._hsf);window._hsf=setTimeout(()=>{dibujarUbicar();const i=$('hsBuscar');i.focus();i.setSelectionRange(i.value.length,i.value.length)},200)">
+  <label class="small row" style="gap:.45rem;margin:8px 0;min-height:36px"><input type="checkbox" style="width:20px;height:20px;min-height:0" ${HS.todos ? '' : 'checked'} onchange="HS.todos=!this.checked;dibujarUbicar()"> Mostrar solo los que no tienen lugar</label>
+  <div class="pr-pick">${VE.length ? `<div class="tiny muted" style="font-weight:800;margin-top:2px">🧢 ADULTOS</div>${VE.map(fila).join('')}` : ''}${VJ.length ? `<div class="tiny muted" style="font-weight:800;margin-top:6px">👦 CHICOS</div>${VJ.map(fila).join('')}` : ''}${!V.length ? '<div class="empty">Nadie para mostrar</div>' : ''}</div>
+  <div class="mact"><button class="btn" onclick="cerrarModal()">Cancelar</button><button class="btn vio" onclick="guardarUbicar()">💾 Guardar</button></div>`);
+  const b = $('hsBuscar'); if (document.activeElement !== b && HS.busca) { b.focus(); b.setSelectionRange(b.value.length, b.value.length); }
+}
+async function guardarUbicar() {
+  const hid = HS.hid, oc = hospOcup(), V = viajeros(), ops = [];
+  const nuevas = V.filter(p => HS.sel.has(p.t + '-' + p.id) && oc[p.t + '-' + p.id] !== hid).map(p => ({ clave: p.t + '-' + p.id, persona_tipo: p.t, persona_id: p.id, hosp_id: hid, nombre: p.nombre }));
+  if (nuevas.length) ops.push({ op: 'upsert', sheet: 'HOSPEDAJE_ASIG', key: 'clave', rows: nuevas });
+  Object.keys(oc).filter(c => oc[c] === hid && !HS.sel.has(c)).forEach(c => ops.push({ op: 'remove', sheet: 'HOSPEDAJE_ASIG', field: 'clave', value: c }));
+  cerrarModal(); if (ops.length) await guardar(ops, '🛏️ Lugar actualizado'); renderGira();
+}
+// pone a cada adulto con su hijo y junta a los chicos del mismo colegio y grado
+async function autoHosp() {
+  const L = lugares(), V = viajeros(), oc = hospOcup(), lib = {};
+  L.forEach(h => lib[h.id] = libres(h, oc));
+  const sinJ = V.filter(p => p.t === 'J' && !oc['J-' + p.id]), sinE = V.filter(p => p.t === 'E' && !oc['E-' + p.id]);
+  if (!sinJ.length && !sinE.length) return toast('Ya están todos ubicados');
+  if (!confirm(`Se van a ubicar ${sinJ.length} chicos y ${sinE.length} adultos que no tienen lugar.\nLos que ya están ubicados no se mueven. Después podés cambiar todo a mano.`)) return;
+  const nuevo = {}, put = (p, hid) => { nuevo[p.t + '-' + p.id] = hid; lib[hid][p.t]--; };
+  const grupo = id => { const j = jugById(id) || {}; return normTxt((j.colegio || '') + '|' + (j.grado || '')); };
+  const donde = c => nuevo[c] || oc[c];
+  // 1) adultos con hijo
+  sinE.forEach(p => { const e = entById(p.id), hj = e && e.hijo_id, cj = 'J-' + hj; if (!hj || !V.some(x => x.t === 'J' && x.id === hj)) return;
+    const h = donde(cj);
+    if (h) { if (lib[h].E > 0) put(p, h); return; }
+    const op = L.filter(x => lib[x.id].E > 0 && lib[x.id].J > 0).sort((a, b) => lib[b.id].J - lib[a.id].J)[0];
+    if (op) { put(p, op.id); const jj = sinJ.find(x => x.id === hj); if (jj) put(jj, op.id); } });
+  // 1b) chicos cuyo papá/mamá entrenador ya tiene lugar
+  sinJ.filter(p => !nuevo['J-' + p.id]).forEach(p => { const e = entActivos().find(x => x.hijo_id === p.id), h = e && donde('E-' + e.id); if (h && lib[h] && lib[h].J > 0) put(p, h); });
+  // 2) chicos, agrupados por colegio y grado (los grupos grandes primero)
+  const pend = sinJ.filter(p => !nuevo['J-' + p.id]), cuenta = {};
+  pend.forEach(p => cuenta[grupo(p.id)] = (cuenta[grupo(p.id)] || 0) + 1);
+  pend.sort((a, b) => cuenta[grupo(b.id)] - cuenta[grupo(a.id)] || grupo(a.id).localeCompare(grupo(b.id)) || a.nombre.localeCompare(b.nombre));
+  pend.forEach(p => { const g = grupo(p.id), resto = pend.filter(x => grupo(x.id) === g && !nuevo['J-' + x.id]).length;
+    const mismos = h => V.filter(x => x.t === 'J' && donde('J-' + x.id) === h.id && grupo(x.id) === g).length;
+    const op = L.filter(h => lib[h.id].J > 0).sort((a, b) => mismos(b) - mismos(a) || Math.abs(lib[a.id].J - resto) - Math.abs(lib[b.id].J - resto))[0];
+    if (op) put(p, op.id); });
+  // 3) adultos que faltan: primero donde hay chicos sin adulto
+  sinE.filter(p => !nuevo['E-' + p.id]).forEach(p => { const sc = h => (lib[h.id].E === h.cap_e ? 0 : 2) + (h.cap_j - lib[h.id].J > 0 ? 0 : 1); const op = L.filter(h => lib[h.id].E > 0).sort((a, b) => sc(a) - sc(b))[0]; if (op) put(p, op.id); });
+  const rows = Object.keys(nuevo).map(c => { const p = V.find(x => x.t + '-' + x.id === c); return { clave: c, persona_tipo: p.t, persona_id: p.id, hosp_id: nuevo[c], nombre: p.nombre }; });
+  const quedan = sinJ.length + sinE.length - rows.length;
+  if (rows.length) await guardar([{ op: 'upsert', sheet: 'HOSPEDAJE_ASIG', key: 'clave', rows }], null);
+  toast(`✨ Ubicados ${rows.length}${quedan ? ` · ${quedan} sin lugar (faltan vacantes)` : ''}`, !!quedan); renderGira();
+}
+function datosHosp() {
+  const V = viajeros(), oc = hospOcup();
+  return { L: lugares().map(h => { const P = V.filter(p => oc[p.t + '-' + p.id] === h.id); return { h, E: P.filter(p => p.t === 'E').map(nomHosp), J: P.filter(p => p.t === 'J').map(p => p.nombre).sort() }; }), sin: V.filter(p => !oc[p.t + '-' + p.id]).map(p => (p.t === 'E' ? '🧢 ' : '') + nomHosp(p)) };
+}
+function docHosp() {
+  const { L, sin } = datosHosp(), V = viajeros(), C = DB.CONFIG;
+  docCompartir('🛏️ Hospedaje', `🚌 ${esc(C.GIRA_NOMBRE || 'Gira')}<br>Hospedaje · ${V.length} personas`,
+    `<div class="kp"><div><b>${V.filter(p => p.t === 'J').length}</b>chicos</div><div><b>${V.filter(p => p.t === 'E').length}</b>adultos</div><div><b>${L.length}</b>lugares</div></div>
+    ${sin.length ? `<div class="aus" style="margin-bottom:8px;color:#b45309;font-weight:700">⚠️ Sin ubicar (${sin.length}): ${sin.map(esc).join(' · ')}</div>` : ''}
+    <div class="pg">${L.map(x => `<div class="pt"><h5>${esc(x.h.nombre)} · ${x.J.length + x.E.length}</h5>${x.E.length ? `<div class="pc">Adultos: ${esc(x.E.join(', '))}</div>` : ''}${x.J.length ? `<ol>${x.J.map(n => `<li>${esc(n)}</li>`).join('')}</ol>` : (x.E.length ? '' : '<div class="aus" style="padding:6px 10px">Vacío</div>')}</div>`).join('')}</div>`,
+    'M9_gira_hospedaje', textoHosp);
+}
+function textoHosp() {
+  const { L, sin } = datosHosp();
+  return `🛏️ *REGATAS M9 · Camada 2017*\n${DB.CONFIG.GIRA_NOMBRE || 'Gira'} · Hospedaje\n\n` + L.map(x => `*${x.h.nombre}* (${x.J.length + x.E.length})${x.E.length ? '\n🧢 ' + x.E.join(', ') : ''}${x.J.length ? '\n' + x.J.map((n, i) => `${i + 1}. ${n}`).join('\n') : ''}${!x.J.length && !x.E.length ? '\n—' : ''}`).join('\n\n') + (sin.length ? `\n\n⚠️ *Sin ubicar* (${sin.length})\n${sin.map(n => '• ' + n.replace('🧢 ', '')).join('\n')}` : '');
+}
+
 /* =====================================================================
    ESTADÍSTICAS
    ===================================================================== */
-let ST = { anio: String(new Date().getFullYear()), mes: '', tipo: '', vista: 'J', dest: 'todos' };
+let ST = { anio: String(new Date().getFullYear()), mes: '', tipo: '', vista: 'J', dest: 'todos', perfil: 0 };
 function renderStats() {
   const adm = isAdmin();
   const cA = conAsistencia();
@@ -1768,7 +1969,6 @@ function renderStats() {
   const totAus = Object.values(mot).reduce((a, b) => a + b, 0);
   const mes = {}; S.recs.filter(a => a.persona_tipo === 'J').forEach(a => { const m = a.fecha.slice(0, 7); mes[m] = mes[m] || [0, 0]; mes[m][1]++; if (a.estado === 'P') mes[m][0]++; });
   const meses = Object.keys(mes).sort();
-  const pctT = (p, t) => p[t][1] ? pct(...p[t]) : null;
   $('v-stats').innerHTML = `
   <h2 class="sec">📊 Estadísticas</h2>
   <div class="grid" style="grid-template-columns:88px minmax(0,1fr) auto;gap:8px;margin-bottom:8px">
@@ -1789,6 +1989,7 @@ function renderStats() {
   </div>
   <div class="card">
     <h3>🏅 Ranking de asistencia</h3>
+    ${(() => { if (ST.vista !== 'J') return ''; const L = filas.filter(r => r.x.activo !== 'NO').map(r => perfilAsis(r.p)).filter(Boolean); const c = k => L.filter(f => f.k === k).length; return L.length ? `<div class="perf">${[[1, '✅ Vienen miércoles y sábados', 'var(--gr2)'], [2, '🟠 Vienen solo los sábados', 'var(--am2)'], [3, '🔵 Vienen solo los miércoles', '#93c5fd'], [4, '⚠️ Irregulares', 'var(--rd2)']].map(([k, t, col]) => `<button class="perf-i ${ST.perfil === k ? 'on' : ''}" onclick="ST.perfil=ST.perfil===${k}?0:${k};renderStats()"><b style="color:${col}">${c(k)}</b><span>${t}</span></button>`).join('')}</div><div class="small muted" style="margin:-2px 0 8px">${ST.perfil ? '<b style="color:var(--cy)">Filtrando: tocá de nuevo el recuadro para ver a todos.</b> ' : 'Tocá un recuadro para ver solo ese grupo. '}Sábado incluye entrenamientos y partidos. "Viene" = 60% o más · "solo" = el otro día menos de 35%.</div>` : ''; })()}
     <div class="seg full" style="margin-bottom:8px"><button class="${ST.vista === 'J' ? 'on' : ''}" onclick="ST.vista='J';renderStats()">Jugadores</button><button class="${ST.vista === 'E' ? 'on' : ''}" onclick="ST.vista='E';renderStats()">Entrenadores</button></div>
     <div class="small muted" style="margin-bottom:6px">Tocá un título para ordenar ↑↓ · tocá un nombre para ver su ficha.</div>
     ${tabla('st' + ST.vista, [
@@ -1796,17 +1997,17 @@ function renderStats() {
       { k: 'nombre', t: 'Nombre', h: r => `<b>${esc(r.nombre)}</b>${r.x.activo === 'NO' ? ' <span class="pill" style="background:rgba(148,163,184,.2)">baja</span>' : ''}` },
       { k: 'pct', t: '%', num: 1, v: r => r.p.tot ? r.p.pct : null, h: r => `<b style="color:${r.p.tot ? colorPct(r.p.pct) : 'var(--tx4)'}">${r.p.tot ? r.p.pct + '%' : '—'}</b>` },
       ...(ST.vista === 'J' ? (adm ? [{ k: 'nivel', t: 'Nivel', v: r => r.x.nivel === 'G' ? (r.x.nivel2 || 0) / 10 : nivelNum(r.x), h: r => nivelBadge(r.x) }] : []) : [{ k: 'rol', t: 'Rol', v: r => r.x.rol, h: r => esc(r.x.rol || '') }]),
-      { k: 'P', t: 'Pres.', num: 1, v: r => r.p.P, h: r => r.p.P },
+      { k: 'pm', t: 'Pres. Mié', num: 1, v: r => r.p.dMIE[1] ? pct(...r.p.dMIE) : null, h: r => fraccion(r.p.dMIE) },
+      { k: 'ps', t: 'Pres. Sáb', num: 1, v: r => r.p.dSAB[1] ? pct(...r.p.dSAB) : null, h: r => fraccion(r.p.dSAB) },
+      { k: 'perfil', t: 'Viene', v: r => (perfilAsis(r.p) || { k: 9 }).k, h: r => { const f = perfilAsis(r.p); return f ? `<span class="pill" style="background:${f.bg};color:${f.c}">${f.t}</span>` : ''; } },
+      { k: 'P', t: 'Pres.', num: 1, v: r => r.p.P, h: r => `${r.p.P}<span class="muted">/${r.p.tot}</span>` },
       { k: 'A', t: 'Aus.', num: 1, v: r => r.p.A, h: r => r.p.A },
       { k: 'aviso', t: 'Avisó', num: 1, v: r => r.p.aviso, h: r => r.p.aviso || '' },
-
-      { k: 'MIE', t: '% Mié', num: 1, v: r => pctT(r.p, 'MIE'), h: r => pctT(r.p, 'MIE') == null ? '—' : pctT(r.p, 'MIE') + '%' },
-      { k: 'SAB', t: '% Sáb', num: 1, v: r => pctT(r.p, 'SAB'), h: r => pctT(r.p, 'SAB') == null ? '—' : pctT(r.p, 'SAB') + '%' },
       { k: 'up', t: '▲', num: 1, v: r => r.p.up, h: r => `<span class="up">${r.p.up || ''}</span>` },
       { k: 'dn', t: '▼', num: 1, v: r => r.p.dn, h: r => `<span class="dn">${r.p.dn || ''}</span>` },
       { k: 'racha', t: 'Racha', num: 1, v: r => r.p.racha ? (r.p.racha.e === 'P' ? r.p.racha.n : -r.p.racha.n) : null, h: r => r.p.racha ? `<span class="pill" style="background:${r.p.racha.e === 'P' ? 'rgba(34,197,94,.18);color:var(--gr2)' : 'rgba(239,68,68,.18);color:var(--rd2)'}">${r.p.racha.n} ${r.p.racha.e === 'P' ? 'pres.' : 'aus.'}</span>` : '' },
       { t: 'Últimos 10', h: r => `<span class="dots">${r.p.hist.slice(-10).map(a => `<i class="d${a.estado}" title="${fmtF(a.fecha)}"></i>`).join('')}</span>` }
-    ], filas, { k: 'pct', desc: true }, r => `class="clk" onclick="${ST.vista === 'J' ? 'fichaJugador' : 'fichaEntrenador'}('${r.x.id}')"`)}
+    ], ST.vista === 'J' && ST.perfil ? filas.filter(r => (perfilAsis(r.p) || {}).k === ST.perfil) : filas, { k: 'pct', desc: true }, r => `class="clk" onclick="${ST.vista === 'J' ? 'fichaJugador' : 'fichaEntrenador'}('${r.x.id}')"`)}
   </div>
   <div class="grid g3">
     <div class="card"><h3>⭐ Destacados y comentarios</h3>
@@ -1850,7 +2051,7 @@ function fichaPersona(t, id) {
   <div class="row small muted" style="margin:-6px 0 12px">${t === 'J' ? `${nivelBadge(x)} ${esc(x.colegio)} · ${esc(x.grado)}${padres.length ? ' · 🧢 ' + padres.map(entNom).map(esc).join(', ') : ''}` : `${esc(x.rol || '')}${hijo ? ' · hijo: ' + esc(hijo.nombre) : ''}`} ${viaja(t, id) ? '· ✈️ viaja a la gira' : ''} ${x.activo === 'NO' ? '· <b>baja ' + fmtF(x.fecha_baja) + '</b>' : ''}</div>
   <div class="kpis">
     <div class="kpi"><div class="l">Asistencia ${anio}</div><div class="v" style="color:${colorPct(p.pct)}">${p.tot ? p.pct + '%' : '—'}</div><div class="s">${p.P} de ${p.tot}${p.aviso ? ' · avisó ' + p.aviso : ''}</div></div>
-    <div class="kpi"><div class="l">Mié / Sáb</div><div class="v" style="font-size:1.2rem">${p.MIE[1] ? pct(...p.MIE) + '%' : '—'} / ${p.SAB[1] ? pct(...p.SAB) + '%' : '—'}</div></div>
+    <div class="kpi"><div class="l">Miércoles / Sábados</div><div class="v" style="font-size:1.15rem">${p.dMIE[1] ? p.dMIE[0] + '/' + p.dMIE[1] : '—'} · ${p.dSAB[1] ? p.dSAB[0] + '/' + p.dSAB[1] : '—'}</div><div class="s">${(perfilAsis(p) || {}).t || ''}</div></div>
     <div class="kpi"><div class="l">Marcas</div><div class="v" style="font-size:1.3rem"><span class="up">▲${p.up}</span> <span class="dn">▼${p.dn}</span></div></div>
   </div>
   <div class="card"><h3>🗓️ Entrenamiento por entrenamiento</h3><div class="timeline">${p.hist.map(a => `<span style="background:${a.estado === 'P' ? 'var(--gr)' : a.motivo && a.motivo !== 'Sin aviso' ? 'var(--am)' : 'var(--rd)'}" title="${fmtFC(a.fecha)} ${TIPOS_C[a.tipo] || ''}${a.motivo ? ' · ' + esc(a.motivo) : ''}${a.comentario ? ': ' + esc(a.comentario) : ''}">${a.calif > 0 ? '▲' : a.calif < 0 ? '▼' : a.fecha.slice(8, 10)}</span>`).join('') || '<span class="muted small" style="width:auto;color:var(--tx3)">Sin registros</span>'}</div><div class="legend"><span><i style="background:var(--gr)"></i>Presente</span><span><i style="background:var(--am)"></i>Ausente con aviso</span><span><i style="background:var(--rd)"></i>Ausente sin aviso</span></div></div>
@@ -1861,8 +2062,8 @@ function fichaPersona(t, id) {
 const fichaJugador = id => fichaPersona('J', id), fichaEntrenador = id => fichaPersona('E', id);
 function exportarCSV() {
   const adm = isAdmin(), S = calcStats({ anio: ST.anio, mes: ST.mes, tipo: ST.tipo });
-  const rows = [['tipo', 'id', 'nombre', ...(adm ? ['nivel'] : []), 'colegio_o_rol', 'presentes', 'ausentes', 'ausencias_con_aviso', 'pct', 'pct_mie', 'pct_sab', 'positivos', 'a_mejorar', 'activo', 'viaja_gira']];
-  const fila = (tipo, x, nom, extra, k) => { const p = S.per[k] || vacioStat(); return [tipo, x.id, nom, ...(adm ? [tipo === 'Jugador' ? nivelTxt(x) : ''] : []), extra, p.P, p.A, p.aviso, p.pct, p.MIE[1] ? pct(...p.MIE) : '', p.SAB[1] ? pct(...p.SAB) : '', p.up, p.dn, x.activo, viaja(k[0], x.id) ? 'SI' : 'NO']; };
+  const rows = [['tipo', 'id', 'nombre', ...(adm ? ['nivel'] : []), 'colegio_o_rol', 'presentes', 'ausentes', 'ausencias_con_aviso', 'pct', 'pres_mie', 'total_mie', 'pct_mie', 'pres_sab', 'total_sab', 'pct_sab', 'perfil', 'positivos', 'a_mejorar', 'activo', 'viaja_gira']];
+  const fila = (tipo, x, nom, extra, k) => { const p = S.per[k] || vacioStat(); return [tipo, x.id, nom, ...(adm ? [tipo === 'Jugador' ? nivelTxt(x) : ''] : []), extra, p.P, p.A, p.aviso, p.pct, p.dMIE[0], p.dMIE[1], p.dMIE[1] ? pct(...p.dMIE) : '', p.dSAB[0], p.dSAB[1], p.dSAB[1] ? pct(...p.dSAB) : '', (perfilAsis(p) || {}).t || '', p.up, p.dn, x.activo, viaja(k[0], x.id) ? 'SI' : 'NO']; };
   DB.JUGADORES.forEach(j => rows.push(fila('Jugador', j, j.nombre, j.colegio, 'J-' + j.id)));
   DB.ENTRENADORES.forEach(e => rows.push(fila('Entrenador', e, entNom(e), e.rol, 'E-' + e.id)));
   const csv = '\ufeff' + rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(';')).join('\n');
