@@ -317,7 +317,7 @@ th .ar{color:var(--cy);font-size:.8em}
 .pl .nm{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.2}
 .pl{border-left:none;margin-bottom:3px;border-radius:9px}
 .pl.pc:hover{filter:brightness(1.08)}
-.pl .nm .cs{display:block;font-size:.74rem;font-weight:500;color:var(--tx3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl .nm .cs{display:block;font-size:.74rem;font-weight:500;color:var(--tx3);margin-top:1px;white-space:normal}
 .pl.pc .lv{background:rgba(0,0,0,.28);color:#fff}
 .pl.sel{outline:3px solid var(--am);outline-offset:-3px}
 .leyenda2{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px 12px;margin:4px 0 10px;padding:.6rem .7rem;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.03)}
@@ -331,7 +331,7 @@ th .ar{color:var(--cy);font-size:.8em}
 .aus-chip{display:inline-flex;align-items:baseline;gap:.3rem;margin:3px 4px 3px 0;padding:.3rem .6rem;border-radius:8px;background:rgba(239,68,68,.14);border:1px solid rgba(239,68,68,.3);color:#fecaca;font-size:.85rem;font-weight:700}
 .aus-chip small{font-size:.72rem;font-weight:600;color:var(--am2)}
 .step{display:flex;align-items:center;gap:.55rem;font-weight:900;font-size:1rem;margin:18px 0 8px}
-.step span{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--cy),var(--cy2));color:#04131a;display:inline-flex;align-items:center;justify-content:center;font-size:.85rem}
+.step>span:first-child{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--cy),var(--cy2));color:#04131a;display:inline-flex;align-items:center;justify-content:center;font-size:.85rem}
 #eqBox .teams{margin-top:4px}
 .plan-h{width:100%;display:flex;align-items:center;gap:.5rem;background:none;border:none;text-align:left;font-weight:800;font-size:.95rem;min-height:var(--tap-sm);padding:0}
 .hs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:10px}
@@ -392,7 +392,7 @@ th,td{padding:.55rem .5rem}
 .att{padding:.5rem .55rem .5rem .7rem}
 .att .main{display:flex;align-items:center;gap:.45rem}
 .att .nm b{white-space:normal;overflow:visible;font-size:.95rem;line-height:1.2;font-weight:700}
-.att .nm small{display:block;font-size:.75rem;line-height:1.3;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.att .nm small{display:block;font-size:.75rem;line-height:1.3;margin-top:1px;white-space:normal}
 .att .mk{font-size:.75rem;margin-left:.25rem}
 .more{width:var(--tap-sm);height:var(--tap);border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--tx3);font-size:1.1rem;flex-shrink:0}
 .more.on{border-color:var(--am);color:var(--am2);background:rgba(245,158,11,.12)}
@@ -433,6 +433,7 @@ th,td{padding:.55rem .5rem}
   .card h3{font-size:.95rem}
   .kpis{grid-template-columns:1fr 1fr;gap:8px}
   .kpi{padding:.7rem .75rem}.kpi .v{font-size:1.45rem}
+  .kpis .kpi:last-child:nth-child(odd){grid-column:1/-1}
   .fgrid{grid-template-columns:1fr}
   .mbox{padding:1rem .9rem calc(1rem + env(safe-area-inset-bottom))}
   .mbox h3{font-size:1.05rem}
@@ -612,10 +613,29 @@ async function subirPendientes() {
     setSync('', 'Guardado ' + ULTIMA_SYNC);
     return true;
   } catch (e) {
-    if (e.fatal) { PEND = PEND.slice(lote.length); guardarPend(); toast('⚠️ ' + e.message, true); setSync('err', 'Error'); return false; }
+    if (e.fatal && /PIN/i.test(e.message)) { toast('⚠️ El PIN cambió: los cambios quedan guardados en el teléfono', true); setSync('err', `${PEND.length} cambio(s) sin subir`); return false; }
+    if (e.fatal) return await subirDeAUno(lote, e);
     setSync('err', `${PEND.length} cambio(s) sin subir`);
     return false;
   } finally { FLUSHING = false; }
+}
+// si la planilla rechaza el lote, se sube cambio por cambio: solo se descarta el que falla y el resto se guarda
+async function subirDeAUno(lote, errLote) {
+  let hechos = 0, malos = 0, msg = errLote.message;
+  for (const op of lote) {
+    try { await llamar(null, { action: 'ops', ops: [op] }, 2); }
+    catch (e) { if (!e.fatal) break; malos++; msg = e.message; }
+    hechos++;
+  }
+  PEND = PEND.slice(hechos); guardarPend();
+  if (malos) {
+    toast(`⚠️ ${malos === 1 ? 'Un cambio no se pudo guardar' : malos + ' cambios no se pudieron guardar'}: ${msg}`, true);
+    setTimeout(() => refrescar(true), 300); // vuelve a mostrar lo que realmente quedó en la planilla
+  }
+  if (PEND.length) { setSync('err', `${PEND.length} cambio(s) sin subir`); return false; }
+  ULTIMA_SYNC = horaAhora(); guardarCache();
+  setSync(malos ? 'err' : '', malos ? 'Error' : 'Guardado ' + ULTIMA_SYNC);
+  return !malos;
 }
 window.addEventListener('online', () => subirPendientes());
 setInterval(() => { if (PEND.length) subirPendientes(); }, 45000);
@@ -939,7 +959,7 @@ function personasAS() {
 }
 function contarAS(arr) { let P = 0, A = 0; arr.forEach(p => (AS.marcas[p.k] && AS.marcas[p.k].estado === 'A') ? A++ : P++); return { P, A }; }
 function renderAsistencia() {
-  if (!AS) cargarSesionAS(hoyISO());
+  if (!AS) { const hoy = hoyISO(); if (DB.SESIONES.some(s => s.fecha === hoy)) cargarSesionAS(hoy); else { const px = proximaSesion(); cargarSesionAS(px.fecha, px.s ? px.s.tipo : px.tipo); } }
   const { J, E } = personasAS();
   const cj = contarAS(J), ce = contarAS(E);
   const cA = conAsistencia();
