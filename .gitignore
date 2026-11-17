@@ -1,0 +1,8 @@
+# Datos personales de los chicos: NUNCA al repo (es público)
+*.xlsx
+*.xls
+*.csv
+*.json
+!package.json
+node_modules/
+.DS_Store
